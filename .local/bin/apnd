@@ -1,1 +1,11 @@
-/home/cf/Scripts/apnd
+#! /bin/sh
+apnd() {
+    content="$1"
+    shift  # Shift the first argument (content) out of the argument list
+    for file in "$@"; do
+        echo "$content" >> "$file"
+        source "$file"
+        echo "=== $file ==="
+        tail -n10 "$file"
+    done
+}
