@@ -1,0 +1,7 @@
+/* Dark Theme */
+@import url("resource:///com/gnome/theme/Yaru/3.22/gtk-dark.css");
+
+/* Larger Font Size */
+* {
+    font-size: 16pt; /* Adjust the size according to your preference */
+}

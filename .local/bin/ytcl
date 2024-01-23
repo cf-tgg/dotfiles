@@ -1,0 +1,11 @@
+#! /bin/sh
+
+ytcl() {
+   url="$1"
+   # Remove "https://youtube.com/" from the URL
+   channel_name="${url/https:\/\/www.youtube.com\//}"
+
+   link="$(ytfzf --channel-link="$url")"
+   echo "# $channel_name\n$link" >> ~/.config/ytfzf/subscriptions
+   bat ~/.config/ytfzf/subscriptions
+}

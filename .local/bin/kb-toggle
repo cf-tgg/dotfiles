@@ -1,0 +1,15 @@
+#!/bin/sh
+
+kb="$(setxkbmap -query | grep -oP 'layout:\s*\K\w+')" || exit 1
+
+if [ "$kb" = "us" ]; then
+    kb="ca"
+else
+    kb="us"
+fi
+
+setxkbmap "$kb"
+pkill -RTMIN+30 "${STATUSBAR:-dwmblocks}"
+remaps
+notify-send "$kb"
+echo "$kb" 
