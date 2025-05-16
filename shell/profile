@@ -1,0 +1,140 @@
+#!/bin/sh
+# shellcheck disable=SC2155
+
+# Add all sub-directories of `$HOME/.local/bin` to $PATH
+export PATH="$(find "$HOME/.local/bin" -type d -exec printf "{}:" \; )$PATH"
+
+unsetopt PROMPT_SP 2>/dev/null
+
+# Default programs
+export TERMINAL="st"
+export TERMINAL_PROG="st"
+export TERM="st-256color"
+
+export BROWSER="qutebrowser"
+export MANPAGER="nvim +Man!"
+export WTTRURL="fr.wttr.in"
+export CRYPTOURL="rate.sx"
+
+# export HISTFILE="${XDG_DATA_HOME}/history"
+
+# ~ clean-up
+export HOME="/home/cf"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XINITRC="${XDG_CONFIG_HOME:-$HOME/.config}/x11/xinitrc"
+export EXWMRC="${XDG_CONFIG_HOME:-$HOME/.config}/x11/xinitrc.exwm"
+
+export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
+export INPUTRC="${XDG_CONFIG_HOME}/shell/inputrc"
+
+export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+export TMUX_TMPDIR="${XDG_RUNTIME_DIR}"
+export XAUTHORITY="${XDG_RUNTIME_DIR}/Xauthority"
+
+export GNUPGHOME="${XDG_DATA_HOME}/gnupg"
+export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
+export PASSWORD_STORE_DIR="${XDG_DATA_HOME}/password-store"
+export QT_QPA_PLATFORMTHEME="qt6ct"
+export GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/gtkrc-2.0"
+export EMACS_SERVER_FILE="${XDG_RUNTIME_DIR:-/run/user/1000}/emacs/server"
+export ALTERNATE_EDITOR=""
+export VISUAL="emacsclient"
+export EDITOR="emacs"
+
+export MBSYNCRC="${XDG_CONFIG_HOME:-$HOME/.config}/mu4e/mbsyncrc"
+export MAIL="$HOME/.local/mail"
+export WGETRC="${XDG_CONFIG_HOME}/wget/wgetrc"
+export WINEPREFIX="${XDG_DATA_HOME}/wineprefixes/default"
+export CARGO_HOME="${XDG_DATA_HOME}/cargo"
+export DOCKER_CONFIG="${XDG_DATA_HOME}/docker"
+export SQLITE_HISTORY="${XDG_DATA_HOME}/sqlite_history"
+
+# export ANDROID_SDK_HOME="${XDG_CONFIG_HOME}/android"
+# export ANSIBLE_CONFIG="${XDG_CONFIG_HOME}/ansible/ansible.cfg"
+# export NOTMUCH_CONFIG="${XDG_CONFIG_HOME}/notmuch-config"
+# export PYTHONSTARTUP="${XDG_CONFIG_HOME}/python/pythonrc"
+# export ELECTRUMDIR="${XDG_DATA_HOME}/electrum"
+# export UNISON="${XDG_DATA_HOME}/unison"
+# export KODI_DATA="${XDG_DATA_HOME}/kodi"
+
+export AWT_TOOLKIT="MToolkit wmname LG3D"
+export _JAVA_AWT_WM_NONREPARENTING=1
+export MOZ_USE_XINPUT2=1
+export GDK_SCALE=1
+export GTK_THEME="Adwaita-dark"
+
+export SDCV_DATA_DIR="$HOME/Documents/Dicts/"
+export DICS="/usr/share/stardict/dic/"
+
+export NODE_PATH="${XDG_DATA_HOME}/node_modules"
+export NVM_BIN="${XDG_DATA_HOME}/.nvm/versions/node/v22.6.0/bin"
+export NVM_INC="${XDG_DATA_HOME}/.nvm/versions/node/v22.6.0/include/node"
+export NVM_DIR="${XDG_DATA_HOME}/.nvm"
+export SURFRAW="/usr/lib/surfraw"
+# export LUA_PATH='/usr/share/lua/5.4/?.lua;/usr/share/lua/5.4/?/init.lua;./?.lua;/home/cf/.luarocks/share/lua/5.4/?.lua;/home/cf/.luarocks/share/lua/5.4/?/init.lua'
+# export LUA_CPATH='/usr/lib/lua/5.4/?.so;./?.so;/home/cf/.luarocks/lib/lua/5.4/?.so'
+
+PATH="${XDG_DATA_HOME}/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="${XDG_DATA_HOME}/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="${XDG_DATA_HOME}/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"${XDG_DATA_HOME}/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=${XDG_DATA_HOME}/perl5"; export PERL_MM_OPT;
+
+export GOPATH="${XDG_DATA_HOME}/go"
+export GOMODCACHE="${XDG_CACHE_HOME}/go/mod"
+export GOBIN="${XDG_DATA_HOME}/go/bin"
+export GO111MODULE="on"
+export GOTELEMETRY=
+
+###{{{
+export LESS="R"
+export LESS_TERMCAP_mb="$(printf '%b' '[1;31m')"
+export LESS_TERMCAP_md="$(printf '%b' '[1;36m')"
+export LESS_TERMCAP_me="$(printf '%b' '[0m')"
+export LESS_TERMCAP_so="$(printf '%b' '[01;44;33m')"
+export LESS_TERMCAP_se="$(printf '%b' '[0m')"
+export LESS_TERMCAP_us="$(printf '%b' '[1;32m')"
+export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
+export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
+###}}}
+
+export FZF_DEFAULT_OPTS="--ansi --layout=reverse --height='100%' --border --color"
+
+export INFO_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/info.conf.d"
+export INFO_INIT_FILE="$INFO_DIR/initinforc"
+
+# User TexLive Directories
+export TEXLIVE_INSTALL_NO_DISKCHECK=1
+export TEXDIR="/usr/local/texlive/2024"
+export TEXMFSYSCONFIG="/usr/local/texlive/2024/texmf-config"
+export TEXMFLOCAL="/usr/local/texlive/texmf-local"
+export TEXMFSYSVAR="/usr/local/texlive/2024/texmf-var"
+
+export TEXMFVAR="${XDG_DATA_HOME:-$HOME/.local/share}/texlive/texmf-var"
+export TEXMFCONFIG="${XDG_DATA_HOME:-$HOME/.local/share}/texlive/texmf-config"
+export TEXMFHOME="${XDG_DATA_HOME:-$HOME/.local/share}/texlive/texmf"
+
+export INFOPATH="$INFO_DIR:/home/cf/.local/src/emacs/info:/home/cf/Templates/emacswiki:/home/cf/Templates/gnu:/home/cf/.emacs.d/elpaca/builds:/home/cf/.local/share/infodir:/usr/local/texlive/texmf-local:/usr/local/texlive/2024/texmf-dist/doc/info"
+export MANPATH="$(manpath):/home/cf/.local/share/.nvm/versions/node/v22.6.0/share/man:/usr/local/texlive/2024/texmf-dist/doc/man:/usr/local/texlive/2024/texmf-dist/doc/man/man1:/usr/local/texlive/2024/texmf-dist/doc/man/man5"
+
+export PATH="$PATH:/home/cf/.local/src/gnulib:/usr/local/texlive/2024/bin/x86_64-linux:$CARGO_HOME/bin:$SURFRAW:$GOBIN:$NODE_PATH:$NVM_BIN"
+
+export TTS_MODEL="fr_FR-gilles-low"
+export VDPAU_DRIVER="radeonsi"
+
+# GnuPG
+gpg-connect-agent updatestartuptty /bye >/dev/null
+GPG_TTY=$(tty)
+export GPG_TTY
+
+SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+export SSH_AUTH_SOCK
+
+[ -f "${XDG_CONFIG_HOME}/shell/shortcutrc" ] && setsid -f shortcutrc >/dev/null 2>&1
+# [ -f "$HOME/.local/bin/mpvq/mpvq_env" ] && . "$HOME/.local/bin/mpvq/mpvq_env" >/dev/null 2>&1
+
+[ "$(tty)" = "/dev/tty1" ] && [ -z "$DISPLAY" ] && exec startx "$XINITRC"
+
+echo -e "keycode 1 = Caps_Lock\nkeycode 58 = Escape" | sudo -n loadkeys 2>/dev/null && setfont -d 2>/dev/null

@@ -1,0 +1,16 @@
+[[device]]
+device = "/dev/input/by-path/platform-AMDI0010:03-event-mouse"
+gestures = [
+	{ type = "tap", fingers = 3, execute = "winDrag" },
+	{ type = "tap", fingers = 4, execute = "xdotool key Super_L+f" },
+
+	{ type = "swipe", direction = "up", fingers = 3, execute = "xdotool key Super_L+shift+k" },
+	{ type = "swipe", direction = "down", fingers = 3, execute = "xdotool key Super_L+shift+j" },
+	{ type = "swipe", direction = "right", fingers = 3, execute = "xdotool key Super_L+semicolon" },
+	{ type = "swipe", direction = "left", fingers = 3, execute = "xdotool key Super_L+g" },
+
+	{ type = "swipe", direction = "right", fingers = 4, execute = "xdotool key Super_L+shift+semicolon" },
+	{ type = "swipe", direction = "left", fingers = 4, execute = "xdotool key Super_L+shift+g" },
+	{ type = "swipe", direction = "up", fingers = 4, execute = "xdotool key Super_L+g" },
+	{ type = "swipe", direction = "down", fingers = 4, execute = "xdotool key Super_L+semicolon" },
+]

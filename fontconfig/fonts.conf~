@@ -1,0 +1,102 @@
+<?xml version='1.0'?>
+<!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+<fontconfig>
+  <!-- Match and Append Noto Sans and Joy Pixels to Noto Color Emoji -->
+  <match>
+    <test name="family">
+      <string>Noto Color Emoji</string>
+    </test>
+    <edit name="family" mode="append">
+      <string>Noto Sans</string>
+      <string>Joy Pixels</string>
+      <family>FontAwesome</family>
+      <family>Symbols Nerd Font</family>
+      <family>Noto Color Emoji</family>
+      <family>Material Icons</family>
+      <family>Weather Icons</family>
+      <family>Noto Sans Mono</family>
+    </edit>
+  </match>
+
+  <!-- Alias Configuration -->
+  <alias>
+    <family>serif</family>
+    <prefer>
+      <family>CaskaydiaCove Nerd Font</family>
+      <family>Iosevka Nerd Font</family>
+      <family>NotoSerif Nerd Font</family>
+      <family>Libertinus Serif</family>
+      <family>JetBrains Mono Nerd Font Mono</family>
+      <family>Cousine Nerd Font</family>
+      <family>VictorMono Nerd Font</family>
+      <family>Geist Mono Nerd Font Mono</family>
+      <family>EB Garamond</family>
+      <family>FontAwesome</family>
+      <family>Material Icons</family>
+      <family>Joy Pixels</family>
+      <family>Noto Color Emoji</family>
+    </prefer>
+  </alias>
+
+  <alias>
+    <family>sans-serif</family>
+    <prefer>
+      <family>CaskaydiaCove Nerd Font</family>
+      <family>Iosevka Nerd Font</family>
+      <family>NotoSans Nerd Font</family>
+      <family>Libertinus Sans</family>
+      <family>Cousine Nerd Font Mono</family>
+      <family>VictorMono Nerd Font Mono</family>
+      <family>FontAwesome</family>
+      <family>Noto Color Emoji</family>
+      <family>Joy Pixels</family>
+    </prefer>
+  </alias>
+
+  <alias>
+    <family>sans</family>
+    <prefer>
+      <family>Iosevka Nerd Font</family>
+      <family>Libertinus Sans</family>
+      <family>JetBrains Mono Nerd Font</family>
+      <family>Cousine Nerd Font</family>
+      <family>VictorMono Nerd Font Mono</family>
+      <family>FontAwesome</family>
+      <family>Symbols Nerd Font</family>
+      <family>Noto Sans Symbols</family>
+      <family>Joy Pixels</family>
+      <family>Noto Color Emoji</family>
+    </prefer>
+  </alias>
+
+  <alias>
+    <family>monospace</family>
+    <prefer>
+      <family>CaskaydiaCove Nerd Font Mono</family>
+      <family>Iosevka Nerd Font Mono</family>
+      <family>JetBrains Mono Nerd Font Mono</family>
+      <family>Cousine Nerd Font Mono</family>
+      <family>Iosevka Term Nerd Font Mono</family>
+      <family>Libertinus Mono</family>
+      <family>VictorMono Nerd Font Mono</family>
+      <family>FontAwesome</family>
+      <family>Symbols Nerd Font</family>
+      <family>Noto Color Emoji</family>
+      <family>Material Icons</family>
+      <family>Weather Icons</family>
+      <family>Noto Sans Mono</family>
+      <family>Braille</family>
+    </prefer>
+  </alias>
+
+  <!-- Reject Unwanted Fonts -->
+  <selectfont>
+    <rejectfont>
+      <pattern>
+        <patelt name="family">
+          <string>Clean</string>
+        </patelt>
+      </pattern>
+    </rejectfont>
+  </selectfont>
+</fontconfig>

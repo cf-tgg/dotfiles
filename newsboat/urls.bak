@@ -1,0 +1,195 @@
+
+"------  Radio Canada ------"
+https://ici.radio-canada.ca/rss/4159
+https://ici.radio-canada.ca/rss/1000524
+https://ici.radio-canada.ca/rss/1000229
+https://ici.radio-canada.ca/rss/5717
+https://ici.radio-canada.ca/rss/4163
+https://ici.radio-canada.ca/rss/96
+# "------  CTV  ------"
+# https://www.ctvnews.ca/rss/ctvnews-ca-top-stories-public-rss-1.822009
+# https://www.ctvnews.ca/rss/ctvnews-ca-canada-public-rss-1.822284
+# https://www.ctvnews.ca/rss/ctvnews-ca-entertainment-public-rss-1.822292
+# https://www.ctvnews.ca/rss/ctvnews-ca-politics-public-rss-1.822302
+# https://www.ctvnews.ca/rss/ctvnews-ca-sci-tech-public-rss-1.822295
+# https://www.ctvnews.ca/rss/ctvnews-ca-health-public-rss-1.822299
+"------  Devl Blogs  ------"
+https://blog.bugswriter.com/atom.xml "BugsWriter"
+https://linkarzu.com/feed.xml "~Linkarzu"
+https://ctftime.org/event/list/archive/rss "~CTFtime - Events"
+https://www.dadall.info/feed/rss "~Dadall info"
+https://stallman.org/rss/rss.xml "~Richard Stallman"
+"------  Scott Hanselman  ------"
+https://rss.app/feeds/bQ1pt8J6sSsAxQyJ.xml "~Blog"
+https://rss.app/feeds/441LHftUkj2mszQP.xml "~Linux"
+"------  Luke Smith  ------"
+https://lukesmith.xyz/rss.xml "~LukeSmith"
+https://based.cooking/rss.xml
+https://landchad.net/rss.xml
+https://videos.lukesmith.xyz/feeds/videos.xml?videoChannelId=2 "~Luke Smith (Videos)"
+https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA "~Luke Smith (YouTube)"
+
+# "------  Le Devoir ------"
+# http://feeds2.feedburner.com/fluxdudevoir "Le Devoir - Actualités"
+# https://www.ledevoir.com/rss/section/opinion/idees.xml "Le Devoir - Idées"
+# https://www.ledevoir.com/rss/section/opinion/chroniques.xml "Le Devoir - Chroniques"
+"------  La Presse  -------"
+# https://www.lapresse.ca/actualites/politique/rss
+# https://www.lapresse.ca/actualites/national/rss
+# https://www.lapresse.ca/actualites/sante/rss
+# https://www.lapresse.ca/actualites/education/rss
+# https://www.lapresse.ca/actualites/environnement/rss
+# https://www.lapresse.ca/actualites/regional/rss
+# https://www.lapresse.ca/actualites/insolite/rss
+# https://www.lapresse.ca/actualites/sciences/rss
+# https://www.lapresse.ca/affaires/finances-personnelles/rss
+# https://www.lapresse.ca/affaires/economie/rss
+# https://www.lapresse.ca/affaires/rss
+# https://www.lapresse.ca/international/rss
+# https://www.lapresse.ca/international/etats-unis/rss
+# https://www.lapresse.ca/cinema/rss
+# https://www.lapresse.ca/societe/sante/rss
+# "------  Le Journal de Montreal ------"
+# https://www.journaldemontreal.com/actualite/politique/rss.xml "Le Journal de Montréal - Politique"
+# https://www.journaldemontreal.com/argent/rss.xml "Le Journal de Montréal - Argent"
+# https://www.journaldemontreal.com/porte-monnaie/rss.xml "Le Journal de Montréal - Porte-Monnaie"
+# Horaire des séances de la Commission de l’administration publique
+#https://www.assnat.qc.ca/fr/rss/SyndicationRSS-176.html
+# Horaire des séances de la Commission de l’agriculture, des pêcheries, de l’énergie et des ressources naturelles
+#https://www.assnat.qc.ca/fr/rss/SyndicationRSS-170.html
+# Horaire des séances de la Commission de l’aménagement du territoire
+#https://www.assnat.qc.ca/fr/rss/SyndicationRSS-172.html
+# Horaire des séances de la Commission de l’Assemblée nationale
+#https://www.assnat.qc.ca/fr/rss/SyndicationRSS-174.html
+# Horaire des séances de la Commission de l’économie et du travail
+#https://www.assnat.qc.ca/fr/rss/SyndicationRSS-180.html
+# Horaire des séances de la Commission de la culture et de l’éducation
+#https://www.assnat.qc.ca/fr/rss/SyndicationRSS-178.html
+# Horaire des séances de la Commission de la santé et des services sociaux
+#https://www.assnat.qc.ca/fr/rss/SyndicationRSS-188.html
+# Horaire des séances de la Commission des finances publiques
+#https://www.assnat.qc.ca/fr/rss/SyndicationRSS-182.html
+# Horaire des séances de la Commission des institutions
+#https://www.assnat.qc.ca/fr/rss/SyndicationRSS-184.html
+# Horaire des séances de la Commission des relations avec les citoyens
+#https://www.assnat.qc.ca/fr/rss/SyndicationRSS-186.html
+# Horaire des séances de la Commission des transports et de l’environnement
+#https://www.assnat.qc.ca/fr/rss/SyndicationRSS-190.html
+# Mandats de la Commission de l’administration publique
+#https://www.assnat.qc.ca/fr/rss/SyndicationRSS-194.html
+# Mandats de la Commission de l’agriculture, des pêcheries, de l’énergie et des ressources naturelles
+#https://www.assnat.qc.ca/fr/rss/SyndicationRSS-82.html
+# Mandats de la Commission de l’aménagement du territoire
+#https://www.assnat.qc.ca/fr/rss/SyndicationRSS-196.html
+# Mandats de la Commission de l’Assemblée nationale
+#https://www.assnat.qc.ca/fr/rss/SyndicationRSS-198.html
+# Mandats de la Commission de l’économie et du travail
+#https://www.assnat.qc.ca/fr/rss/SyndicationRSS-200.html
+# Mandats de la Commission de la culture et de l’éducation
+#https://www.assnat.qc.ca/fr/rss/SyndicationRSS-88.html
+#https://www.assnat.qc.ca/fr/rss/SyndicationRSS-202.html
+# Mandats de la Commission des institutions
+#https://www.assnat.qc.ca/fr/rss/SyndicationRSS-204.html
+# Mandats de la Commission des relations avec les citoyens
+#https://www.assnat.qc.ca/fr/rss/SyndicationRSS-86.html
+# Mandats de la Commission des transports et de l’environnement
+#https://www.assnat.qc.ca/fr/rss/SyndicationRSS-206.html
+"------  Office Protection du Consommateur  -------"
+https://www.opc.gouv.qc.ca/actualite/toutes-les-actualites/rss.xml "OPC - Actualités"
+#https://www.opc.gouv.qc.ca/actualites/conseil/rss.xml "OPC - Conseils"
+#https://www.opc.gouv.qc.ca/actualites/poursuite-condamnation-region-date/poursuites-et-condamnations/rss.xml
+#https://www.opc.gouv.qc.ca/actualites/fermeture-faillite-region-date/fermetures-et-faillites-de-commerces/rss.xml
+#https://www.opc.gouv.qc.ca/actualites/communiques/rss.xml "OPC - Communiqués"
+#https://www.opc.gouv.qc.ca/actualites/changement-loi/rss.xml "OPC - Changement de Loi"
+#Revenu Qc
+https://www.revenuquebec.ca/fr/rss-actualites.xml "RevenuQC - Actualités"
+#https://www.revenuquebec.ca/fr/rss-actualites-entreprises.xml "RevenuQC - Actualités Entreprises"
+https://www.revenuquebec.ca/fr/rss-communiques-de-presse.xml "RevenuQC - Communiqués de Presse"
+#https://www.revenuquebec.ca/fr/rss-nouvelles-fiscales.xml "RevenuQC - Nouvelles Fiscales"
+#https://www.revenuquebec.ca/fr/rss-operation-determinees.xml "RevenuQC - Opérations Déterminées"
+#https://www.revenuquebec.ca/fr/rss-services-en-ligne.xml "RevenuQC - Services en Ligne"
+#https://www.revenuquebec.ca/fr/rss-formulaires-et-publications.xml "RevenuQC - Formulaires & Publications"
+#LSA-Conso
+https://www.lsa-conso.fr/rss/lsa-a-la-une.xml "LSA à la une"
+#Partenaires – Entente internationale concernant la taxe sur les carburants (IFTA)
+#https://www.revenuquebec.ca/fr/rss-partenaires-ifta.xml
+#Partenaires – Exemption fiscale des Premières Nations en matière de taxes
+#https://www.revenuquebec.ca/fr/rss-partenaires-exemption-fiscale-des-premieres-nations-en-matiere-de-taxes.xml
+#Partenaires – Facturation obligatoire – Solution infonuagique
+#https://www.revenuquebec.ca/fr/rss-partenaires-facturation-obligatoire-solution-infonuagique.xml
+#Partenaires – Impôt des fiducies
+#https://www.revenuquebec.ca/fr/rss-partenaires-impot-des-fiducies.xml
+#Partenaires – Impôt des particuliers
+#https://www.revenuquebec.ca/fr/rss-partenaires-impot-des-particuliers.xml
+#Partenaires – Impôt des sociétés
+#https://www.revenuquebec.ca/fr/rss-partenaires-impot-des-societes.xml
+#Partenaires – Incitatif québécois à l'épargne-études (IQEE)
+#https://www.revenuquebec.ca/fr/rss-partenaires-iqee.xml
+#Partenaires – Organismes de bienfaisance enregistrés
+#https://www.revenuquebec.ca/fr/rss-partenaires-obe.xml
+#Partenaires – Registraire des entreprises
+#https://www.revenuquebec.ca/fr/rss-partenaires-registraire-des-entreprises.xml
+#Partenaires – Relevé 1 et Sommaire des retenues et des cotisations de l'employeur
+#https://www.revenuquebec.ca/fr/rss-partenaires-releve-1-et-sommaire.xml
+#Partenaires – Relevés et feuillets
+#https://www.revenuquebec.ca/fr/rss-partenaires-releves-et-feuillets.xml
+#Partenaires – Restauration – Solution physique
+#https://www.revenuquebec.ca/fr/rss-partenaires-restauration-concepteurs.xml
+#Partenaires – Retenues et cotisations
+#https://www.revenuquebec.ca/fr/rss-partenaires-retenues-et-cotisations.xml
+#Partenaires – Services intégrés gouvernementaux
+#https://www.revenuquebec.ca/fr/rss-partenaires-services-integres-gouvernementaux.xml
+#Partenaires – Sociétés de personnes
+#https://www.revenuquebec.ca/fr/rss-partenaires-societes-de-personnes.xml
+#Partenaires – Taxes
+#https://www.revenuquebec.ca/fr/rss-partenaires-taxes.xml
+#Partenaires – Transactions bancaires électroniques
+#https://www.revenuquebec.ca/fr/rss-partenaires-transactions-bancaires-electroniques.xml
+"-------   Tech  -------"
+https://montrehack.ca/feed.xml "~MontréHack"
+https://godfrey.online/rss/linustechtips.xml "Linus Tech Tips"
+https://www.cnet.com/rss/news
+https://www.wired.com/feed/rss
+https://mashable.com/feeds/rss/all
+https://nvidianews.nvidia.com/releases.xml
+https://feeds.feedburner.com/nvidiablog
+https://developer.nvidia.com/blog/feed
+https://www.techpowerup.com/rss/news
+https://www.techpowerup.com/rss/reviews
+https://ir.amd.com/news-events/press-releases/rss
+https://hnrss.org/best
+https://hnrss.org/active
+https://hnrss.org/jobs
+# https://hnrss.org/whoishiring/jobs
+# https://hnrss.org/whoishiring/freelance
+# Travaux de l'Assemblée Nationale
+# Dépôts du jour
+# https://www.assnat.qc.ca/fr/rss/depots-du-jour.html "AssNatQC - Dépôts du jour"
+# Travaux des commissions parlementaires
+# https://hnrss.org/whoishiring/jobs
+# https://hnrss.org/whoishiring/freelance
+# Travaux de l'Assemblée Nationale
+# Dépôts du jour
+# https://www.assnat.qc.ca/fr/rss/depots-du-jour.html "AssNatQC - Dépôts du jour"
+# Tous les mandats des commissions parlementaires
+#Projets de loi
+# https://www.assnat.qc.ca/fr/rss/SyndicationRSS-120.html "AssNatQC - Mandats"
+# https://www.assnat.qc.ca/fr/rss/SyndicationRSS-210.html "AssNatQc - Projets de Loi"
+# https://www.assnat.qc.ca/fr/rss/SyndicationRSS-18.html "AssNatQc - Transcription des conférences et points de presse"
+# Horaire des conférences et points de presse
+#https://www.assnat.qc.ca/fr/rss/SyndicationRSS-212.html "AssNatQc - Horaire des conférences et points de presse"
+# Transcription des conférences et points de presse
+# https://lindypress.net/rss
+# https://notrelated.xyz/rss
+# https://based.cooking/index.xml
+# https://christitus.com/categories/titus/index.xml "Titus"
+# https://christitus.com/categories/freebsd/index.xml "FreeBSD"
+# https://christitus.com/categories/virtualization/index.xml "Virtualization"
+# https://christitus.com/categories/windows/index.xml "Windows"
+# https://christitus.com/categories/windows-server/index.xml "Windows Server"
+# https://christitus.com/categories/android/index.xml "Android"
+# "------  Routes QC  ------"
+# https://www.quebec511.info/Diffusion/Rss/GenererRss.aspx?regn=13000&routes=10;13;15;19;20;25;40;112;117;125;134;136;138;335;520&lang=en
+# https://www.quebec511.info/Diffusion/Rss/GenererRss.aspx?regn=8000&routes=13;15;19;25;117;125;148;335;440&lang=en
+# https://www.quebec511.info/Diffusion/Rss/GenererRss.aspx?regn=11000&routes=10;15;20;25;30;35;40;104;112;116;122;132;133;134;137;138;139;201;202;203;205;207;209;211;213;215;217;219;221;222;223;224;225;227;229;231;233;235;236;237;239;241;243;325;338;340;342;530;730;930&lang=en
+# https://www.quebec511.info/Diffusion/Rss/GenererRss.aspx?regn=12000&routes=40;73;136;138;169;170;175;354;358;360;362;363;365;367;368;369;371;381;440;540;573;740;973&lang=en

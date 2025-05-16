@@ -1,0 +1,59 @@
+{
+  "parser-directories": [
+    "/home/cf/github",
+    "/home/cf/src",
+    "/home/cf/source",
+    "/home/cf/projects",
+    "/home/cf/dev",
+    "/home/cf/git"
+  ],
+  "theme": {
+    "variable.parameter": {
+      "underline": true
+    },
+    "property": 124,
+    "comment": {
+      "color": 245,
+      "italic": true
+    },
+    "embedded": null,
+    "function.builtin": {
+      "bold": true,
+      "color": 26
+    },
+    "number": {
+      "bold": true,
+      "color": 94
+    },
+    "constant.builtin": {
+      "bold": true,
+      "color": 94
+    },
+    "operator": {
+      "color": 239,
+      "bold": true
+    },
+    "punctuation.bracket": 239,
+    "punctuation.delimiter": 239,
+    "constant": 94,
+    "constructor": 136,
+    "string": 28,
+    "attribute": {
+      "color": 124,
+      "italic": true
+    },
+    "function": 26,
+    "type.builtin": {
+      "bold": true,
+      "color": 23
+    },
+    "type": 23,
+    "string.special": 30,
+    "variable.builtin": {
+      "bold": true
+    },
+    "tag": 18,
+    "keyword": 56,
+    "module": 136
+  }
+}

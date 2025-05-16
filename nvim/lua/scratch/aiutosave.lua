@@ -1,0 +1,26 @@
+-- ~& [ aiutosave.lua ] [ Last Update: 2024-10-18 14:14 ]
+-- local bufnr = 180
+-- vim.api.nvim_buf_set_lines(bufnr, 0, 1, false, { "buffer", "sourced" })
+-- vim.api.nvim_create_autocmd("BufWritePost", {
+-- 	group = vim.api.nvim_create_augroup("cfAutoSave", { clear = true }),
+-- 	callback = function()
+-- 		print("j'garde ça en tête..")
+-- 	end,
+-- })
+-- pattern = "",
+-- print("java moé donc ça !")
+-- vim.fn.jobstart({ "echo", "that" }, {
+-- 	stdout_buffered = true,
+-- 	on_stout = function(_, data)
+-- 		if data then
+-- 			vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, data)
+-- 		end
+-- 	end,
+-- 	on_sterr = function(_, data)
+-- 		if data then
+-- 			vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, data)
+-- 		end
+-- 	end,
+-- })
+-- end,
+-- })

@@ -1,0 +1,144 @@
+-- ~& [ ytjpg.lua ] [ Last Update: 2024-12-12 17:37 ]
+
+local mp = require("mp")
+local options = require("mp.options")
+local msg = require("mp.msg")
+local utils = require("mp.utils")
+local pl_count = mp.get_property_number("playlist-count", 0)
+local have_pl = (pl_count > 1)
+local pl_pos = mp.get_property_number("playlist-pos", 0) + 1
+local have_ch = (mp.get_property_number("chapters", 0) > 0)
+local loop = mp.get_property("loop-playlist", "no")
+local osc_param = mp.get_property_native("options/osc-parameters", {})
+local osc_visible = mp.get_property_native("osc/visibility", {})
+local osc_height = mp.get_property_number("osc/h", 0)
+local osc_width = mp.get_property_number("osc/w", 0)
+local osc_x = mp.get_property_number("osc/x", 0)
+
+-- Function to shell escape arguments
+local function shell_escape(arg)
+	return "'" .. arg:gsub("'", "'\\''") .. "'"
+end
+
+-- Extract URI from video or jpg files
+local function extract_uri(file_path)
+	if file_path:match("youtube.com") then
+		mp.msg.info("Skipping URI extraction for YouTube URL: " .. file_path)
+		return file_path -- Return the URL as is, if it's a YouTube URL
+	end
+
+	local escaped_path = shell_escape(file_path)
+	local uri_cmd = { "sh", "-c", "exifjpg -u " .. escaped_path }
+	local uri_result = utils.subprocess({ args = uri_cmd, cancellable = false })
+	mp.msg.info("Subprocess status: " .. tostring(uri_result.status))
+	mp.msg.info("Subprocess output: " .. (uri_result.stdout or "nil"))
+	if uri_result.status == 0 and uri_result.stdout and uri_result.stdout:match("%S") then
+		return uri_result.stdout:gsub("%s+$", "")
+	end
+	return nil
+end
+
+-- Function to manage playlist (adding new entries)
+local function manage_playlist(uri)
+	local playlist = mp.get_property("playlist")
+	if playlist and #playlist > 1 then
+		mp.commandv("loadfile", uri, "append")
+	else
+		mp.commandv("loadfile", uri)
+	end
+end
+
+-- Handle file loaded or dropped events
+local function handle_file_loaded()
+	local path = mp.get_property("path")
+	if path then
+		mp.msg.info("File loaded: " .. path)
+		local uri = extract_uri(path)
+		if uri then
+			mp.msg.info("Loading URI: " .. uri)
+			manage_playlist(uri)
+		else
+			mp.msg.warn("No URI found in the file.")
+		end
+	else
+		mp.msg.warn("No file loaded.")
+	end
+end
+
+-- Function to open playlist in default editor
+local function open_playlist_in_editor()
+	local playlist_path = mp.get_property("playlist")
+	if playlist_path then
+		local editor = os.getenv("EDITOR") or "nano" -- Use $EDITOR or fallback to nano
+		local cmd = { editor, playlist_path }
+		mp.msg.info("Opening playlist file in editor: " .. playlist_path)
+		utils.subprocess({ args = cmd })
+	else
+		mp.msg.warn("No playlist file found.")
+	end
+end
+
+-- Function to reload playlist after editing
+local function reload_playlist()
+	mp.msg.info("Reloading playlist.")
+	mp.commandv("playlist-rescan")
+end
+
+-- Function to load the URI and set the flag
+local function load_uri(uri)
+	is_script_initiated = true
+	mp.commandv("loadfile", uri)
+end
+
+-- Register file-loaded event to handle dropped files or loaded media
+mp.register_event("file-loaded", function()
+	handle_file_loaded()
+end)
+
+-- Register start-file event to prevent re-triggering
+mp.register_event("start-file", function()
+	handle_file_loaded()
+end)
+
+-- Reset flag when file is unloaded
+mp.register_event("end-file", function()
+	is_script_initiated = false
+end)
+
+-- Watch for changes to the playlist and reload on modification
+mp.observe_property("playlist", "native", function(name, value)
+	if value then
+		mp.msg.info("Playlist modified, reloading...")
+		reload_playlist()
+	end
+end)
+
+-- Bindings for user interaction
+
+-- Bind to open playlist in editor (use 'shift+ctrl+e' as an example)
+mp.add_key_binding("shift+ctrl+e", "edit-playlist", open_playlist_in_editor)
+
+-- Main function to execute
+function main()
+	local file_path = mp.get_property("path")
+	if file_path then
+		mp.msg.info("Processing file: " .. file_path)
+		handle_file_loaded()
+	else
+		mp.msg.warn("No file path found.")
+	end
+end
+
+-- Trigger main function on file load
+mp.register_event("start-file", function()
+	if not is_script_initiated then
+		main()
+	end
+end)
+
+-- Trigger main function for drag-and-drop events
+mp.register_event("file-loaded", function()
+	if not is_script_initiated then
+		handle_file_loaded()
+	end
+end)

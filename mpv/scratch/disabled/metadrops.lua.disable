@@ -1,0 +1,83 @@
+-- ~& [ metadrops.lua ] [ Last Update: 2024-11-28 21:47 ]
+
+package.path = package.path .. ";/home/cf/.luarocks/share/lua/5.4/?.lua"
+
+-- Lua script to process dropped files or files passed via stdin in mpv
+
+local mp = require("mp")
+local json = require("dkjson")
+
+-- Function to extract JSON metadata from a JPG file
+function extract_json_jpg_metadata(file_path)
+	-- Run the 'extract_json_jpg' command to get the metadata in JSON format
+	local handle = io.popen("extract_json_jpg " .. file_path)
+	local result = handle:read("*all")
+	handle:close()
+
+	-- Parse the JSON output from the command
+	local data, _, err = json.decode(result)
+
+	if err then
+		mp.msg.warn("Error decoding JSON: " .. err)
+		return
+	end
+
+	-- Extract Summary.Title and Summary.URI if available
+	local summary = data["Summary"] or {}
+	local title = summary["Title"] or "No Title"
+	local uri = summary["URI"] or "No URI"
+	local description = summary["Description"] or "No Description"
+	local date = data["DateTimeOriginal"] or "No Date"
+
+	-- Output the extracted metadata
+	mp.msg.info("Title: " .. title)
+	mp.msg.info("URI: " .. uri)
+	mp.msg.info("Description: " .. description)
+	mp.msg.info("Date: " .. date)
+
+	-- Return the URI found in the metadata
+	return uri, title, description
+end
+
+function display_metadata_in_osc(title, description)
+	local osc_property = mp.get_property_native("osc-visibility")
+	if osc_property == "yes" then
+		mp.osd_message("Title: " .. title .. "\nDescription: " .. description, 3) -- Display for 3 seconds
+	end
+end
+
+-- Main function to process the file
+function main()
+	local file_path = mp.get_property("path")
+	if file_path then
+		mp.msg.info("Processing file: " .. file_path)
+		local playlist = mp.get_property("playlist-count")
+		local uri = extract_json_jpg_metadata(file_path)
+
+		if uri and uri ~= "No URI" then
+			mp.msg.info("Loading URI: " .. uri)
+			mp.commandv("loadfile", uri)
+			if uri and playlist then
+				mp.commandv("loadfile", uri)
+			end
+		else
+			mp.msg.warn("No URI found in the file.")
+		end
+	else
+		mp.msg.warn("No file path found.")
+	end
+end
+
+-- Register the 'file-loaded' event to trigger the script when a file is opened
+mp.register_event("file-loaded", main)
+
+-- Handle stdin or dropped files
+mp.register_event("start-file", function()
+	local path = mp.get_property("path")
+	if path then
+		mp.msg.info("File loaded: " .. path)
+		main() -- Trigger main function to process the file
+	else
+		mp.msg.warn("No file loaded.")
+	end
+end)

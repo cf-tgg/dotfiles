@@ -1,0 +1,15 @@
+-- ~& [ bookmark-list.lua ] [ Last Update: 2024-11-07 03:00 ]
+
+-- List all bookmarks in the osd.
+mp.add_key_binding("Ctrl+b", "list-bookmarks", function()
+
+    local bookmarks = mp.get_property_native("bookmark-list")
+
+    if type(bookmarks) == "table" then
+        for _, bookmark in ipairs(bookmarks) do
+            print("Bookmark at: " .. bookmark.time .. " seconds")
+        end
+    else
+        print("No bookmarks found or error retrieving bookmarks.")
+    end
+end)

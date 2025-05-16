@@ -1,0 +1,640 @@
+always-display-description false
+article-sort-order "date-asc"
+articlelist-format "%4i %f %D %6L  %?T?|%-17T|  &?%t"
+articlelist-title-format "%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter '%F'&? - %U"
+auto-reload no # default: no
+bookmark-autopilot false
+bookmark-cmd ""
+bookmark-interactive false
+browser "linkhandler" # default: qutebrowser
+cache-file ""
+cleanup-on-quit yes
+confirm-delete-all-articles yes
+confirm-exit no
+confirm-mark-all-feeds-read yes
+confirm-mark-feed-read yes
+cookie-cache ""
+datetime-format "%b %d"
+delete-played-files false
+delete-read-articles-on-quit false
+dialogs-title-format "%N %V - Dialogs"
+dirbrowser-title-format "%N %V - %?O?Open Directory&Save File? - %f"
+display-article-progress yes
+download-filename-format "%?u?%u&%Y-%b-%d-%H%M%S.unknown?"
+download-full-page false
+download-path "~/"
+download-retries 1
+download-timeout 30
+error-log ""
+external-url-viewer "urlscan -dc -r 'linkhandler {}'" # default: 
+feed-sort-order "none-desc"
+feedbin-flag-star ""
+feedbin-login ""
+feedbin-password ""
+feedbin-passwordeval ""
+feedbin-passwordfile ""
+feedbin-url "https://api.feedbin.com"
+feedhq-flag-share ""
+feedhq-flag-star ""
+feedhq-login ""
+feedhq-min-items 20
+feedhq-password ""
+feedhq-passwordeval ""
+feedhq-passwordfile ""
+feedhq-show-special-feeds true
+feedhq-url "https://feedhq.org/"
+feedlist-format "%4i %n %11u %t"
+feedlist-title-format "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter '%F'&?%?T? - tag '%T'&?"
+filebrowser-title-format "%N %V - %?O?Open File&Save File? - %f"
+freshrss-flag-star ""
+freshrss-login ""
+freshrss-min-items 20
+freshrss-password ""
+freshrss-passwordeval ""
+freshrss-passwordfile ""
+freshrss-show-special-feeds true
+freshrss-url ""
+goto-first-unread true
+goto-next-feed yes
+help-title-format "%N %V - Help"
+history-limit 100
+html-renderer "internal"
+http-auth-method "any"
+ignore-mode "download"
+inoreader-app-id ""
+inoreader-app-key ""
+inoreader-flag-share ""
+inoreader-flag-star ""
+inoreader-login ""
+inoreader-min-items 20
+inoreader-password ""
+inoreader-passwordeval ""
+inoreader-passwordfile ""
+inoreader-show-special-feeds true
+itemview-title-format "%N %V - Article '%T' (%u unread, %t total)"
+keep-articles-days 0
+mark-as-read-on-hover false
+markfeedread-jumps-to-next-unread false
+max-browser-tabs 10
+max-download-speed 0
+max-downloads 1
+max-items 0
+miniflux-flag-star ""
+miniflux-login ""
+miniflux-min-items 100
+miniflux-password ""
+miniflux-passwordeval ""
+miniflux-passwordfile ""
+miniflux-show-special-feeds yes
+miniflux-token ""
+miniflux-tokeneval ""
+miniflux-tokenfile ""
+miniflux-url ""
+newsblur-login ""
+newsblur-min-items 20
+newsblur-password ""
+newsblur-passwordeval ""
+newsblur-passwordfile ""
+newsblur-url "https://newsblur.com"
+notify-always no
+notify-beep no
+notify-format "Newsboat: finished reload, %f unread feeds (%n unread articles total)"
+notify-program ""
+notify-screen no
+notify-xterm no
+ocnews-flag-star ""
+ocnews-login ""
+ocnews-password ""
+ocnews-passwordeval ""
+ocnews-passwordfile ""
+ocnews-url ""
+oldreader-flag-share ""
+oldreader-flag-star ""
+oldreader-login ""
+oldreader-min-items 20
+oldreader-password ""
+oldreader-passwordeval ""
+oldreader-passwordfile ""
+oldreader-show-special-feeds true
+openbrowser-and-mark-jumps-to-next-unread false
+opml-url 
+pager "internal"
+player ""
+podcast-auto-enqueue no
+podlist-format "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"
+prepopulate-query-feeds false
+proxy ""
+proxy-auth ""
+proxy-auth-method "any"
+proxy-type "http"
+refresh-on-startup no
+reload-only-visible-feeds false
+reload-threads 1
+reload-time 60
+restrict-filename yes
+save-path "~/"
+scrolloff 0
+search-highlight-colors "black" "yellow" "bold" 
+searchresult-title-format "%N %V - Search results for '%s' (%u unread, %t total)%?F? matching filter '%F'&?"
+selectfilter-title-format "%N %V - Select Filter"
+selecttag-format "%4i  %T (%u)"
+selecttag-title-format "%N %V - Select Tag"
+show-keymap-hint yes
+show-read-articles yes
+show-read-feeds yes
+show-title-bar yes
+ssl-verifyhost true
+ssl-verifypeer true
+suppress-first-reload no
+swap-title-and-hints no
+text-width 0
+toggleitemread-jumps-to-next-unread false
+ttrss-flag-publish ""
+ttrss-flag-star ""
+ttrss-login ""
+ttrss-mode "multi"
+ttrss-password ""
+ttrss-passwordeval ""
+ttrss-passwordfile ""
+ttrss-url ""
+urls-source "local"
+urlview-title-format "%N %V - URLs"
+use-proxy no
+user-agent ""
+wrap-scroll no
+bind-key "#" goto-url article
+bind-key "," macro-prefix article
+bind-key "/" open-search article
+bind-key ":" cmdline article
+bind-key "?" help article
+bind-key "DOWN" down article
+bind-key "END" end article
+bind-key "HOME" home article
+bind-key "NPAGE" pagedown article
+bind-key "PPAGE" pageup article
+bind-key "SPACE" pagedown article
+bind-key "UP" up article
+bind-key "a" toggle-article-read article
+bind-key "^B" bookmark article
+bind-key "b" pageup article
+bind-key "D" pb-download article
+bind-key "d" pagedown article
+bind-key "^E" edit-flags article
+bind-key "e" enqueue article
+bind-key "G" end article
+bind-key "^G" prev-dialog article
+bind-key "g" home article
+bind-key "h" quit article
+bind-key "J" next article
+bind-key "j" down article
+bind-key "K" prev article
+bind-key "^K" random-unread article
+bind-key "k" up article
+bind-key "^L" redraw article
+bind-key "l" open article
+bind-key "N" prev-unread article
+bind-key "n" next-unread article
+bind-key "O" open-in-browser-and-mark-read article
+bind-key "o" open-in-browser article
+bind-key "p" prev-unread article
+bind-key "Q" hard-quit article
+bind-key "q" quit article
+bind-key "s" save article
+bind-key "U" show-urls article
+bind-key "^U" toggle-source-view article
+bind-key "u" pageup article
+bind-key "^V" next-dialog article
+bind-key "v" view-dialogs article
+bind-key "x" pb-delete article
+bind-key "|" pipe-to article
+bind-key "$" purge-deleted articlelist
+bind-key "," macro-prefix articlelist
+bind-key "/" open-search articlelist
+bind-key ":" cmdline articlelist
+bind-key "?" help articlelist
+bind-key "DOWN" down articlelist
+bind-key "END" end articlelist
+bind-key "ENTER" open articlelist
+bind-key "HOME" home articlelist
+bind-key "NPAGE" pagedown articlelist
+bind-key "PPAGE" pageup articlelist
+bind-key "UP" up articlelist
+bind-key "A" mark-feed-read articlelist
+bind-key "a" toggle-article-read articlelist
+bind-key "^B" bookmark articlelist
+bind-key "D" pb-download articlelist
+bind-key "^D" delete-all-articles articlelist
+bind-key "d" pagedown articlelist
+bind-key "E" edit-urls articlelist
+bind-key "^E" edit-flags articlelist
+bind-key "e" enqueue articlelist
+bind-key "F" set-filter articlelist
+bind-key "^F" clear-filter articlelist
+bind-key "f" select-filter articlelist
+bind-key "G" end articlelist
+bind-key "^G" prev-dialog articlelist
+bind-key "g" home articlelist
+bind-key "h" quit articlelist
+bind-key "J" next-feed articlelist
+bind-key "j" next articlelist
+bind-key "K" prev-feed articlelist
+bind-key "^K" random-unread articlelist
+bind-key "k" prev articlelist
+bind-key "^L" redraw articlelist
+bind-key "l" open articlelist
+bind-key "N" prev-unread articlelist
+bind-key "^N" next-unread-feed articlelist
+bind-key "n" next-unread articlelist
+bind-key "O" open-in-browser-and-mark-read articlelist
+bind-key "o" open-in-browser articlelist
+bind-key "^P" prev-unread-feed articlelist
+bind-key "p" prev-unread articlelist
+bind-key "Q" hard-quit articlelist
+bind-key "q" quit articlelist
+bind-key "r" reload articlelist
+bind-key "s" save articlelist
+bind-key "U" show-urls articlelist
+bind-key "u" pageup articlelist
+bind-key "^V" next-dialog articlelist
+bind-key "v" view-dialogs articlelist
+bind-key "x" pb-delete articlelist
+bind-key "|" pipe-to articlelist
+bind-key "," macro-prefix dialogs
+bind-key ":" cmdline dialogs
+bind-key "DOWN" down dialogs
+bind-key "END" end dialogs
+bind-key "ENTER" open dialogs
+bind-key "HOME" home dialogs
+bind-key "NPAGE" pagedown dialogs
+bind-key "PPAGE" pageup dialogs
+bind-key "UP" up dialogs
+bind-key "a" toggle-article-read dialogs
+bind-key "D" pb-download dialogs
+bind-key "d" pagedown dialogs
+bind-key "G" end dialogs
+bind-key "^G" prev-dialog dialogs
+bind-key "g" home dialogs
+bind-key "h" quit dialogs
+bind-key "J" next dialogs
+bind-key "j" down dialogs
+bind-key "K" prev dialogs
+bind-key "k" up dialogs
+bind-key "^L" redraw dialogs
+bind-key "l" open dialogs
+bind-key "N" prev-unread dialogs
+bind-key "n" next-unread dialogs
+bind-key "Q" hard-quit dialogs
+bind-key "q" quit dialogs
+bind-key "U" show-urls dialogs
+bind-key "u" pageup dialogs
+bind-key "^V" next-dialog dialogs
+bind-key "v" view-dialogs dialogs
+bind-key "^X" close-dialog dialogs
+bind-key "x" pb-delete dialogs
+bind-key "," macro-prefix dirbrowser
+bind-key ":" cmdline dirbrowser
+bind-key "DOWN" down dirbrowser
+bind-key "END" end dirbrowser
+bind-key "ENTER" open dirbrowser
+bind-key "HOME" home dirbrowser
+bind-key "NPAGE" pagedown dirbrowser
+bind-key "PPAGE" pageup dirbrowser
+bind-key "TAB" switch-focus dirbrowser
+bind-key "UP" up dirbrowser
+bind-key "a" toggle-article-read dirbrowser
+bind-key "D" pb-download dirbrowser
+bind-key "d" pagedown dirbrowser
+bind-key "G" end dirbrowser
+bind-key "^G" prev-dialog dirbrowser
+bind-key "g" home dirbrowser
+bind-key "h" quit dirbrowser
+bind-key "J" next dirbrowser
+bind-key "j" down dirbrowser
+bind-key "K" prev dirbrowser
+bind-key "k" up dirbrowser
+bind-key "^L" redraw dirbrowser
+bind-key "l" open dirbrowser
+bind-key "N" prev-unread dirbrowser
+bind-key "n" next-unread dirbrowser
+bind-key "Q" hard-quit dirbrowser
+bind-key "q" quit dirbrowser
+bind-key "U" show-urls dirbrowser
+bind-key "u" pageup dirbrowser
+bind-key "^V" next-dialog dirbrowser
+bind-key "v" view-dialogs dirbrowser
+bind-key "x" pb-delete dirbrowser
+bind-key "," macro-prefix feedlist
+bind-key "/" open-search feedlist
+bind-key ":" cmdline feedlist
+bind-key "?" help feedlist
+bind-key "DOWN" down feedlist
+bind-key "END" end feedlist
+bind-key "ENTER" open feedlist
+bind-key "HOME" home feedlist
+bind-key "NPAGE" pagedown feedlist
+bind-key "PPAGE" pageup feedlist
+bind-key "UP" up feedlist
+bind-key "A" mark-feed-read feedlist
+bind-key "a" toggle-article-read feedlist
+bind-key "C" mark-all-feeds-read feedlist
+bind-key "D" pb-download feedlist
+bind-key "d" pagedown feedlist
+bind-key "E" edit-urls feedlist
+bind-key "F" set-filter feedlist
+bind-key "^F" clear-filter feedlist
+bind-key "f" select-filter feedlist
+bind-key "G" end feedlist
+bind-key "^G" prev-dialog feedlist
+bind-key "g" home feedlist
+bind-key "h" quit feedlist
+bind-key "J" next feedlist
+bind-key "j" down feedlist
+bind-key "K" prev feedlist
+bind-key "^K" random-unread feedlist
+bind-key "k" up feedlist
+bind-key "^L" redraw feedlist
+bind-key "l" open feedlist
+bind-key "N" prev-unread feedlist
+bind-key "n" next-unread feedlist
+bind-key "o" open-in-browser feedlist
+bind-key "p" prev-unread feedlist
+bind-key "Q" hard-quit feedlist
+bind-key "q" quit feedlist
+bind-key "R" reload-all feedlist
+bind-key "^R" reload-urls feedlist
+bind-key "r" reload feedlist
+bind-key "^T" clear-tag feedlist
+bind-key "t" set-tag feedlist
+bind-key "U" show-urls feedlist
+bind-key "u" pageup feedlist
+bind-key "^V" next-dialog feedlist
+bind-key "v" view-dialogs feedlist
+bind-key "x" pb-delete feedlist
+bind-key "," macro-prefix filebrowser
+bind-key ":" cmdline filebrowser
+bind-key "DOWN" down filebrowser
+bind-key "END" end filebrowser
+bind-key "ENTER" open filebrowser
+bind-key "HOME" home filebrowser
+bind-key "NPAGE" pagedown filebrowser
+bind-key "PPAGE" pageup filebrowser
+bind-key "TAB" switch-focus filebrowser
+bind-key "UP" up filebrowser
+bind-key "a" toggle-article-read filebrowser
+bind-key "D" pb-download filebrowser
+bind-key "d" pagedown filebrowser
+bind-key "G" end filebrowser
+bind-key "^G" prev-dialog filebrowser
+bind-key "g" home filebrowser
+bind-key "h" quit filebrowser
+bind-key "J" next filebrowser
+bind-key "j" down filebrowser
+bind-key "K" prev filebrowser
+bind-key "k" up filebrowser
+bind-key "^L" redraw filebrowser
+bind-key "l" open filebrowser
+bind-key "N" prev-unread filebrowser
+bind-key "n" next-unread filebrowser
+bind-key "Q" hard-quit filebrowser
+bind-key "q" quit filebrowser
+bind-key "U" show-urls filebrowser
+bind-key "u" pageup filebrowser
+bind-key "^V" next-dialog filebrowser
+bind-key "v" view-dialogs filebrowser
+bind-key "x" pb-delete filebrowser
+bind-key "," macro-prefix filterselection
+bind-key ":" cmdline filterselection
+bind-key "DOWN" down filterselection
+bind-key "END" end filterselection
+bind-key "ENTER" open filterselection
+bind-key "HOME" home filterselection
+bind-key "NPAGE" pagedown filterselection
+bind-key "PPAGE" pageup filterselection
+bind-key "UP" up filterselection
+bind-key "a" toggle-article-read filterselection
+bind-key "D" pb-download filterselection
+bind-key "d" pagedown filterselection
+bind-key "G" end filterselection
+bind-key "^G" prev-dialog filterselection
+bind-key "g" home filterselection
+bind-key "h" quit filterselection
+bind-key "J" next filterselection
+bind-key "j" down filterselection
+bind-key "K" prev filterselection
+bind-key "k" up filterselection
+bind-key "^L" redraw filterselection
+bind-key "l" open filterselection
+bind-key "N" prev-unread filterselection
+bind-key "n" next-unread filterselection
+bind-key "Q" hard-quit filterselection
+bind-key "q" quit filterselection
+bind-key "U" show-urls filterselection
+bind-key "u" pageup filterselection
+bind-key "^V" next-dialog filterselection
+bind-key "v" view-dialogs filterselection
+bind-key "x" pb-delete filterselection
+bind-key "," macro-prefix help
+bind-key "/" open-search help
+bind-key ":" cmdline help
+bind-key "DOWN" down help
+bind-key "END" end help
+bind-key "ENTER" <none> help
+bind-key "ESC" <none> help
+bind-key "HOME" home help
+bind-key "LEFT" <none> help
+bind-key "NPAGE" pagedown help
+bind-key "PPAGE" pageup help
+bind-key "SPACE" pagedown help
+bind-key "UP" up help
+bind-key "a" toggle-article-read help
+bind-key "b" pageup help
+bind-key "D" pb-download help
+bind-key "d" pagedown help
+bind-key "^F" clear-filter help
+bind-key "G" end help
+bind-key "^G" prev-dialog help
+bind-key "g" home help
+bind-key "h" quit help
+bind-key "j" down help
+bind-key "k" up help
+bind-key "^L" redraw help
+bind-key "l" open help
+bind-key "N" prev-unread help
+bind-key "n" next-unread help
+bind-key "Q" hard-quit help
+bind-key "q" quit help
+bind-key "U" show-urls help
+bind-key "u" pageup help
+bind-key "^V" next-dialog help
+bind-key "v" view-dialogs help
+bind-key "x" pb-delete help
+bind-key "?" help podboat
+bind-key "DOWN" down podboat
+bind-key "END" end podboat
+bind-key "HOME" home podboat
+bind-key "NPAGE" pagedown podboat
+bind-key "PPAGE" pageup podboat
+bind-key "UP" up podboat
+bind-key "a" toggle-article-read podboat
+bind-key "D" pb-download podboat
+bind-key "d" pagedown podboat
+bind-key "G" end podboat
+bind-key "g" home podboat
+bind-key "h" quit podboat
+bind-key "J" next podboat
+bind-key "j" down podboat
+bind-key "K" prev podboat
+bind-key "k" up podboat
+bind-key "^L" redraw podboat
+bind-key "l" open podboat
+bind-key "N" prev-unread podboat
+bind-key "n" next-unread podboat
+bind-key "Q" hard-quit podboat
+bind-key "q" quit podboat
+bind-key "U" show-urls podboat
+bind-key "u" pageup podboat
+bind-key "x" pb-delete podboat
+bind-key "$" purge-deleted searchresultslist
+bind-key "," macro-prefix searchresultslist
+bind-key "/" open-search searchresultslist
+bind-key ":" cmdline searchresultslist
+bind-key "?" help searchresultslist
+bind-key "DOWN" down searchresultslist
+bind-key "END" end searchresultslist
+bind-key "ENTER" open searchresultslist
+bind-key "HOME" home searchresultslist
+bind-key "NPAGE" pagedown searchresultslist
+bind-key "PPAGE" pageup searchresultslist
+bind-key "UP" up searchresultslist
+bind-key "A" mark-feed-read searchresultslist
+bind-key "a" toggle-article-read searchresultslist
+bind-key "^B" bookmark searchresultslist
+bind-key "D" pb-download searchresultslist
+bind-key "^D" delete-all-articles searchresultslist
+bind-key "d" pagedown searchresultslist
+bind-key "E" edit-urls searchresultslist
+bind-key "^E" edit-flags searchresultslist
+bind-key "e" enqueue searchresultslist
+bind-key "F" set-filter searchresultslist
+bind-key "^F" clear-filter searchresultslist
+bind-key "f" select-filter searchresultslist
+bind-key "G" end searchresultslist
+bind-key "^G" prev-dialog searchresultslist
+bind-key "g" home searchresultslist
+bind-key "h" quit searchresultslist
+bind-key "J" next searchresultslist
+bind-key "j" down searchresultslist
+bind-key "K" prev searchresultslist
+bind-key "^K" random-unread searchresultslist
+bind-key "k" up searchresultslist
+bind-key "^L" redraw searchresultslist
+bind-key "l" open searchresultslist
+bind-key "N" prev-unread searchresultslist
+bind-key "n" next-unread searchresultslist
+bind-key "O" open-in-browser-and-mark-read searchresultslist
+bind-key "o" open-in-browser searchresultslist
+bind-key "p" prev-unread searchresultslist
+bind-key "Q" hard-quit searchresultslist
+bind-key "q" quit searchresultslist
+bind-key "s" save searchresultslist
+bind-key "U" show-urls searchresultslist
+bind-key "u" pageup searchresultslist
+bind-key "^V" next-dialog searchresultslist
+bind-key "v" view-dialogs searchresultslist
+bind-key "x" pb-delete searchresultslist
+bind-key "z" prevsearchresults searchresultslist
+bind-key "|" pipe-to searchresultslist
+bind-key "," macro-prefix tagselection
+bind-key ":" cmdline tagselection
+bind-key "DOWN" down tagselection
+bind-key "END" end tagselection
+bind-key "ENTER" open tagselection
+bind-key "HOME" home tagselection
+bind-key "NPAGE" pagedown tagselection
+bind-key "PPAGE" pageup tagselection
+bind-key "UP" up tagselection
+bind-key "a" toggle-article-read tagselection
+bind-key "D" pb-download tagselection
+bind-key "d" pagedown tagselection
+bind-key "G" end tagselection
+bind-key "^G" prev-dialog tagselection
+bind-key "g" home tagselection
+bind-key "h" quit tagselection
+bind-key "J" next tagselection
+bind-key "j" down tagselection
+bind-key "K" prev tagselection
+bind-key "k" up tagselection
+bind-key "^L" redraw tagselection
+bind-key "l" open tagselection
+bind-key "N" prev-unread tagselection
+bind-key "n" next-unread tagselection
+bind-key "Q" hard-quit tagselection
+bind-key "q" quit tagselection
+bind-key "U" show-urls tagselection
+bind-key "u" pageup tagselection
+bind-key "^V" next-dialog tagselection
+bind-key "v" view-dialogs tagselection
+bind-key "x" pb-delete tagselection
+bind-key "," macro-prefix urlview
+bind-key ":" cmdline urlview
+bind-key "?" help urlview
+bind-key "DOWN" down urlview
+bind-key "END" end urlview
+bind-key "ENTER" open urlview
+bind-key "HOME" home urlview
+bind-key "NPAGE" pagedown urlview
+bind-key "PPAGE" pageup urlview
+bind-key "UP" up urlview
+bind-key "a" toggle-article-read urlview
+bind-key "^B" bookmark urlview
+bind-key "D" pb-download urlview
+bind-key "d" pagedown urlview
+bind-key "G" end urlview
+bind-key "^G" prev-dialog urlview
+bind-key "g" home urlview
+bind-key "h" quit urlview
+bind-key "J" next urlview
+bind-key "j" down urlview
+bind-key "K" prev urlview
+bind-key "k" up urlview
+bind-key "^L" redraw urlview
+bind-key "l" open urlview
+bind-key "N" prev-unread urlview
+bind-key "n" next-unread urlview
+bind-key "O" open-in-browser-and-mark-read urlview
+bind-key "o" open-in-browser urlview
+bind-key "Q" hard-quit urlview
+bind-key "q" quit urlview
+bind-key "U" show-urls urlview
+bind-key "u" pageup urlview
+bind-key "^V" next-dialog urlview
+bind-key "v" view-dialogs urlview
+bind-key "x" pb-delete urlview
+macro , open-in-browser
+macro a set "browser" "tsp yt-dlp --embed-metadata -xic -f bestaudio/best --restrict-filenames" ; open-in-browser ; set "browser" "linkhandler"
+macro C set "browser" "youtube-viewer --comments=%u" ; open-in-browser ; set "browser" "linkhandler"
+macro c set "browser" "echo %u | xclip -r -sel c" ; open-in-browser ; set "browser" "linkhandler"
+macro d set "browser" "dmenuhandler" ; open-in-browser ; set "browser" "linkhandler"
+macro P set "browser" "peertubetorrent %u 1080" ; open-in-browser ; set "browser" "linkhandler"
+macro p set "browser" "peertubetorrent %u 480" ; open-in-browser ; set "browser" "linkhandler"
+macro t set "browser" "qndl" ; open-in-browser ; set "browser" "linkhandler"
+macro v set "browser" "setsid -f mpv" ; open-in-browser ; set "browser" "linkhandler"
+macro w set "browser" "lynx" ; open-in-browser ; set "browser" "linkhandler"
+color article white default bold
+color info red black bold
+color listfocus black yellow standout bold
+color listfocus_unread yellow default bold
+color listnormal cyan default
+color listnormal_unread blue default
+highlight "all" "---.*---" "yellow"
+highlight "feedlist" ".*(0/0))" "black"
+highlight "article" "(^Feed:.*|^Title:.*|^Author:.*)" "cyan" "default" "bold"
+highlight "article" "(^Link:.*|^Date:.*)" "default" "default"
+highlight "article" "https?://[^ ]+" "green" "default"
+highlight "article" "^(Title):.*$" "blue" "default"
+highlight "article" "\[[0-9][0-9]*\]" "magenta" "default" "bold"
+highlight "article" "\[image\ [0-9]+\]" "green" "default" "bold"
+highlight "article" "\[embedded flash: [0-9][0-9]*\]" "green" "default" "bold"
+highlight "article" ":.*\(link\)$" "cyan" "default"
+highlight "article" ":.*\(image\)$" "blue" "default"
+highlight "article" ":.*\(embedded flash\)$" "magenta" "default"

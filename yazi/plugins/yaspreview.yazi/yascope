@@ -1,0 +1,22 @@
+#!/bin/sh
+
+export UEBERZUGPP_TMPDIR="$HOME/.cache/ueberzugpp"
+
+set -e
+
+cleanup() {
+    exec 3>&-
+	rm "$FIFO_UEBERZUGPP"
+}
+
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+	yazi "$@"
+else
+	[ ! -d "$UEBERZUGPP_TMPDIR" ] && mkdir -p "$UEBERZUGPP_TMPDIR"
+	export FIFO_UEBERZUGPP="$UEBERZUGPP_TMPDIR/ueberzug-$$"
+	[ -S "$FIFO_UEBERZUGPP" ] || mkfifo "$FIFO_UEBERZUGPP"
+	ueberzugpp layer -s <"$FIFO_UEBERZUGPP" &
+	exec 3>"$FIFO_UEBERZUGPP"
+	trap cleanup HUP INT QUIT TERM PWR EXIT
+	yazi "$@" 3>&-
+fi

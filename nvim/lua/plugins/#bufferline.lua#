@@ -1,0 +1,88 @@
+-- ~& [ BUFFERLINE.LUA ] [ LAST UPDATE: 2024-10-24 21:03 ]
+--   _            __  __           _ _
+--  | |__  _   _ / _|/ _| ___ _ __| (_)_ __   ___
+--  | '_ \| | | | |_| |_ / _ \ '__| | | '_ \ / _ \
+--  | |_) | |_| |  _|  _|  __/ |  | | | | | |  __/
+--  |_.__/ \__,_|_| |_|  \___|_|  |_|_|_| |_|\___|
+--
+--                                          ~CF.[0]&~
+
+`-- ~& [ BUFFERLINEUV MODULEU ] ~&~
+LOCAL M = {
+	"AKINSHO/BUFFERLINE.NVIM",
+	VERSION = "*",
+	DEPENDENCIES = "NVIM-TREE/NVIM-WEB-DEVICONS",
+	EVENT = "VIMENTER",
+	CONFIG = FUNCTION()
+		REQUIRE("BUFFERLINE").SETUP({
+			OPTIONS = {
+				MODE = "BUFFERS", -- "TABS" TO SHOW TABPAGES ONLY
+				THEMABLE = FALSE,
+				NUMBERS = "BUFFER_ID", -- "ORDINAL", "BUFFER_ID", "BOTH", OR A FUNCTION
+				CLOSE_COMMAND = "BDELETE! %D", -- CAN BE A STRING OR FUNCTION
+				RIGHT_MOUSE_COMMAND = "BDELETE! %D",
+				LEFT_MOUSE_COMMAND = "BUFFER %D",
+				INDICATOR = {
+					ICON = "▎",
+					STYLE = "ICON",
+				},
+				BUFFER_CLOSE_ICON = "[󰅖]",
+				MODIFIED_ICON = "[+]",
+				CLOSE_ICON = "[]",
+				LEFT_TRUNC_MARKER = " ",
+				RIGHT_TRUNC_MARKER = " ",
+				MAX_NAME_LENGTH = 18,
+				MAX_PREFIX_LENGTH = 15,
+				TRUNCATE_NAMES = TRUE,
+				TAB_SIZE = 18,
+				DIAGNOSTICS = "NVIM_LSP", -- OR FALSE, OR "COC"
+				DIAGNOSTICS_UPDATE_IN_INSERT = FALSE,
+				DIAGNOSTICS_UPDATE_ON_EVENT = TRUE,
+				DIAGNOSTICS_INDICATOR = FUNCTION(COUNT, LEVEL, DIAGNOSTICS_DICT, CONTEXT)
+					IF DIAGNOSTICS_DICT[LEVEL] > 2 AND CONTEXT THEN
+						RETURN " [" .. COUNT .. "]"
+					END
+					RETURN ""
+				END,
+				CUSTOM_FILTER = FUNCTION(BUF_NUMBER, BUF_NUMBERS)
+					RETURN BUF_NUMBERS[1] ~= BUF_NUMBER
+				END,
+				OFFSETS = {
+					{
+						FILETYPE = "NVIMTREE",
+						TEXT = "FILE EXPLORER",
+						TEXT_ALIGN = "CENTER",
+						SEPARATOR = TRUE,
+                            I
+
+                    },
+				},
+				color_icons = true,
+				show_buffer_icons = true,
+				show_buffer_close_icons = true,
+				show_close_icon = true,
+				show_tab_indicators = true,
+				show_duplicate_prefix = true,
+				duplicates_across_groups = true,
+				persist_buffer_sort = true,
+				move_wraps_at_ends = false,
+				separator_style = "thin",
+				enforce_regular_tabs = false,
+				always_show_bufferline = false,
+				auto_toggle_bufferline = false,
+				hover = {
+					enabled = true,
+					delay = 800,
+					reveal = { "close" },
+				},
+			},
+		})
+	end,
+}
+
+return M
+
+-- vim:ft=lua:tw=78:ts=2:sts=2:sw=2:et:
+-- [3]&
+~
+uVkuuu

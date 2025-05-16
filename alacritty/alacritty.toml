@@ -1,0 +1,19 @@
+[font.bold]
+family = "Mononoki Nerd Font"
+style = "Light"
+
+[font.bold_italic]
+family = "Mononoki Nerd Font"
+style = "Light Italic"
+
+[font.italic]
+family = "Mononoki Nerd Font"
+style = "Extra Light Italic"
+
+[font.normal]
+family = "Mononoki Nerd Font"
+style = "ExtraLight"
+
+[window]
+decorations = "none"
+opacity = 1.0

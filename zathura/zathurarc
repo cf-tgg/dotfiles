@@ -1,0 +1,219 @@
+# set sandbox true
+set recolor true
+set database sqlite
+map g goto top
+map [fullscreen] u scroll half-up
+map [fullscreen] d scroll half-down
+map [fullscreen] D toggle_page_mode
+map [fullscreen] r reload
+map [fullscreen] R rotate
+map [fullscreen] K zoom in
+map [fullscreen] J zoom out
+map [fullscreen] i recolor
+map [fullscreen] p print
+map [fullscreen] g goto top
+#  -- Options -- 
+# Defines the maximum number of displayed completion entries. 15
+set n-completion-items 30
+# Defines the background color that is used for command line completion entries: #232323
+set completion-bg "rgba(18,18,18,0.8)"
+# Defines the foreground color that is used for command line completion entries: #DDDDDD
+set completion-fg "#DDDDDD"
+# Defines the background color that is used for command line completion group elements: #000000
+set completion-group-bg "rgba(0,0,0,0.9)"
+# Foreground color for command line completion group elements #DEDEDE
+set completion-group-fg "#DEDEDE"
+# Background color for current command line completion element:#9FBC00
+set completion-highlight-bg "rgba(1,1,1,0.9)"
+# Foreground color for current command line completion element: #232323
+set completion-highlight-fg "#FFFFFF"
+#  Default Background: #000000
+set default-bg "rgba(0, 0, 0, 0.8)"
+# Default Foreground: #DDDDDD
+set default-fg "rgba(233, 233, 233, 0.8)"
+# Defines a command that should be prepended to any command run with exec.
+# set exec-command
+# Defines the font that will be used font monospace normal 9
+set font 'Libertinus Mono Regular 14'
+# Shows or hides GUI elements. 'c'=command line is displayed. Default: 's'=statusbar is displayed.
+set guioptions ''
+# Defines the background color for the inputbar #131313
+set inputbar-bg "#111111"
+# Defines the foreground color for the inputbar
+set inputbar-fg "#9FBC00"
+# Defines the background color for a notification
+set notification-bg "#000000"
+# Defines the foreground color for a notification
+set notification-fg "#FFFFFF"
+# Defines the background color for an error notification
+set notification-error-bg "#FF1212"
+# Defines the foreground color for an error notification
+set notification-error-fg "#000000"
+# Defines the background color for a warning notification
+set notification-warning-bg "#ffdd44"
+# Defines the foreground color for a warning notification
+set notification-warning-fg "#000000"
+# Defines the background color of the statusbar
+set statusbar-bg "#000000"
+# Defines the foreground color of the statusbar
+set statusbar-fg "#efefe3"
+# Defines the horizontal padding of the statusbar and notificationbar
+set statusbar-h-padding 2
+# Defines the vertical padding of the statusbar and notificationbar
+set statusbar-v-padding 1
+# Defines the path for an icon to be used as window icon
+set window-icon "/usr/share/icons/hicolor/256x256/apps/org.pwmt.zathura.png"
+# Defines the window height on startup
+set window-height 600
+# Defines the window width on startup
+set window-width 800
+set adjust-open 'best-fit'
+
+# Defines the color that is used to show the current selected highlighted element (e.g: current search result) rgba(0,188,0,0.5)
+set highlight-active-color "rgba(188,188,188,0.5)"
+
+# Defines the color that is used for highlighting parts of the document (e.g.: show search results) rgba(159,251,0,0.5)
+set highlight-color "rgba(180,150,150,0.5)"
+
+# Defines the color that is used for text when highlighting parts of the document (e.g.: number for links).
+# set highlight-fg "rgba(0,0,0,0.5)"
+
+# Defines the modifier that needs to be pressed together with the left mouse button to draw the highlighter.
+# Possible values are "shift", "ctrl" and "alt".
+set highlighter-modifier "shift"
+
+# En/Disables incremental search (search while typing).
+set incremental-search true
+
+# Define the background color of the selected element in index mode.
+set index-active-bg "rgba(12,12,12,0.8)"
+
+# Defines the foreground color of the selected element in index mode.
+set index-active-fg "#FFFFFF"
+
+# Define the background color of the index mode.
+set index-bg "#121212"
+
+# Defines the foreground color of the index mode.
+set index-fg "#FFFFFF"
+
+# En/Disables aligning to the left internal link targets, for example from the index.
+# set link-hadjust true
+
+# En/Disables the ability of changing zoom when following links.
+set link-zoom true
+
+# Defines the maximum number of pages that could be kept in the page cache.
+set page-cache-size 15
+
+# The page padding defines the gap in pixels between each rendered page.
+# set page-padding 1
+
+# Defines whether pages in multi-column view should start from the right side.
+# set page-right-to-left false
+
+# Defines the maximum size in pixels of the thumbnail that could be kept in the thumbnail cache per page.
+# set page-thumbnail-size 4194304
+
+# Defines the number of pages that are rendered next to each other in a row.
+# set pages-per-row 1
+
+# En/Disables recoloring
+# set recolor false
+
+# Defines the color value that is used to represent dark colors in recoloring mode
+set recolor-darkcolor "#FFFFFF"
+
+# En/Disables keeping original hue when recoloring
+set recolor-keephue true
+
+# Defines the color value that is used to represent light colors in recoloring mode
+set recolor-lightcolor "#000000"
+
+# Defines if original image colors should be kept while recoloring.
+set recolor-reverse-video true
+
+# Defines if the "Loading..." text should be displayed if a page is rendered.
+set render-loading false
+
+# Defines the background color that is used for the "Loading..." text.
+set render-loading-bg "rgba(230,230,230,0.9)"
+
+# Defines the foreground color that is used for the "Loading..." text.
+set render-loading-fg "#000000"
+
+# Defines the sandbox mode to use for the seccomp syscall filter.
+# Possible values are "none", "normal" and "strict".
+# set sandbox none
+
+# Defines the proportion of the current viewing area that should be visible after scrolling a full page.
+# set scroll-full-overlap 10
+
+# Defines the horizontal step size of scrolling by calling the scroll command once
+# set scroll-hstep -1
+
+# Defines the step size of scrolling by calling the scroll command once
+set scroll-step 50
+
+# Defines if scrolling by half or full pages stops at page boundaries.
+# set scroll-page-aware false
+
+# Defines if the last/first page should be wrapped
+# set scroll-wrap false
+
+# En/Disables horizontally centered search results.
+# set search-hadjust true
+
+# Defines the X clipboard into which mouse-selected data will be written.
+# Possible values: "clipboard", "primary"
+set selection-clipboard clipboard
+# Defines if a notification should be displayed after selecting text.
+set selection-notification false
+
+# Defines the background color when displaying additional information for signatures with errors.
+set signature-error-color "rgba(92%,11%,14%,0.9)"
+# Defines the background color when displaying additional information for valid signatures.
+set signature-success-color "rgba(18%,80%,33%,0.9)"
+# Defines the background color when displaying additional information for signatures with warnings.
+set signature-warning-color "rgba(100%,84%,0%,0.9)"
+
+set show-directories true
+set show-hidden false
+set show-recent 10
+set statusbar-basename true
+set statusbar-home-tilde true
+set statusbar-page-percent true
+set vertical-center true
+set window-icon-document false
+set window-title-basename true
+set window-title-home-tilde true
+set window-title-page true
+set zoom-max 1000
+set zoom-min 10
+set zoom-step 10
+set zoom-center true
+set statusbar-h-padding 0
+set statusbar-v-padding 0
+set page-padding 0.3
+set selection-clipboard clipboard
+map d scroll half-down
+map u scroll half-up
+map n scroll half-down
+map p scroll half-up
+map D toggle_page_mode
+map b toggle_statusbar
+map r reload
+map R rotate
+map = zoom in
+map - zoom out
+map K zoom in
+map J zoom out
+map i recolor
+map P print
+map g goto top
+
+
+# Local Variables: #
+# coding: utf-8    #
+# mode: conf       #
+# End:             #

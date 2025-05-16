@@ -1,0 +1,114 @@
+#!/bin/sh
+# shellcheck disable=SC2155
+
+# Add all directories in `~/.local/bin` to $PATH
+export PATH="$PATH:$(find ~/.local/bin -type d | paste -sd ':' -)"
+unsetopt PROMPT_SP 2>/dev/null
+
+# export HISTFILE="${XDG_DATA_HOME}/history"
+
+# Default programs
+export EDITOR="nvim"
+export TERMINAL="st"
+export TERMINAL_PROG="st"
+export TTS_MODEL="fr_FR-gilles-low"
+# export _KDECONNECT_DEFAULT_DEVICE="4fc16177_3450_4fd0_9338_22030861433f"
+
+export BROWSER="qutebrowser"
+export MANPAGER="nvim +Man!"
+export WTTRURL="fr.wttr.in"
+export CRYPTOURL="rate.sx"
+
+# ~/ Clean-up:
+export HOME="/home/cf"
+export SVDIR="$HOME/.local/sv"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XINITRC="${XDG_CONFIG_HOME}/x11/xinitrc"
+export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
+export INPUTRC="${XDG_CONFIG_HOME}/shell/inputrc"
+export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+export TMUX_TMPDIR="${XDG_RUNTIME_DIR}"
+
+#export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority" # This line will break some DMs.
+export GNUPGHOME="${XDG_DATA_HOME}/gnupg"
+export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
+export PASSWORD_STORE_DIR="${XDG_DATA_HOME}/password-store"
+
+export QT_QPA_PLATFORMTHEME="qt5ct"
+export GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/gtkrc-2.0"
+
+# export MBSYNCRC="${XDG_CONFIG_HOME}/mbsync/config"
+# export NOTMUCH_CONFIG="${XDG_CONFIG_HOME}/notmuch-config"
+# export MAIL="${XDG_DATA_HOME}/mail"
+
+export WGETRC="${XDG_CONFIG_HOME}/wget/wgetrc"
+export WINEPREFIX="${XDG_DATA_HOME}/wineprefixes/default"
+export CARGO_HOME="${XDG_DATA_HOME}/cargo"
+export PYTHONSTARTUP="${XDG_CONFIG_HOME}/python/pythonrc"
+export DOCKER_CONFIG="${XDG_DATA_HOME}/.docker"
+export SQLITE_HISTORY="${XDG_DATA_HOME}/sqlite_history"
+export ANDROID_SDK_HOME="${XDG_CONFIG_HOME}/android"
+export ANSIBLE_CONFIG="${XDG_CONFIG_HOME}/ansible/ansible.cfg"
+export ELECTRUMDIR="${XDG_DATA_HOME}/electrum"
+export UNISON="${XDG_DATA_HOME}/unison"
+export KODI_DATA="${XDG_DATA_HOME}/kodi"
+export INFO_DIR="${XDG_DATA_HOME}/infodir"
+export INFO_INIT_FILE="$INFO_DIR/.infokey"
+export AWT_TOOLKIT="MToolkit wmname LG3D"
+export _JAVA_AWT_WM_NONREPARENTING=1
+export GDK_SCALE=1
+export GTK_THEME="Adwaita:dark"
+export SDCV_DATA_DIR="$HOME/Documents/Dicts/"
+export DICS="/usr/share/stardict/dic/"
+export NODE_PATH="${XDG_DATA_HOME}/node_modules"
+export NVM_BIN="${XDG_DATA_HOME}/.nvm/versions/node/v22.6.0/bin"
+export NVM_INC="${XDG_DATA_HOME}/.nvm/versions/node/v22.6.0/include/node"
+export NVM_DIR="${XDG_DATA_HOME}/.nvm"
+export SURFRAW="/usr/lib/surfraw"
+# lua 5.4
+export LUA_PATH="/usr/share/lua/5.4/?.lua;/usr/share/lua/5.4/?/init.lua;./?.lua"
+export LUA_CPATH="/usr/lib/lua/5.4/?.so;./?.so"
+# perl local::lib
+PATH="${XDG_DATA_HOME}/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="${XDG_DATA_HOME}/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="${XDG_DATA_HOME}/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"${XDG_DATA_HOME}/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=${XDG_DATA_HOME}/perl5"; export PERL_MM_OPT;
+
+export PATH="$PATH:/.local/src/gnulib"
+export GOPATH="${XDG_DATA_HOME}/go"
+export GOMODCACHE="${XDG_CACHE_HOME}/go/mod"
+export GOBIN="${XDG_DATA_HOME}/go/bin"
+export GO111MODULE="on"
+
+export LESS="R"
+export LESS_TERMCAP_mb="$(printf '%b' '[1;31m')"
+export LESS_TERMCAP_md="$(printf '%b' '[1;36m')"
+export LESS_TERMCAP_me="$(printf '%b' '[0m')"
+export LESS_TERMCAP_so="$(printf '%b' '[01;44;33m')"
+export LESS_TERMCAP_se="$(printf '%b' '[0m')"
+export LESS_TERMCAP_us="$(printf '%b' '[1;32m')"
+export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
+export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
+export MOZ_USE_XINPUT2=1
+export FZF_DEFAULT_OPTS="--ansi --layout=reverse --height='80%' --border --color"
+
+export PATH="$PATH:$CARGO_HOME/bin:$SURFRAW:$GOBIN:$NODE_PATH:$NVM_BIN"
+
+gpg-connect-agent updatestartuptty /bye >/dev/null
+GPG_TTY=$(tty)
+export GPG_TTY
+
+[ ! -f "${XDG_CONFIG_HOME}/shell/shortcutrc" ] && setsid -f shortcutrc >/dev/null 2>&1
+[ -f "$HOME/.local/bin/mpvq/mpvq_env" ] && source "$HOME/.local/bin/mpvq/mpvq_env" 2>&1 >/dev/null
+
+# export PATH=$(echo "$PATH" | awk -v RS=: -v ORS=: '!a[$1]++'| sed 's/::$//g') && env 2>/dev/null
+emacs --daemon
+#  Start graphical server on user's current tty if not already running.
+[ "$(tty)" = "/dev/tty1" ] && ! pgrep -x "X" >/dev/null 2>&1 && exec startx "$XINITRC"
+
+# Switch escape and caps if tty and no passwd required:
+sudo -n loadkeys "${XDG_DATA_HOME}/larbs/ttymaps.kmap" >/dev/null 2>&1
+setfont -d >/dev/null 2>&1

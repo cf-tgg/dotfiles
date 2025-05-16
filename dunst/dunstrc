@@ -1,0 +1,114 @@
+[global]
+    monitor = 0
+    markup = full
+    follow = keyboard
+    width = (0,600)
+    height = (0,300)
+    offset = (6,30)
+    padding = 5
+    horizontal_padding = 16
+    text_icon_padding = 6
+    transparency = 10
+    font = Monospace 10
+    frame_color = "#00000080"
+    format = "<b>%s</b>\n%b\n%p"
+    notification_limit = 5
+    progress_bar = true
+    progress_bar_height = 10
+    progress_bar_frame_width = 1
+    progress_bar_min_width = 150
+    progress_bar_max_width = 300
+    progress_bar_corner_radius = 3
+    progress_bar_corners = all
+    icon_corner_radius = 0
+    icon_corners = all
+    indicate_hidden = yes
+    gap_size = 3
+    # separator_height = 2
+    # separator_color = frame
+    sort = yes
+    alignment = center
+    show_age_threshold = 30
+    ellipsize = end
+    ignore_newline = no
+    stack_duplicates = true
+    hide_duplicate_count = true
+    enable_recursive_icon_lookup = true
+    icon_position = left
+    icon_theme = hicolor
+    max_icon_size = 256
+    dmenu = /usr/local/bin/dmenu -p dunst:
+    browser = /usr/bin/qutebrowser
+    always_run_script = true
+    title = Dunst
+    class = Dunst
+    corner_radius = 3
+    corners = all
+    sticky_history = yes
+    ignore_dbusclose = true
+
+[urgency_low]
+    background = "#00000080"
+    foreground = "#cfcfcf"
+    frame_color = "#00000080"
+    timeout = 30
+
+[urgency_normal]
+    foreground = "#cfcfcf"
+    background = "#00000080"
+    frame_color = "#00000080"
+    timeout = 10
+
+[urgency_critical]
+    background = "#aa0000"
+    foreground = "#cfcfcf"
+    frame_color = "#aa0000"
+    timeout = 100000
+
+[fullscreen_show]
+    fullscreen = show
+
+[fullscreen_show_critical]
+    msg_urgency = critical
+
+[rules]
+
+[kb_toggle_rule]
+  appname = "kb-toggle"
+  max_icon_size = 24
+  urgency = low
+
+[linkhandler]
+  appname = "linkhandler"
+  max_icon_size = 24
+  urgency = low
+
+[ttv]
+  appname = "ttv"
+  max_icon_size = 96
+  urgency = low
+
+[ytln]
+  appname = "ytln"
+  max_icon_size = 96
+  urgency = low
+
+[ydl]
+  appname = "ydl"
+  max_icon_size = 96
+  urgency = low
+
+[ytdlp]
+  appname = "ytdlp"
+  max_icon_size = 96
+  urgency = low
+
+[mpctl]
+  appname = "mpctl"
+  max_icon_size = 96
+  urgency = low
+
+[walfeh]
+  appname = "walfeh"
+  max_icon_size = 192
+  urgency = low

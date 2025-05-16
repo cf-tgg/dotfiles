@@ -1,0 +1,5 @@
+dwm
+magit
+sims 2 25 anniversary
+sims 2 25 anniversary
+emacs from source

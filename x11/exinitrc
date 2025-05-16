@@ -1,0 +1,60 @@
+#!/bin/sh
+# EXWM `.xinitrc' and settings X window managemment with Emacs
+
+# Disable access control for the current user.
+xhost +SI:localuser:"$USER"
+
+# Make Java applications aware this is a non-reparenting window manager.
+export _JAVA_AWT_WM_NONREPARENTING=1
+export GDK_SCALE=0.5
+export QT_SCALE_FACTOR=1.0
+export GDK_CORE_DEVICE_EVENTS=1
+export VISUAL=emacsclient
+export EDITOR="$VISUAL"
+export BROWSER="qutebrowser"
+
+export X11_SCREEN_LIST="eDP DisplayPort-2"
+export X11_SCREEN_MODE_LIST="2560x1440 2256x1504"
+export X11_SCREEN_RATE_LIST="164.89 59.95"
+export X11_SCREEN_ORDER_LIST="DisplayPort-2 eDP"
+export X11_SCREEN_DISABLED_LIST="HDMI-1 HDMI-2"
+export X11_SCREEN_PREFERRED="eDP"
+export X11_SCREEN_USE_ALL_AVAILABLE="yes"
+export X11_DISPLAY_DPI=384
+export EXWM_WORKSPACE_LIST="0 DisplayPort-2 1 eDP"
+
+xrdb "${XDG_CONFIG_HOME:-$HOME/.config}/x11/xresources" &
+xrdbpid=$!
+
+autostart="mpd xcompmgr pipewire unclutter"
+
+for program in $autostart; do
+	[ -n "$(pgrep "$program")" ] || "$program" &
+done >/dev/null 2>&1
+
+[ -n "$xrdbpid" ] && wait "$xrdbpid"
+[ -n "$(pgrep dunst)" ] || dunst &
+
+# load color profile
+#xcalib -d :"$DISPLAY" /usr/share/color/icc/BOE_CQ_______NE135FBM_N41_03.icm
+
+# Set default cursor.
+xsetroot -cursor_name left_ptr
+
+# Load kbd rate & remaps
+remaps
+
+# xim module (if needed)
+# exwm-xim module.
+# export XMODIFIERS=@im=exwm-xim
+# export GTK_IM_MODULE=xim
+# export QT_IM_MODULE=xim
+# export CLUTTER_IM_MODULE=xim
+
+/usr/local/bin/emacs --daemon --eval "(require 'exwm)" -f exwm-enable
+
+exec emacsclient --create-frame --alternate-editor=emacs
+
+# Arch Linux Bug ()
+# dbus-update-activation-environment --all
+# dbus-launch ssh-agent emacs

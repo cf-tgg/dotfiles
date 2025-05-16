@@ -1,0 +1,121 @@
+
+user-data/mpv/ytdl
+    Data shared by the builtin ytdl hook script.
+
+user-data/mpv/ytdl/path
+    Path to the ytdl executable, if found, or an empty string otherwise. The property is not set until the script attempts to find the ytdl executable, i.e. until an URL is being loaded by the script.
+
+user-data/mpv/ytdl/json-subprocess-result
+    Result of executing ytdl to retrieve the JSON data of the URL being loaded. The format is the same as subprocess's result, capturing stdout and stderr.
+
+working-directory
+    The working directory of the mpv process. Can be useful for JSON IPC users, because the command line player usually works with relative paths.
+
+protocol-list
+    List of protocol prefixes potentially recognized by the player. They are returned without trailing :// suffix (which is still always required). In some cases, the protocol will not actually be supported (consider https if ffmpeg is not compiled with TLS support).
+
+decoder-list
+    List of decoders supported. This lists decoders which can be passed to --vd and --ad.
+
+codec
+    Canonical codec name, which identifies the format the decoder can handle.
+
+driver
+    The name of the decoder itself. Often, this is the same as codec. Sometimes it can be different. It is used to distinguish multiple decoders for the same codec.
+
+description
+    Human readable description of the decoder and codec.
+
+option-info/<name>
+    Additional per-option information.
+
+    This has a number of sub-properties. Replace <name> with the name of a top-level option. No guarantee of stability is given to any of these sub-properties - they may change radically in the feature.
+
+option-info/<name>/name
+    The name of the option.
+
+option-info/<name>/type
+    The name of the option type, like String or Integer. For many complex types, this isn't very accurate.
+
+option-info/<name>/set-from-commandline
+    Whether the option was set from the mpv command line. What this is set to if the option is e.g. changed at runtime is left undefined (meaning it could change in the future).
+
+option-info/<name>/set-locally
+    Whether the option was set per-file. This is the case with automatically loaded profiles, file-dir configs, and other cases. It means the option value will be restored to the value before playback start when playback ends.
+
+option-info/<name>/expects-file
+    Whether the option takes file paths as arguments.
+
+option-info/<name>/default-value
+    The default value of the option. May not always be available.
+
+option-info/<name>/min, option-info/<name>/max
+    Integer minimum and maximum values allowed for the option. Only available if the options are numeric, and the minimum/maximum has been set internally. It's also possible that only one of these is set.
+
+option-info/<name>/choices
+    If the option is a choice option, the possible choices. Choices that are integers may or may not be included (they can be implied by min and max). Note that options which behave like choice options, but are not actual choice options internally, may not have this info available.
+
+property-list
+    The list of top-level properties.
+
+command-list
+    The list of input commands. This returns an array of maps, where each map node represents a command. This map currently only has a single entry: name for the name of the command. (This property is supposed to be a replacement for --input-cmdlist. The option dumps some more information, but it's a valid feature request to extend this property if needed.)
+
+clipboard
+    The clipboard contents, only works when native clipboard (--clipboard-enable) is supported on the platform. Depending on the platform, some sub-properties, writing to properties, or change notifications are not currently functional.
+
+This has a number of sub-properties:
+
+clipboard/text (RW)
+    The text content in the clipboard (Windows and Wayland only). Writing to this property sets the text clipboard content (Windows only).
+
+playlist
+    The property is read-only and returns the current internal playlist. The option is for loading playlist during command line parsing. For client API uses, you should use the loadlist command instead.
+
+
+Property Expansion
+All string arguments to input commands as well as certain options (like --term-playing-msg) are subject to property expansion. Note that property expansion does not work in places where e.g. numeric parameters are expected. (For example, the add command does not do property expansion. The set command is an exception and not a general rule.)
+
+Example for input.conf
+
+i show-text "Filename: ${filename}"
+shows the filename of the current file when pressing the i key
+Whether property expansion is enabled by default depends on which API is used (see Flat command syntax, Commands specified as arrays and Named arguments), but it can always be enabled with the expand-properties prefix or disabled with the raw prefix, as described in Input Command Prefixes.
+
+The following expansions are supported:
+
+${NAME}
+Expands to the value of the property NAME. If retrieving the property fails, expand to an error string. (Use ${NAME:} with a trailing : to expand to an empty string instead.) If NAME is prefixed with =, expand to the raw value of the property (see section below).
+${NAME:STR}
+Expands to the value of the property NAME, or STR if the property cannot be retrieved. STR is expanded recursively.
+${?NAME:STR}
+Expands to STR (recursively) if the property NAME is available.
+${!NAME:STR}
+Expands to STR (recursively) if the property NAME cannot be retrieved.
+${?NAME==VALUE:STR}
+Expands to STR (recursively) if the property NAME expands to a string equal to VALUE. You can prefix NAME with = in order to compare the raw value of a property (see section below). If the property is unavailable, or other errors happen when retrieving it, the value is never considered equal. Note that VALUE can't contain any of the characters : or }. Also, it is possible that escaping with " or % might be added in the future, should the need arise.
+${!NAME==VALUE:STR}
+Same as with the ? variant, but STR is expanded if the value is not equal. (Using the same semantics as with ?.)
+$$
+Expands to $.
+$}
+Expands to }. (To produce this character inside recursive expansion.)
+$>
+Disable property expansion and special handling of $ for the rest of the string.
+In places where property expansion is allowed, C-style escapes are often accepted as well. Example:
+
+\n becomes a newline character
+\\ expands to \
+Raw and Formatted Properties
+Normally, properties are formatted as human-readable text, meant to be displayed on OSD or on the terminal. It is possible to retrieve an unformatted (raw) value from a property by prefixing its name with =. These raw values can be parsed by other programs and follow the same conventions as the options associated with the properties. Additionally, there is a > prefix to format human-readable text, with fixed precision for floating-point values. This is useful for printing values where a constant width is important.
+
+Examples
+
+${time-pos} expands to 00:14:23 (if playback position is at 14 minutes 23 seconds)
+${=time-pos} expands to 863.4 (same time, plus 400 milliseconds - milliseconds are normally not shown in the formatted case)
+${avsync} expands to +0.003
+${>avsync} expands to +0.0030
+${=avsync} expands to 0.003028
+Sometimes, the difference in amount of information carried by raw and formatted property values can be rather big. In some cases, raw values have more information, like higher precision than seconds with time-pos. Sometimes it is the other way around, e.g. aid shows track title and language in the formatted case, but only the track number if it is raw.
+
+https://mpv.io/manual/master/#property-expansion

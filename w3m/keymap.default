@@ -1,0 +1,143 @@
+# A sample of ~/.w3m/keymap (default)
+#
+# Ctrl  : C-, ^
+# Escape: ESC-, M-, ^[
+# Space : SPC, ' '
+# Tab   : TAB, ^i, ^I
+# Delete: DEL, ^?
+# Up    : UP, ^[[A
+# Down  : DOWN, ^[[B
+# Right : RIGHT, ^[[C
+# Left  : LEFT, ^[[D
+
+C-@      MARK
+C-_      GOTO_HOME
+C-a      LINE_BEGIN
+C-b      MOVE_LEFT
+C-e      LINE_END
+C-f      MOVE_RIGHT
+C-g      LINE_INFO
+C-h      HISTORY
+TAB      NEXT_LINK
+C-j      GOTO_LINK
+C-k      COOKIE
+C-l      REDRAW
+C-m      GOTO_LINK
+C-n      MOVE_DOWN
+C-p      MOVE_UP
+C-q      CLOSE_TAB
+C-r      ISEARCH_BACK
+C-s      ISEARCH
+C-t      TAB_LINK
+C-u      PREV_LINK
+C-v      NEXT_PAGE
+C-w      WRAP_TOGGLE
+C-z      SUSPEND
+
+SPC      NEXT_PAGE
+!        SHELL
+\"       REG_MARK
+#        PIPE_SHELL
+$        LINE_END
+(        UNDO
+)        REDO
++        NEXT_PAGE
+,        LEFT
+-        PREV_PAGE
+.        RIGHT
+/        SEARCH
+:        MARK_URL
+";"      MARK_WORD
+<        SHIFT_LEFT
+=        INFO
+>        SHIFT_RIGHT
+?        SEARCH_BACK
+@        READ_SHELL
+B        BACK
+D        DOWNLOAD_LIST
+E        EDIT
+F        FRAME
+G        END
+H        HELP
+I        VIEW_IMAGE
+J        UP
+K        DOWN
+L        LIST
+M        EXTERN
+N        SEARCH_PREV
+Q        EXIT
+R        RELOAD
+S        SAVE_SCREEN
+T        NEW_TAB
+U        GOTO
+V        LOAD
+W        PREV_WORD
+Z        CENTER_H
+[        LINK_BEGIN
+]        LINK_END
+\^       LINE_BEGIN
+a        SAVE_LINK
+b        PREV_PAGE
+c        PEEK
+g        BEGIN
+h        MOVE_LEFT
+i        PEEK_IMG
+j        MOVE_DOWN
+k        MOVE_UP
+l        MOVE_RIGHT
+m        MOUSE_TOGGLE
+n        SEARCH_NEXT
+o        OPTIONS
+q        QUIT
+r        VERSION
+s        SELECT_MENU
+u        PEEK_LINK
+v        VIEW
+w        NEXT_WORD
+z        CENTER_V
+{        PREV_TAB
+|        PIPE_BUF
+}        NEXT_TAB
+
+M-TAB    PREV_LINK
+M-C-j    SAVE_LINK
+M-C-m    SAVE_LINK
+
+M-:      MARK_MID
+M-<      BEGIN
+M->      END
+M-I      SAVE_IMAGE
+M-M      EXTERN_LINK
+M-W      DICT_WORD_AT
+M-a      ADD_BOOKMARK
+M-b      BOOKMARK
+M-c      COMMAND
+M-e      EDIT_SCREEN
+M-g      GOTO_LINE
+M-k      DEFINE_KEY
+M-l      LIST_MENU
+M-m      MOVE_LIST_MENU
+M-n      NEXT_MARK
+M-o      SET_OPTION
+M-p      PREV_MARK
+M-s      SAVE
+M-t      TAB_MENU
+M-u      GOTO_RELATIVE
+M-v      PREV_PAGE
+M-w      DICT_WORD
+
+UP       MOVE_UP
+DOWN     MOVE_DOWN
+RIGHT    MOVE_RIGHT
+LEFT     MOVE_LEFT
+
+M-[E     MENU
+M-[L     MENU
+M-[Z     PREV_LINK
+
+M-[1~    BEGIN
+M-[2~    MENU
+M-[4~    END
+M-[5~    PREV_PAGE
+M-[6~    NEXT_PAGE
+M-[28~   MENU

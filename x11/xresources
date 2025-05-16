@@ -1,0 +1,297 @@
+! *.alpha: 0.98
+*.font: Iosevka Nerd Font:size=14:antialias=true:autohint=true
+XTerm*disallowedWindowOps: 20,21,SetXprop
+
+Xcursor.theme: Vanilla-DMZ-AA
+Xcursor.size: 56
+Nsxiv.window.background: #030303
+Nsxiv.window.foreground: #484848
+Nsxiv.window.background.alpha: 0.9
+
+Zathura.window.background: #181818
+Zathura.window.background.alpha: 0.9
+
+! HiDPI
+Xft.dpi: 202
+Xft.autohint: 1
+Xft.lcdfilter: lcddefault
+Xft.hintstyle: hintslight
+Xft.antialias: 1
+Xft.hinting: 0
+Xft.rgba: rgb
+Xft.font: CaskaydiaCove Nerd Font Propo:size=12:style=Book
+Xft.theme: Adwaita:dark
+
+!! Emacs.alpha: 0.9
+emacs.verticalScrollBars:off
+emacs.menuBar:off
+emacs.toolBar:0
+emacs.tabBar:0
+emacs.useXIM:off
+emacs.bitmapIcon:on
+emacs.minibuffer:minibuffer
+
+! polybar-exwmbar_*.background: #181818
+! polybar*.background.alpha: 0.9
+
+!! gruber-darker palette
+! gruber-darker-fg        #e4e4ef
+! gruber-darker-fg+1      #f4f4ff
+! gruber-darker-fg+2      #f5f5f5
+! gruber-darker-white     #ffffff
+! gruber-darker-black     #000000
+! gruber-darker-bg-1      #101010
+! gruber-darker-bg        #181818
+! gruber-darker-bg+1      #282828
+! gruber-darker-bg+2      #453d41
+! gruber-darker-bg+3      #484848
+! gruber-darker-bg+4      #52494e
+! gruber-darker-red-1     #c73c3f
+! gruber-darker-red       #f43841
+! gruber-darker-red+1     #ff4f58
+! gruber-darker-green     #73c936
+! gruber-darker-yellow    #ffdd33
+! gruber-darker-brown     #cb9c3c
+! gruber-darker-quartz    #95a99f
+! gruber-darker-niagara-2 #303540
+! gruber-darker-niagara-1 #565f73
+! gruber-darker-niagara   #96a6c8
+! gruber-darker-wisteria  #9e95c7
+
+!! simple terminal
+st.alpha: 0.9
+st.alphaOffset: 0.1
+st.borderpx: 1
+st.font: Aporetic Serif Mono:size=11
+st.color0:      #181818
+st.color1:      #ab2c1d
+st.color2:      #72c936
+st.color3:      #f7ca88
+st.color4:      #453d41
+st.color5:      #cb9c3c
+st.color6:      #83a598
+st.color7:      #a89984
+st.color8:      #928374
+st.color9:      #c73c3f
+st.color10:     #a1b56c
+st.color11:     #ffdd33
+st.color12:     #93acc9
+st.color13:     #d3869b
+st.color14:     #95a99f
+st.color15:     #ecdbc2
+st.background:  #090909
+st.foreground:  #efecef
+st.cursorColor: #ffdd33
+
+st.timer.cursorColor: #00000e
+
+! st.color0:      #181818
+! st.color1:      #ab4642
+! st.color2:      #a1b56c
+! st.color3:      #f7ca88
+! st.color4:      #7cafc2
+! st.color5:      #ba8baf
+! st.color6:      #86c1b9
+! st.color7:      #d8d8d8
+! st.color8:      #585858
+! st.color9:      #ab4642
+! st.color10:     #a1b56c
+! st.color11:     #f7ca88
+! st.color12:     #7cafc2
+! st.color13:     #ba8baf
+! st.color14:     #86c1b9
+! st.color15:     #f8f8f8
+
+!! st.font: Monospace-11;
+! st.termname: st-256color
+! st.color0:  #1d2024
+! st.color1:  #cc2c1d
+! st.color2:  #719c1d
+! st.color3:  #d79615
+! st.color4:  #458588
+! st.color5:  #b16286
+! st.color6:  #689d6a
+! st.color7:  #a89984
+! st.color8:  #928374
+! st.color9:  #fb4934
+! st.color10: #b0bd27
+! st.color11: #fabd2f
+! st.color12: #83a598
+! st.color13: #d3869b
+! st.color14: #8ec07c
+! st.color15: #ecdbc2
+
+! st.background:  #000000
+! st.foreground:  #e4e4ef
+! st.cursorColor: #ebdcee
+
+!! foreground also used or reverse cursor highlighting
+! st.color6:      #393540
+! st.color7:      #484848
+! st.color8:      #52494e
+! XTerm.VT100*font1: nil2
+! XTerm.VT100.charClass: 33:48,35-37:48,43:48,45-47:48,64:48,126:48
+! XTerm*VT100.Translations:       #override\n\
+!       &lt;KeyPress&gt; BackSpace : string(0x7f)\n\
+
+!! name    dark  light
+!  black    0     8
+!  red      1     9
+!  green    2     10
+!  yellow   3     11
+!  blue     4     12
+!  purple   5     13
+!  cyan     6     14
+!  white    7     15
+
+!! gruvbox
+! *.color0: #1d2021
+! *.color1: #cc241d
+! *.color2: #98971a
+! *.color3: #d79921
+! *.color4: #458588
+! *.color5: #b16286
+! *.color6: #689d6a
+! *.color7: #a89984
+! *.color8: #928374
+! *.color9: #fb4934
+! *.color10: #b8bb26
+! *.color11: #fabd2f
+! *.color12: #83a598
+! *.color13: #d3869b
+! *.color14: #8ec07c
+! *.color15: #ebdbb2
+! *.color256: #1d2021
+! *.color257: #ebdbb2
+
+!! gruvbox light
+! *.color0:     #fbf1c7
+! *.color1:     #cc241d
+! *.color2:     #98971a
+! *.color3:     #d79921
+! *.color4:     #458588
+! *.color5:     #b16286
+! *.color6:     #689d6a
+! *.color7:     #7c6f64
+! *.color8:     #928374
+! *.color9:     #9d0006
+! *.color10:    #79740e
+! *.color11:    #b57614
+! *.color12:    #076678
+! *.color13:    #8f3f71
+! *.color14:    #427b58
+! *.color15:    #3c3836
+! *.background: #fbf1c7
+! *.foreground: #282828
+! st.alpha:     0.9
+
+!! brogrammer
+! *.foreground:  #d6dbe5
+! *.background:  #131313
+! *.color0:      #1f1f1f
+! *.color8:      #d6dbe5
+! *.color1:      #f81118
+! *.color9:      #de352e
+! *.color2:      #2dc55e
+! *.color10:     #1dd361
+! *.color3:      #ecba0f
+! *.color11:     #f3bd09
+! *.color4:      #2a84d2
+! *.color12:     #1081d6
+! *.color5:      #4e5ab7
+! *.color13:     #5350b9
+! *.color6:      #1081d6
+! *.color14:     #0f7ddb
+! *.color7:      #d6dbe5
+! *.color15:     #ffffff
+! *.colorBD:     #d6dbe5
+
+!! base16
+! *.color0:       #181818
+! *.color1:       #ab4642
+! *.color2:       #a1b56c
+! *.color3:       #f7ca88
+! *.color4:       #7cafc2
+! *.color5:       #ba8baf
+! *.color6:       #86c1b9
+! *.color7:       #d8d8d8
+! *.color8:       #585858
+! *.color9:       #ab4642
+! *.color10:      #a1b56c
+! *.color11:      #f7ca88
+! *.color12:      #7cafc2
+! *.color13:      #ba8baf
+! *.color14:      #86c1b9
+! *.color15:      #f8f8f8
+
+!! solarized
+! *.color0:     #073642
+! *.color1:     #dc322f
+! *.color2:     #859900
+! *.color3:     #b58900
+! *.color4:     #268bd2
+! *.color5:     #d33682
+! *.color6:     #2aa198
+! *.color7:     #eee8d5
+! *.color9:     #cb4b16
+! *.color8:     #fdf6e3
+! *.color10:    #586e75
+! *.color11:    #657b83
+! *.color12:    #839496
+! *.color13:    #6c71c4
+! *.color14:    #93a1a1
+! *.color15:    #fdf6e3
+
+!! xterm
+! *.color0:      #000000
+! *.color1:      #cd0000
+! *.color2:      #00cd00
+! *.color3:      #cdcd00
+! *.color4:      #0000cd
+! *.color5:      #cd00cd
+! *.color6:      #00cdcd
+! *.color7:      #e5e5e5
+! *.color8:      #4d4d4d
+! *.color9:      #ff0000
+! *.color10:     #00ff00
+! *.color11:     #ffff00
+! *.color12:     #0000ff
+! *.color13:     #ff00ff
+! *.color14:     #00ffff
+! *.color15:     #aabac8
+! *.background:  #000000
+
+!! Dracula Xresources palette
+! *.foreground: #F8F8F2
+! *.background: #282A36
+! *.color0:     #000000
+! *.color8:     #4D4D4D
+! *.color1:     #FF5555
+! *.color9:     #FF6E67
+! *.color2:     #50FA7B
+! *.color10:    #5AF78E
+! *.color3:     #F1FA8C
+! *.color11:    #F4F99D
+! *.color4:     #BD93F9
+! *.color12:    #CAA9FA
+! *.color5:     #FF79C6
+! *.color13:    #FF92D0
+! *.color6:     #8BE9FD
+! *.color14:    #9AEDFE
+! *.color7:     #BFBFBF
+! *.color15:    #E6E6E6
+
+! *.background: .color0
+! *.color256: 0#1d2021
+! *.color257: 15#ebdbb2
+
+
+
+! vim: ft=xdefaults      !
+! Local Variables:       !
+! coding: utf-8          !
+! mode: xconf            !
+! indent-tabs-mode: nil  !
+! eval: (rainbow-mode 1) !
+! End:                   !
+

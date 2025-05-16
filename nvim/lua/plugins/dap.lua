@@ -1,0 +1,69 @@
+-- ~& [ dap.lua ] [ Last Update: 2024-10-21 07:06 ]
+--         _
+--      __| | __ _ _ __
+--     / _` |/ _` | '_ \
+--    | (_| | (_| | |_) |
+--     \__,_|\__,_| .__/
+--                |_|
+--                     ~cf.[0]&~
+
+-- ~& [ Dap Plugins ] ~&~
+local M = {
+  -- "rcarriga/nvim-dap-ui",
+  -- lazy = true,
+  -- dependencies = {
+  -- "nvim-neotest/nvim-nio",
+  -- "mfussenegger/nvim-dap",
+  -- "leoluz/nvim-dap-go",
+  -- "theHamsta/nvim-dap-virtual-text",
+  -- },
+  -- dap_configurations = {
+  --     {
+  --       type = "go",
+  --       name = "Attach remote",
+  --       mode = "remote",
+  --       request = "attach",
+  --     },
+  --   tests = {
+  --     verbose = false,
+  --   },
+  --     },
+  -- delve = {
+  --   path = "dlv",
+  --   initialize_timeout_sec = 20,
+  --   args = {},
+  --   port= {},
+  --   build_flags = "",
+  --   detached = true
+  -- },
+  -- [3]&~
+  -- ~& [ Setup ]
+  -- config = function()
+  -- 	require("dap-go").setup()
+  -- 	require("dapui").setup()
+  -- 	require("nvim-dap-virtual-text").setup({})
+  -- 	vim.fn.sign_define(
+  -- 		"DapBreakpoint",
+  -- 		{ text = "🔴", texthl = "DapBreakpoint", linehl = "DapBreakpoint", numhl = "DapBreakpoint" }
+  -- 	)
+  -- 	-- Debugger
+  -- 	vim.api.nvim_set_keymap("n", "<leader>Dt", ":DapUiToggle<CR>", { noremap = true })
+  -- 	vim.api.nvim_set_keymap("n", "<leader>Db", ":DapToggleBreakpoint<CR>", { noremap = true })
+  -- 	vim.api.nvim_set_keymap("n", "<leader>Dc", ":DapContinue<CR>", { noremap = true })
+  -- 	vim.api.nvim_set_keymap("n", "<leader>Dr", ":lua require('dapui').open({reset = true})<CR>", { noremap = true })
+
+  -- 	vim.api.nvim_create_autocmd("FileType", {
+  -- 		pattern = "dap-repl",
+  -- 		desc = "Attach nvim-dap autocomplete to dap-repl",
+  -- 		callback = function()
+  -- 			require("dap.ext.autocompl").attach()
+  -- 		end,
+  -- 		group = vim.api.nvim_create_augroup("dap-repl-autocomplete", { clear = true }),
+  -- 	})
+  -- end,
+}
+-- [4]&~
+-- ~& [ Modeline ]
+return M
+-- vim: ft=lua ts=4 sw=2 sts=2 et:
+-- [3]&~

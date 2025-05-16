@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+# AUTHOR: cf.
+#
+# DATE: <2025-03-12 04:13:13 EDT>
+#
+# DESC: Elvi to search EmacsWiki (www.emacswiki.org)
+# elvis: emacswiki
+
+. surfraw || exit 1
+
+# Define the usage hook for w3
+w3_usage_hook () {
+    cat <<EOF
+Usage: $w3_argv0 [options] [search words]...
+Description:
+  Search EmacsWiki (www.emacswiki.org) for Emacs documentation pages.
+EOF
+    w3_global_usage
+}
+
+# Parse configuration and arguments
+w3_config
+w3_parse_args "$@"
+
+# Check if there are search arguments
+if test -z "$w3_args"; then
+    # No search words provided, browse the main EmacsWiki page
+    w3_browse_url "https://www.emacswiki.org/"
+else
+    # Escape search arguments for URL
+    escaped_args=$(w3_url_of_arg "$w3_args")
+
+    # Construct the search URL for EmacsWiki
+    search_url="https://duckduckgo.com/?q=!emacswiki+${escaped_args}"
+
+    # Open the search URL in the default browser
+    w3_browse_url "$search_url"
+fi

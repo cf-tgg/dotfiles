@@ -1,0 +1,343 @@
+# Removing Defaults
+
+keymap + NULL
+keymap C-v NULL
+keymap SPC NULL
+keymap ^[[6~ NULL
+keymap - NULL
+keymap ESC-v NULL
+keymap ^[[5~ NULL
+keymap b NULL
+keymap C-f NULL
+keymap C-b NULL
+keymap C-f NULL
+keymap C-b NULL
+keymap C-n NULL
+keymap C-p NULL
+keymap J NULL
+keymap K NULL
+keymap > NULL
+keymap < NULL
+keymap , NULL
+keymap . NULL
+keymap C-a NULL
+keymap ^ NULL
+keymap $ NULL
+keymap C-e NULL
+keymap 0 NULL
+keymap Z NULL
+keymap z NULL
+keymap w NULL
+keymap W NULL
+keymap b NULL
+keymap ESC-g NULL
+keymap ESC-< NULL
+keymap ESC-> NULL
+keymap ^[[1~ NULL
+keymap ^[[4~ NULL
+keymap G NULL
+keymap g NULL
+keymap [ NULL
+keymap ] NULL
+keymap TAB NULL
+keymap C-u NULL
+keymap ESC-TAB NULL
+keymap ^[[Z NULL
+keymap ESC-m NULL
+keymap u NULL
+keymap C-r NULL
+keymap C-j NULL
+keymap C-m NULL
+keymap C-t NULL
+keymap ESC-C-j NULL
+keymap ESC-C-m NULL
+keymap a NULL
+keymap I NULL
+keymap ESC-I NULL
+keymap c NULL
+keymap u NULL
+keymap i NULL
+keymap = NULL
+keymap C-g NULL
+keymap : NULL
+keymap ";" NULL
+keymap ESC-: NULL
+keymap F NULL
+keymap M NULL
+keymap ESC-M NULL
+keymap L NULL
+keymap ESC-l NULL
+keymap U NULL
+keymap ESC-u NULL
+keymap V NULL
+keymap @ NULL
+keymap "#" NULL
+keymap | NULL
+keymap B NULL
+keymap C-_ NULL
+keymap s NULL
+keymap v NULL
+keymap ESC-s NULL
+keymap S NULL
+keymap E NULL
+keymap ESC-e NULL
+keymap R NULL
+keymap r NULL
+keymap C-l NULL
+keymap T NULL
+keymap C-q NULL
+keymap { NULL
+keymap } NULL
+keymap ESC-t NULL
+keymap J NULL
+keymap K NULL
+keymap ESC-b NULL
+keymap ESC-a NULL
+keymap / NULL
+keymap ? NULL
+keymap n NULL
+keymap N NULL
+keymap C-s NULL
+keymap C-r NULL
+keymap ESC-w NULL
+keymap ESC-W NULL
+keymap C-@ NULL
+keymap ESC-n NULL
+keymap ESC-p NULL
+keymap \" NULL
+keymap ^[[28~ NULL
+keymap ^[[2~ NULL
+keymap ^[[E NULL
+keymap ^[[L NULL
+keymap H NULL
+keymap o NULL
+keymap r NULL
+keymap C-k NULL
+keymap C-h NULL
+keymap D NULL
+keymap m NULL
+keymap C-w NULL
+keymap ESC-c NULL
+keymap ESC-o NULL
+keymap ESC-k NULL
+keymap ! NULL
+keymap C-z NULL
+keymap q NULL
+keymap Q NULL
+
+# New keybinds
+
+# Navigation
+
+keymap SPC NEXT_PAGE
+keymap !  SHELL
+keymap \"  REG_MARK
+keymap # PIPE_SHELL
+keymap ( UNDO
+keymap ) REDO
+keymap + NEXT_PAGE
+keymap , LEFT
+keymap - PREV_PAGE
+keymap . RIGHT
+keymap / SEARCH
+keymap : MARK_URL
+keymap ";" MARK_WORD
+keymap < SHIFT_LEFT
+keymap = INFO
+keymap > SHIFT_RIGHT
+keymap ? SEARCH_BACK
+keymap @ READ_SHELL
+
+keymap E EDIT
+keymap C-w WRAP_TOGGLE
+keymap C-t NEW_TAB
+keymap C-r ISEARCH_BACK
+keymap C-s ISEARCH
+keymap C-@ MARK
+
+keymap C-g LINE_INFO
+keymap $ LINE_END
+keymap ^ LINE_BEGIN
+keymap 0 LINE_BEGIN
+keymap ESC-g GOTO_LINE
+
+keymap G END
+keymap gg BEGIN
+
+keymap w NEXT_WORD
+keymap b PREV_WORD
+
+keymap M-[1~ BEGIN
+keymap M-[2~ MENU
+keymap M-[4~ END
+keymap M-[5~ PREV_PAGE
+keymap M-[6~ NEXT_PAGE
+keymap M-[28~ MENU
+
+keymap C-n COMMAND "NEXT_PAGE"
+keymap d COMMAND "NEXT_PAGE"
+
+keymap M-TAB    PREV_LINK
+keymap M-C-j    SAVE_LINK
+keymap M-C-m    SAVE_LINK
+
+keymap M-: MARK_MID
+keymap M-< BEGIN
+keymap M-> END
+keymap M-I SAVE_IMAGE
+keymap M-M EXTERN_LINK
+keymap M-W DICT_WORD_AT
+keymap M-a ADD_BOOKMARK
+keymap M-b BOOKMARK
+keymap M-c COMMAND
+keymap M-e EDIT_SCREEN
+keymap M-g GOTO_LINE
+keymap M-k DEFINE_KEY
+keymap M-l LIST_MENU
+keymap M-m MOVE_LIST_MENU
+keymap M-n NEXT_MARK
+keymap M-o SET_OPTION
+keymap M-p PREV_MARK
+keymap M-s SAVE
+keymap M-t TAB_MENU
+keymap M-u GOTO_RELATIVE
+keymap M-v PREV_PAGE
+keymap M-w DICT_WORD
+
+keymap F FRAME
+keymap L LIST
+keymap I VIEW_IMAGE
+keymap M EXTERN
+keymap T TAB_LINK
+# keymap V LOAD
+
+keymap z CENTER_V
+keymap Z CENTER_H
+
+keymap [ LINK_BEGIN
+keymap ] LINK_END
+
+keymap { PREV_TAB
+keymap | PIPE_BUF
+keymap } NEXT_TAB
+
+keymap UP MOVE_UP
+keymap DOWN MOVE_DOWN
+keymap RIGHT MOVE_RIGHT
+keymap LEFT MOVE_LEFT
+
+# keymap j COMMAND "MOVE_DOWN1"
+# keymap k COMMAND "MOVE_UP1"
+
+keymap h MOVE_LEFT
+keymap j MOVE_DOWN
+keymap k MOVE_UP
+keymap l MOVE_RIGHT
+keymap c PEEK
+
+keymap e PEEK_LINK
+keymap a SAVE_LINK
+keymap P PREV_LINK
+keymap m MOUSE_TOGGLE
+keymap v VIEW
+
+keymap C-p PREV_PAGE
+keymap u PREV_PAGE
+
+keymap B BACK
+keymap H BACK
+keymap S SAVE_SCREEN
+
+keymap s SELECT_MENU
+
+keymap F1 HELP
+
+# Undo
+keymap C-r REDO
+keymap r RELOAD
+
+# Tab stuff
+keymap J NEXT_TAB
+keymap K PREV_TAB
+keymap o GOTO
+keymap O TAB_GOTO
+
+# Search
+keymap / WHEREIS
+keymap ? SEARCH_BACK
+keymap n SEARCH_NEXT
+keymap N SEARCH_PREV
+
+keymap M-g MENU
+
+keymap C-d DOWNLOAD_LIST
+keymap C-d DOWNLOAD_LIST
+keymap WW COMMAND "DOWNLOAD_LIST"
+keymap ZZ COMMAND "EXIT"
+keymap SPC COMMAND "GOTO_LINK"
+keymap C-RET COMMAND "SAVE_LINK"
+keymap RET COMMAND "GOTO_LINK"
+keymap t COMMAND "TAB_LINK"
+keymap L COMMAND "LINK_BEGIN;GOTO_LINK"
+keymap DD CLOSE_TAB
+keymap ESC-D CLOSE_TAB
+
+# Commands
+keymap :: COMMAND
+keymap :help HELP
+keymap :downloads DOWNLOAD_LIST
+keymap :dl DOWNLOAD_LIST
+keymap :hist HISTORY
+keymap :q EXIT
+keymap :settings OPTIONS
+keymap :opts OPTIONS
+
+# copy url to clipboard
+keymap yy EXTERN 'printf %s | xclip -selection clipboard'
+keymap f COMMAND "RESHAPE;LINK_BEGIN;GOTO_LINK"
+keymap F COMMAND "RESHAPE;LINK_BEGIN;TAB_LINK"
+keymap R COMMAND "READ_SHELL 'rdrview $W3M_URL -H 2> /dev/null 1> /tmp/readable.html' ; LOAD /tmp/readable.html"
+keymap s COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_google.cgi ; DICT_WORD"
+
+# Dictionary Lookup {{{
+############################ Execute dictionary command (see README.dict) (DICT_WORD)
+keymap  \\\d    COMMAND "SET_OPTION dictcommand=file:///cgi-bin/dictionary.cgi ; DICT_WORD"
+############################ Execute dictionary command for word at cursor (DICT_WORD_AT)
+keymap  \\\w    COMMAND "SET_OPTION dictcommand=file:///cgi-bin/dictionary.cgi ; DICT_WORD_AT"
+############################ Execute omnibar command (DICT_WORD)
+# }}}
+
+############################ Omnibar search engines {{{
+# user input keywords to search
+keymap  s1      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_1337x.cgi ; DICT_WORD"
+keymap  sa      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_aspell.cgi ; DICT_WORD"
+keymap  sb      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_bing.cgi ; DICT_WORD"
+keymap  sd      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_duckduckgo.cgi ; DICT_WORD"
+keymap  sg      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_google.cgi ; DICT_WORD"
+keymap  si      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_geminispace.cgi ; DICT_WORD"
+keymap  sn      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_nyaasi.cgi ; DICT_WORD"
+keymap  sp      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_piratebay.cgi ; DICT_WORD"
+keymap  sr      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_subreddit.cgi ; DICT_WORD"
+keymap  st      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_twitch.cgi ; DICT_WORD"
+keymap  su      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_yewtube.cgi ; DICT_WORD"
+keymap  sv      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_veronica2.cgi ; DICT_WORD"
+keymap  sw      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_wikipedia.cgi ; DICT_WORD"
+keymap  sx      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_xdcceu.cgi ; DICT_WORD"
+keymap  sy      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_yahoo.cgi ; DICT_WORD"
+# search current word under cursor
+keymap  s2      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_1337x.cgi ; DICT_WORD_AT"
+keymap  sA      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_aspell.cgi ; DICT_WORD_AT"
+keymap  sB      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_bing.cgi ; DICT_WORD_AT"
+keymap  sD      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_duckduckgo.cgi ; DICT_WORD_AT"
+keymap  sG      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_google.cgi ; DICT_WORD_AT"
+keymap  sI      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_geminispace.cgi ; DICT_WORD_AT"
+keymap  sN      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_nyaasi.cgi ; DICT_WORD_AT"
+keymap  sP      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_piratebay.cgi ; DICT_WORD_AT"
+keymap  sR      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_subreddit.cgi ; DICT_WORD_AT"
+keymap  sU      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_yewtube.cgi ; DICT_WORD_AT"
+keymap  sV      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_veronica2.cgi ; DICT_WORD_AT"
+keymap  sW      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_wikipedia.cgi ; DICT_WORD_AT"
+keymap  sX      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_xdcceu.cgi ; DICT_WORD_AT"
+keymap  sY      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_yahoo.cgi ; DICT_WORD_AT"
+keymap  sT      COMMAND "SET_OPTION dictcommand=file:///cgi-bin/omnibar_twitch.cgi ; DICT_WORD_AT"
+# }}}

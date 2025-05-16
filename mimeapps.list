@@ -1,0 +1,30 @@
+[Default Applications]
+text/x-shellscript=text.desktop;
+x-scheme-handler/magnet=torrent.desktop;
+application/x-bittorrent=torrent.desktop;
+x-scheme-handler/mailto=chromium.desktop
+text/plain=text.desktop;
+application/postscript=pdf.desktop;
+application/pdf=pdf.desktop;
+image/png=img.desktop;
+image/jpeg=userapp-linkhandler %f-TDUZ02.desktop
+image/gif=img.desktop;
+application/rss+xml=rss.desktop
+video/x-matroska=video.desktop
+video/mp4=video.desktop
+x-scheme-handler/lbry=lbry.desktop
+inode/directory=file.desktop
+x-scheme-handler/heroic=heroic.desktop
+x-scheme-handler/msteams=teams.desktop
+text/x-uri=eww.desktop
+text/html=qutebrowser.desktop
+text/xml=qutebrowser.desktop
+application/xhtml+xml=qutebrowser.desktop
+application/xml=qutebrowser.desktop
+application/x-mimearchive=qutebrowser.desktop
+x-scheme-handler/http=qutebrowser.desktop
+x-scheme-handler/https=qutebrowser.desktop
+x-scheme-handler/ftp=qutebrowser.desktop
+
+[Added Associations]
+image/jpeg=userapp-linkhandler %f-TDUZ02.desktop;nsxiv.desktop

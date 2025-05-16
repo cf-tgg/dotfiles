@@ -1,0 +1,45 @@
+-- ~& [ repl.lua ] [ Last Update: 2024-11-14 19:52 ]
+--[[ This script provides a simple Lua REPL (Read-Eval-Print Loop) for `mpv` using IPC.
+ It allows users to evaluate Lua code directly from the command line and receive the result.
+ The script registers a new script message `lua-repl` that takes a Lua code string as input.
+ The code is evaluated, and the result is sent back to the IPC client as a JSON-formatted string.
+ The JSON output includes a `success` flag, the result (if successful), and an error message (if failed).
+ The script is intended for debugging and testing Lua code within the `mpv` environment.
+]]-- [3]&~
+
+local mp = require 'mp'
+local msg = require 'mp.msg'
+local utils = require 'mp.utils'
+local json = require 'mp.utils'.format_json
+
+-- Function to evaluate Lua code directly and format output as JSON
+local function evaluate_lua(code)
+    -- Attempt to load the Lua code
+    local chunk, load_err = load("return " .. code)
+    if not chunk then
+        chunk, load_err = load(code)  -- Retry without "return"
+    end
+
+    -- If code loaded, execute and handle result; otherwise, return error
+    if chunk then
+        local status, result = pcall(chunk)
+        if status then
+            return { success = true, result = tostring(result) }
+        else
+            return { success = false, error = "Runtime Error: " .. tostring(result) }
+        end
+    else
+        return { success = false, error = "Load Error: " .. tostring(load_err) }
+    end
+end
+
+-- Function to handle IPC message, evaluate Lua code, and return JSON result
+local function handle_message(code)
+    local result_table = evaluate_lua(code)
+    local json_output = json(result_table)
+    msg.info("Result: " .. json_output)  -- Log result in `mpv`
+    mp.commandv("script-message-to", "ipc", json_output)  -- Send JSON output to IPC
+end
+
+-- Register the script message for evaluating Lua
+mp.register_script_message("lua-repl", handle_message)

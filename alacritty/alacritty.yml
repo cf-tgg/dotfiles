@@ -1,0 +1,74 @@
+#Colors (One Darker)
+colors:
+primary:
+  background: '#1e2127'
+  foreground: '#2E3440'
+
+  normal:
+    black: '#3B4252'
+    red: '#BF616A'
+    green: '#A3BE8C'
+    yellow: '#EBCB8B'
+    blue: '#81A1C1'
+    magenta: '#B48EAD'
+    cyan: '#88C0D0'
+    white: '#Abb2bf'
+
+  bright:
+    black: '#5C5670'
+    red: '#E06C75'
+    green: '#98C379'
+    yellow: '#D19A66'
+    blue: '#61AFEF'
+    magenta: '#C678DD'
+    cyan: '#56B6C2'
+    white: '#ABB2BF'
+background_opacity: 0.8
+
+window:
+  opacity: 0.9
+  decorations: none
+
+font:
+  normal:
+    family: Hack Nerd Font
+    style: Bold
+  bold:
+    family: Hack Nerd Font
+    style: Light
+  italic:
+    family: Mononoki Nerd Font
+    style: Light Italic
+  bold_italic:
+    family: Mononoki Nerd Font
+    style: Light Italic
+
+window:
+  padding:
+    x: 2
+    y: 2
+
+scrolling:
+  history: 10000
+  multiplier: 10
+
+draw_bold_text_with_bright_colors: true
+
+selection:
+  semantic_escape_chars: ",|`|&|.|!|@|#|$|%|^|&|*|(|)|-|_|=|+|{|}|[|]|:|;|'|\"|<|>|?|/|\\|~|`|"
+  save_to_clipboard: true
+
+live_config_reload: true
+
+key_bindings:
+ - { key: F1, mods: Control, action: ShowHint }
+ - { key: F2, mods: Control, action: ShowConfig }
+ - { key: F3, mods: Control, action: ShowLogs }
+ - { key: F4, mods: Control, action: ToggleFullscreen }
+ - { key: F5, mods: Control, action: ClearHistory }
+ - { key: F6, mods: Control, action: ClearLog }
+ - { key: F7, mods: Control, action: IncreaseFontSize }
+ - { key: F8, mods: Control, action: DecreaseFontSize }
+ - { key: F9, mods: Control, action: ResetFontSize }
+ - { key: F10, mods: Control, action: IncreaseOpacity }
+ - { key: F11, mods: Control, action: DecreaseOpacity }

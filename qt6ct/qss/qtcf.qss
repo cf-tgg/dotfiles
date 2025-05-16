@@ -1,0 +1,5 @@
+
+::selection {
+    background: #1f1f2e;
+    color: #eef8fe;
+}

@@ -1,0 +1,71 @@
+[
+    "invidious.jing.rocks",
+    {
+        "cors": true,
+        "type": "https",
+        "monitor": {
+            "recipients": [
+                "email:2371453714"
+            ],
+            "down": false,
+            "next_check_at": "2024-10-16T00:08:37Z",
+            "created_at": "2024-04-21T20:54:18Z",
+            "down_since": null,
+            "string_match": "An alternative front-end to YouTube",
+            "enabled": true,
+            "http_verb": "GET/HEAD",
+            "url": "https://invidious.jing.rocks",
+            "favicon_url": "https://invidious.jing.rocks/favicon-16x16.png?v=82ac9a86",
+            "up_since": "2024-10-15T21:22:16Z",
+            "uptime": 89.133,
+            "apdex_t": 1,
+            "token": "cfds",
+            "custom_headers": {},
+            "mute_until": "forever",
+            "disabled_locations": [],
+            "http_body": "",
+            "last_status": 200,
+            "last_check_at": "2024-10-16T00:03:38Z",
+            "published": true,
+            "period": 300,
+            "error": null,
+            "ssl": {
+                "valid": true,
+                "expires_at": "2025-01-02T01:43:15Z",
+                "tested_at": "2024-10-16T00:03:41Z",
+                "error": null
+            },
+            "alias": "invidious.jing.rocks"
+        },
+        "_time": 1729053784,
+        "region": "JP",
+        "api": true,
+        "uri": "https://invidious.jing.rocks",
+        "flag": "🇯🇵",
+        "stats": {
+            "openRegistrations": true,
+            "playback": {
+                "totalRequests": 63,
+                "successfulRequests": 1,
+                "ratio": 0.02
+            },
+            "version": "2.0",
+            "usage": {
+                "users": {
+                    "activeHalfyear": 5178,
+                    "activeMonth": 3161,
+                    "total": 5755
+                }
+            },
+            "metadata": {
+                "updatedAt": 1729036785,
+                "lastChannelRefreshedAt": 1729035933
+            },
+            "software": {
+                "version": "2024.10.09-3168ea8a",
+                "branch": "master",
+                "name": "invidious"
+            }
+        }
+    }
+]

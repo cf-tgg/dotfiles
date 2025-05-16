@@ -1,0 +1,110 @@
+#!/bin/sh
+
+# quick edit resource alias
+alias ytaliases='$EDITOR ~/.config/shell/ytaliases && source ~/.config/shell/ytaliases'
+
+# rsync config
+alias sync_ytaliases='rsync ~/.config/shell/ytaliases cf@10.0.0.234:~/; rsync ~/.config/shell/ytaliases cf@10.0.0.203:~/; rsync ~/.config/shell/ytaliases cf@10.0.0.27:~/ 2>/dev/null'
+
+# ytfzf
+alias ytf='ytfzf -ft' \
+	ytm='ytf -m' \
+	yts='ytfzf -s' \
+	ytst='ytfzf -ltf -cS --async-thumbnails' \
+	ytdlm='ytfzf -dlm' \
+	ytdlmf='ytfzf -dlmf' \
+	ytdl='yt -dlf' \
+	ytdH='ytfzf -dfH' \
+	ytlt='ytfzf -lt --async-thumbnails' \
+	ytl='ytfzf -lf' \
+	ytstl='ytfzf -tl --async-thumbnails -cSI' \
+	ytsdl='ytfzf -dl --async-thumbnails -cSI' \
+	ytsubs='bat ~/.config/ytfzf/subscriptions' \
+	ytA='ytfzf -A -r -n 100' \
+	ytpl='ytpl --scrape=youtube-playlist' \
+	ytdlpl='ytdl --scrape=youtube-playlist' \
+	ytdlmpl='ytdlm --scrape=youtube-playlist' \
+	ytlist='ytf -l -cS' \
+	yttrending='ytfzf -cT -r -n 100'
+
+# ytd='ytfzf -Df' \
+
+# Radio
+alias ici-premiere='mpv --force-seekable https://rcavliveaudio.akamaized.net/hls/live/2006635/P-2QMTL0_MTL/adaptive_192/chunklist_ao.m3u8' \
+	ici-musique='mp --force-seekable https://rcavliveaudio.akamaized.net/hls/live/2006979/M-7QMTL0_MTL/adaptive_192/chunklist_ao.m3u8' \
+	ici-musique-classique='mpv --force-seekable https://rcavliveaudio.akamaized.net/hls/live/2007000/MUSE/adaptive_192/chunklist_ao.m3u8' \
+	fm97-7='mpv --force-seekable https://rogers-hls.leanstream.co/rogers/gra977.stream/48k/playlist.m3u8' \
+	chom='mpv --force-seekable https://rogers-hls.leanstream.co/rogers/gra977.stream/48k/playlist.m3u8' \
+	fm98-5='mpv --force-seekable "https://15233.live.streamtheworld.com/CHMPFMAAC/HLS/playlist.m3u8"' \
+	qub='mpv --force-seekable "https://19293.live.streamtheworld.com/QUB_RADIOAAC.aac?tdsdk=js-2.9&swm=false&pname=TDSdk&pversion=2.9&banners=none&burst-time=15&sbmid=5c8c86a2-e029-4f75-9496-bedf36187971"' \
+	assnatqc='mpv --force-seekable "https://cdn3.wowza.com/5/SVEySlNEQ0FOWXlS/diffusion/canal17/playlist.m3u8"' \
+	tva-en-direct='mpv --force-seekable "https://tvalive-dai01.akamaized.net/Content/HLS/Live/channel(575b93c5-be31-ee34-6285-14620fd14048)/index.m3u8"' \
+	ici-tele='mpv --force-seekable "https://rcavlive-dai.akamaized.net/hls/live/696614/cancbftprem/master_5000.m3u8"' \
+	cladrite='mpv --force-seekable "https://radio.garden/api/ara/content/listen/6JxEnJZg/channel.mp3?r=1&1708999034449"'
+
+# Nouvelles \
+alias rdi='ytA -r -n 100 Radio\-Canada' \
+	cbc='ytA CBC' \
+	tva='ytA TVA Nouvelles' \
+	bloomberg='ytA Bloomberg Television'
+
+# Devs \
+alias gotbletu='ytA gotbletu' \
+	linuxcast='ytA The Linux Cast' \
+	djware='ytA DJ Ware' \
+	distrotube='ytA Distro Tube' \
+	linuxexp='ytA The Linux Experiment' \
+	bugswriter='ytA bugswriter' \
+	primagen='ytA ThePrimagen' \
+	tjdevries='ytA TJ Devries' \
+	lukesmith='ytA LukeSmithxyz' \
+	ctt='ytA Chris Titus Tech' \
+	tallpaultech='ytA Tall Paul Tech' \
+	tsoding='ytA tsoding' \
+
+
+# Tech Subs
+alias cbtnuggets='ytA CBT Nuggets' \
+	technotim='ytA TechnoTim' \
+	davesgarage='ytA DavesGarage' \
+	liveoverflow='ytA LiveOverflow' \
+	novaspirittech='ytA NovaspiritTech' \
+	jeffgeerling='ytA JeffGeerling' \
+	networkchuck='ytA NetworkChuck' \
+	ltt='ytA Linus Tech Tips' \
+	davidbombal='ytA davidbombal' \
+	shanselman='ytA Scott Hanselman' \
+	tonytechtech='ytA Tony Teaches Tech'
+
+# Podcasts
+alias level1tech='ytA Level1Tech' \
+	sousecoute='ytA Sous Écoute' \
+	themobreporter='ytA TheMobReporter' \
+	smallbrainedamerican='ytA Small Brained American' \
+	tedtalks='ytA Ted Talks'
+
+# Music
+alias mtv='ytA MTV' \
+	pomplamoose='ytA Pomplamoose' \
+	scarypockets='ytA ScaryPockets' \
+	nprtinydesk='ytA npr tiny desk'
+
+# Life Hacks
+alias howitsmade='ytA how its made' \
+	lifehacks='ytA lifehacks' \
+	commentcestfait='ytA comment cest fait' \
+	diyelectronics='ytA DIY Electronics Projects' \
+	woodworkers='ytA woodworker tips' \
+	diywood='ytA DIY woodworking projects' \
+	diyraspi='ytA DIY Raspberry Pi Projects' \
+	diytips='ytA DIY tips'
+
+# random fillers
+alias landscapes='ytA landscapes' \
+	lavalamps='ytA Lava Lamp' \
+	natgeo='ytA national geographic' \
+	trippy='ytA trippy animations' \
+	vimeo='ytA vimeo' \
+	gta='ytA Grand Theft Auto' \
+	bestofyt='ytA best of youtube' \
+	ragdolls='ytA ragdolls'

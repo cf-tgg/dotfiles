@@ -1,0 +1,189 @@
+#!/bin/sh
+#         _ _
+#    __ _| (_) __ _ ___  ___  ___
+#   / _` | | |/ _` / __|/ _ \/ __|
+#  | (_| | | | (_| \__ \  __/\__ \
+#   \__,_|_|_|\__,_|___/\___||___/
+#                       - cf. aliases
+
+# pacman
+alias pacs='pacman -Sy' \
+    pacr='pacman -Rns' \
+    pup='pacman -Syyu' \
+    install='pacman -Sy' \
+    uninstall='pacman -Rns' \
+    update='pacman -Syyu'
+
+# perms
+alias lsoct='stat -c "%a %n"'
+alias 644='chmod 644' \
+    755='chmod 755' \
+    600='chmod 600' \
+    666='chmod 666' \
+    777='chmod 777' \
+    444='chmod 444' \
+    555='chmod 555' \
+    700='chmod 700'
+
+alias escaps='printf "keycode 1 = Caps_Lock\nkeycode 58 = Escape\n" >escaps.kmap && sudo -n loadkeys escaps.kmap && rm escaps.kmap'
+
+# shell files
+alias shellfn='spwnedit "${XDG_CONFIG_HOME:-$HOME/.config}/shell/functions" && source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/functions"'
+alias aliases='spwnedit "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliases" && source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliases"'
+
+# quick access
+alias installmd='spwnedit ~/Documents/Notes/man/INSTALLATION.md'
+alias empd='nvim -o ~/.cache/mpd-title ~/.cache/mpd-streams'
+alias taskapp='chromium ~/Templates/html/pwc/projet1/Projet1_FelixGagnon/index.html'
+alias cyt='cd ~/Videos/yt/meta'
+alias mpvq='sb-mpvq'
+alias eDPx="xrandr | grep 'eDP' | awk '{print $4}'"
+alias ixv="xrandr | grep 'mm' | awk '{if (\$3 == \"primary\") {print \$1, \$4} else {print \$1, \$3}}'"
+alias xmon="xrandr | grep 'mm' | sed 's/ primary//' | awk '{print \$1 \$3}'"
+alias getDPI='xdpyinfo | grep resolution'
+alias setDPI='xrandr --output=eDP --dpi'
+alias wlsg="wmctrl -p -G -l"
+alias heure='tts "$(date +"%A le %e %B %H:%-M et %-S secondes")" >/dev/null ; date +"%A le %e %B %H:%M:%S"'
+
+# Qol
+alias c='clear' \
+	l='ls --group-directories-first -AlF' \
+	q='clear && exit' \
+	cdp='cd .. && ls' \
+	qtb='qutebrowser' \
+	qtp='qutebrowser --target=private-window' \
+	tldr='tldr --color' \
+	info='info --init-file ${INFO_INIT_FILE}' \
+	passc='pass -c' \
+	Notes='cd ~/Documents/Notes && ls' \
+    ezf='eza --color=always | fzf --multi' \
+    pcmanyt='pcmanfm ~/Videos/yt/meta' \
+    lh='linkhandler' \
+    so='source' \
+    bthctl='bluetoothctl' \
+    l='eza --color=always --group-directories-first' \
+    ll='eza -al --color=always --group-directories-first' \
+    rmdir='rm -rf'
+
+# dir to feh background
+dfatg="$(ixv | grep "$(ixv | awk '{print $2}' | cut -dx -f1 | sort -n | tail -n1)" | awk '{print $2}')"
+alias fehbg='feh -r --scale-down -z -g "$dfatg" --bg-fill --no-fehbg'
+
+# move by ft
+alias mvVids='mv *.webm *.mp4 ~/Videos' \
+	mvShots='mv *.png ~/Pictures/screenshots' \
+	mvGif='mv *.gif ~/Pictures/gif'
+
+# spawns installed png and svg icons in nsxiv thumbnail mode
+xivopts=("-b" "-a" "-q" "-t" "--anti-alias")
+icondir='/usr/share/icons'
+alias icons='find ${icondir} -type f -name "*.png" | nsxiv - ${xivopts} & ; find ${icondir} -type f -name "*.svg" | nsxiv - ${xivopts} &'
+alias ssxiv='setsid -f nsxiv -q -b --alpha-layer --anti-alias -p -S3 -A60 -sf . >/dev/null 2>&1'
+
+alias clip="xclip -selection clipboard" \
+	getclip="xclip -selection clipboard -o" \
+	pclip="xsel --primary -o" \
+	sclip="xsel --secondary --append" \
+	clipx="xsel --exchange"
+
+alias df.='sdcv -n --utf8-output --color' \
+	pbcopy='xclip -selection clipboard' \
+	pbpaste='xclip -selection clipboard -o' \
+	pbselect='xclip -selection primary -o' \
+	nmail='notmuch new' \
+	define='googler -n 2 define'
+
+# notetaking
+alias note='echo "___________________\n"$(date +%Y-%m-%d) $(date +%H:%M:%S)"\n\n" >> ~/Documents/Notes/Notes_$(date --iso-8601) && vim -c "normal G" -c startinsert ~/Documents/Notes/Notes_$(date --iso-8601)' \
+	dnote='bat ~/Documents/Notes/Notes_$(date --iso-8601) 2>/dev/null || ls -t ~/Documents/Notes/Notes_* | head -n 5 | xargs bat || echo "Acucune Note"' \
+	notes='ls -t ~/Documents/Notes/Notes_* | head -n 2 | xargs bat'
+
+# sonosctl
+alias sp='soco Portable' \
+  spvol='soco Portable volume' \
+  spbal='soco Portable balance' \
+  spplay='soco Portable play' \
+  spnext='soco Portable next' \
+  spause='soco Portable pause' \
+  spmute='soco Portable mute' \
+  spbass='soco Portable bass' \
+  sptreble='soco Portable treble' \
+  sprbass='soco Portable relative_bass' \
+  sprtreble='soco Portable relative_treble' \
+  sprsubgain='soco Portable relative_sub_gain' \
+  spdialog='soco Portable dialog_mode' \
+  sptrueplay='soco Portable trueplay' \
+  sploud='soco Portable loudness' \
+  spsurround='soco Portable surround_enabled' \
+  splayf='soco Portable play_file' \
+  spm3u='soco Portable play_m3u' \
+  spdir='soco Portable play_dir' \
+  spfav='soco Portable play_fav' \
+  spaddpl='soco Portable add_playlist_to_queue' \
+  spaddlibpl='soco Portable add_library_playlist_to_queue'
+
+# yt subs latest uploads
+alias ytls="pipe-viewer -ls"
+
+# edit src
+alias cfblocks='spwnedit ~/.local/src/dwmblocks/blocks.h && cd ~/.local/src/dwmblocks && sudo make clean install && { killall -q dwmblocks ; setsid -f dwmblocks >/dev/null 2>&1 ; } ; cd ~' \
+	cfdwm='spwnedit ~/.local/src/dwm/config.h && cd ~/.local/src/dwm && sudo make clean install && wmreup && cd ~' \
+	cfdmenu='spwnedit ~/.local/src/dmenu/config.h && cd ~/.local/src/dmenu && sudo make clean install && cd ~' \
+	cfzshrc='spwnedit ~/.config/zsh/.zshrc && source ~/.config/zsh/.zshrc' \
+	cfytfzf='spwnedit ~/.config/ytfzf/subscriptions && source ~/.config/ytfzf/subscriptions 2>/dev/null' \
+	cfmpv='spwnedit ~/.config/mpv/input.conf && source ~/.config/mpv/input.conf 2>/dev/null' \
+	cfnews='spwnedit ~/.config/newsboat/urls && source ~/.config/newsboat/urls 2>/dev/null' \
+    cfqtb='spwnedit ~/.config/qutebrowser/config.py' \
+    cfyazi='cd ~/.config/yazi && spwnedit .'
+
+alias monkeytype='cd ~/.local/src/monkeytype/frontend && npm run dev' \
+	alias poemeGG='cat_random ~/Notes/poemes-godin' \
+	alias rmdt='brave https://remotedesktop.google.com/access' \
+	alias combine-sinks='pactl load-module module-combine-sink' \
+	alias uncombine-sinks='pactl unload-module module-combine-sink'
+
+alias cfxmouse='spwnedit ~/.local/src/xmouseless/config.h'
+alias dbind='spwnedit +500:0 ~/.local/src/dwm/config.h'
+
+# convert to pdf
+alias mkpdf='localc --verbose --convert-to pdf' \
+  doc2pdf='localc --verbose --convert-to pdf *.doc'
+
+# v4l2 devices
+alias webcam='mpv --untimed --load-scripts=no --profile=low-latency --load-scripts=no --cache=no --demuxer-lavf-format=video4linux2 --demuxer-lavf-o=video_size=1920x1080 av://v4l2:/dev/video0'
+alias vlb1="mpv av://v4l2:/dev/video1 --untimed --load-scripts=no --no-cache --profile=low-latency --no-demuxer-thread --vd-lavc-threads=2 --title=Loopback-1" \
+	vlb2="mpv av://v4l2:/dev/video3 --untimed --load-scripts=no --no-cache --profile=low-latency --no-demuxer-thread --vd-lavc-threads=2 --title=Loopback-2" \
+	vlb3="mpv av://v4l2:/dev/video2 --untimed --load-scripts=no --no-cache --profile=low-latency --no-demuxer-thread --vd-lavc-threads=2 --title=Loopback-3" \
+	vlb4="mpv av://v4l2:/dev/video4 --untimed --load-scripts=no --no-cache --profile=low-latency --no-demuxer-thread --vd-lavc-threads=2 --title=Loopback-4"
+alias cam2v4l2='ffmpeg -f v4l2 -i /dev/video0 -s 1920x1080 -vf format=yuv420p -fps_mode cfr -fflags +genpts+discardcorrupt -flags low_delay -f v4l2 ${/dev/video#} && vlb3' \
+
+# surfraw wrappers
+alias google='sr -browser="$(which chromium)" google' \
+	googl='sr -browser="$(which brave)" google' \
+	goog='sr -browser="$(which firefox)" google' \
+	ggl='sr -browser="$(which qutebrowser)" google' \
+	chromeyt='sr -browser="$(which chromium)" youtube' \
+	ddg='sr -browser="$(which qutebrowser)" duckduckgo' \
+	torbrowser='$(which torbrowser-launcher)' \
+	firedev='firefox-developer-edition'
+
+# run LLM model
+alias lama8b='ollama run deepseek-r1:8b'
+alias lama7b='ollama run deepseek-r1:7b'
+alias lama671b='ollama run deepseek-r1:671b'
+
+alias nonman='for d in ~/Pictures/niesage/pNon/*; do [ -d "$d" ] && ssxiv "$d" ; done'
+# alias kx2x='pgrep x2x | xargs -I{} kill -9 "{}"'
+
+# x2dg3() { dg3=$(pass dg3); ipa=$(ip -4 addr show scope global | awk '/inet / {print $2}' | cut -d/ -f1) ; setsid -f ssh -A "$dg3" env DISPLAY=:0.0 ssh -Y "$ipa" >/dev/null 2>&1 ; }
+alias x2d='setsid -f ~/.local/keys/x2xdg3 >/dev/null 2>&1'
+alias bang='ddgr --gb --np'
+
+# vim: ft=sh:ts=2:sw=2:sts=2:et:
+# Local Variables:
+# mode: sh
+# coding: utf-8
+# indent-tabs-mode: nil
+# fill-column: 80
+# require-final-newline: t
+# End:

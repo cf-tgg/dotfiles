@@ -1,0 +1,106 @@
+$include /etc/inputrc
+
+# Set editing mode to Emacs
+set editing-mode emacs
+set show-mode-in-prompt on
+
+$if mode=emacs
+set bell-style visible
+set input-meta on
+set convert-meta off
+set output-meta on
+set completion-query-items 150
+
+# Basic navigation
+Control-a:     beginning-of-line
+Control-e:     end-of-line
+Control-b:     backward-char
+Control-f:     forward-char
+Meta-b:        backward-word
+Meta-f:        forward-word
+
+# Deleting and killing text
+Control-d:     delete-char
+Control-h:     backward-delete-char
+Control-w:     backward-kill-word
+Meta-d:        kill-word
+
+Meta-Backspace: backward-kill-word
+Control-k:     kill-line
+Control-u:     unix-line-discard
+Control-y:     yank
+Meta-y:        yank-pop
+
+# Transposing text
+Control-t:     transpose-chars
+Meta-t:        transpose-words
+Meta-u:        upcase-word
+Meta-l:        downcase-word
+Meta-c:        capitalize-word
+
+# History navigation and expansion
+Control-p:     previous-history
+Control-n:     next-history
+Meta-<:        beginning-of-history
+Meta->:        end-of-history
+Control-r:     reverse-search-history
+Control-s:     forward-search-history
+Meta-p:        history-search-backward
+Meta-n:        history-search-forward
+Control-o:     operate-and-get-next
+Meta-.:        insert-last-argument
+Control-g:     abort
+
+# Undo
+Control-_:     undo
+Control-x Control-u: undo
+
+# Line and word movement
+Control-l:     clear-screen
+Control-v:     quoted-insert
+Control-xr:    redraw-current-line
+
+# Completion settings
+TAB:           complete
+Meta-?:        possible-completions
+Meta-*:        insert-completions
+Meta-/ :       complete-filename
+Meta-~:        complete-username
+Meta-@:        complete-hostname
+Meta-$:        complete-variable
+Meta-!:        complete-command
+
+# Arrow keys for navigation
+"\M-[D":       backward-char
+"\M-[C":       forward-char
+"\M-[A":       previous-history
+"\M-[B":       next-history
+
+$endif               
+
+# Bash-specific bindings
+$if Bash
+"\C-xp":       "PATH=${PATH}\e\C-e\C-a\ef\C-f"
+"\C-x\"":      "\"\"\C-b"
+"\C-x\\":      "\\"
+"\C-xq":       "\eb\"\ef\""
+"\M-\C-v":     "\C-a\C-k$\C-y\M-\C-e\C-a\C-y="
+$endif
+
+$if mode=vi
+
+set show-mode-in-prompt on
+set vi-ins-mode-string \1\e[6 q\2
+set vi-cmd-mode-string \1\e[2 q\2
+
+set keymap vi-command
+# these are for vi-command mode
+Control-l: clear-screen
+Control-a: beginning-of-line
+
+set keymap vi-insert
+# these are for vi-insert mode
+Control-l: clear-screen
+Control-a: beginning-of-line
+
+$endif

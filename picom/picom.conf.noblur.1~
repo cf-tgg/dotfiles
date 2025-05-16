@@ -1,0 +1,131 @@
+shadow = true;
+shadow-radius = 50;
+shadow-opacity = .35;
+shadow-offset-x = -49;
+shadow-offset-y = -47;
+shadow-color = "#00020b";
+
+# Full transparency for window frames
+frame-opacity = 0;
+frame-opacity-for-same-colors = true;
+
+corner-radius = 1;
+
+# Disable blur entirely
+blur-method = "none";
+blur-background = false;
+blur-background-frame = false;
+blur-strength = 0;
+
+backend = "glx";
+dithered-present = false;
+vsync = true;
+detect-client-opacity = true;
+detect-transient = true;
+detect-client-leader = true;
+glx-no-stencil = true;
+glx-no-rebind-pixmap = true;
+use-damage = true;
+xrender-sync-fence = true;
+log-level = "warn";
+
+rules = ({
+    match = "WM_TRANSIENT_FOR@";
+    # Ensure no blur during animations
+    animations = ({
+        triggers = ["open", "show"];
+        opacity = {
+            curve = "linear";
+            duration = 0.15;
+            start = "window-raw-opacity-before";
+            end = "window-raw-opacity";
+        };
+        blur-opacity = 0; # Disable blur during animations
+        shadow-opacity = "opacity";
+        scale-y = {
+            curve = "cubic-bezier(0.24, 0.64, 0.79, 0.98)";
+            duration = 0.15;
+            start = 0.8;
+            end = 1;
+        };
+        offset-y = "(-window-height/2) + (window-height/2) * scale-y";
+        shadow-scale-y = "scale-y";
+        shadow-offset-y = "offset-y";
+    }, {
+        triggers = ["close", "hide"];
+        opacity = {
+            curve = "linear";
+            duration = 0.15;
+            start = "window-raw-opacity-before";
+            end = "0";
+        };
+        blur-opacity = 0; # Ensure blur remains disabled
+        shadow-opacity = "opacity";
+        scale-y = {
+            curve = "cubic-bezier(0.21, 0.02, 0.76, 0.36)";
+            duration = 0.15;
+            start = 1;
+            end = 0.7;
+        };
+        offset-y = "(-window-height/2) + (window-height/2) * scale-y";
+        shadow-scale-y = "scale-y";
+        shadow-offset-y = "offset-y";
+    });
+}, {
+    match = "window_type = 'dropdown_menu' || window_type = 'popup_menu' || window_type = 'menu'";
+    opacity = 0.9; # Adjust as needed
+}, {
+    match = "window_type = 'dock' || window_type = 'desktop'";
+    blur-background = false;
+    corner-radius = 0;
+}, {
+    match = "class_g *= 'i3lock' || _NET_WM_STATE@[1] = '_NET_WM_STATE_FULLSCREEN'";
+    shadow = false;
+    corner-radius = 0;
+    # Ensure no blur for fullscreen windows
+    animations = ({
+        triggers = ["open", "show"];
+        opacity = {
+            curve = "linear";
+            duration = 0.15;
+            start = "window-raw-opacity-before";
+            end = "window-raw-opacity";
+        };
+        blur-opacity = 0; 
+        shadow-opacity = "opacity";
+    }, {
+        triggers = ["close", "hide"];
+        opacity = {
+            curve = "linear";
+            duration = 0.15;
+            start = "window-raw-opacity-before";
+            end = "0";
+        };
+        blur-opacity = 0; 
+        shadow-opacity = "opacity";
+    });
+});
+
+# Window opening and closing animation with transparency
+animations = ({
+    triggers = ["open", "show"];
+    opacity = {
+        curve = "linear";
+        duration = 0.15;
+        start = "window-raw-opacity-before";
+        end = 1; # Full transparency
+    };
+    blur-opacity = 0;
+    shadow-opacity = "opacity";
+}, {
+    triggers = ["close", "hide"];
+    opacity = {
+        curve = "linear";
+        duration = 0.15;
+        start = 1;
+        end = 0; # Fade out completely
+    };
+    blur-opacity = 0;
+    shadow-opacity = "opacity";
+});
+

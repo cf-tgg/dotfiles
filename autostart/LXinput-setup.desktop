@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=LXInput autostart
+Comment=Setup keyboard and mouse using settings done in LXInput
+NoDisplay=true
+Exec=sh -c 'xset m 51/10 10 r rate 300 100 b off'
+NotShowIn=GNOME;KDE;XFCE;

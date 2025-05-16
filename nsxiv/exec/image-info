@@ -1,0 +1,12 @@
+#!/bin/sh
+
+f=$(realpath "$1")
+
+if exifjpg "$f" -t 2>/dev/null; then
+    TITLE="$(exifjpg "$f" -t)"
+else
+    b=$(basename "$f")
+    t=${b%.*}
+    TITLE=$(echo "$t" | sed -e 's/_/ /g')
+fi
+[ -n "$TITLE" ] && echo "$TITLE"

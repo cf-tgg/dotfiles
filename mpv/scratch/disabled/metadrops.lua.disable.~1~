@@ -1,0 +1,76 @@
+-- ~& [ metadrops.lua ] [ Last Update: 2024-12-16 03:47 ]
+
+local mp = require("mp")
+local playlist = mp.get_property_native("playlist", {})
+local utils = require("mp.utils")
+
+-- Helper to escape shell arguments
+local function shellescape(arg)
+	if arg == nil then
+		return nil
+	end
+	return "'" .. arg:gsub("'", "'\\''") .. "'"
+end
+
+-- Improved shell command execution
+local function shellcmd(cmd)
+	local handle = io.popen(cmd)
+	if not handle then
+		mp.msg.error("Failed to execute command: " .. cmd)
+		return nil, "Error opening pipe"
+	end
+	local result = handle:read("*a")
+	local ok, exit_code = handle:close()
+	if not ok then
+		mp.msg.error("Command failed: " .. cmd)
+		return exit_code
+	end
+	return result:gsub("%s+$", "")
+end
+
+local function extract_uri(file_path)
+	if file_path:match("youtube") then
+		mp.msg.info("Detected YouTube URL: " .. file_path)
+		return file_path
+	end
+	local escaped_path = shellescape(file_path)
+	local uri, exit_code = shellcmd("exifjpg " .. escaped_path .. " -u")
+	if uri and uri:match("%S") then
+		return uri
+	end
+	return file_path
+end
+
+local function no_pause()
+	if mp.get_property("pause") == "yes" then
+		mp.set_property("pause", "no")
+	end
+end
+
+-- Extract URI from the JPG using `exifjpg`
+local function extract_uri(file_path)
+	local escaped_path = shellescape(file_path)
+	local uri = shellcmd("exifjpg " .. escaped_path .. " -u")
+	if uri and uri:match("^https?://") then
+		return uri
+	end
+	return nil -- No valid URI found
+end
+
+local function handle_file()
+	local path = mp.get_property("path")
+	if path then
+		local uri = extract_uri(path)
+		local type = mp.get_property("file-format")
+		if uri and type == "jpeg_pipe" then
+			mp.msg.info("Playing: " .. uri .. ", " .. type)
+			mp.commandv("loadfile", uri, "append-play")
+		end
+		no_pause()
+	end
+end
+
+-- -- -- Bind to file-load and file-start events
+mp.register_event("file-load", handle_file)
+mp.register_event("start-file", handle_file)
+-- mp.register_event("file-end", appendplaylist)

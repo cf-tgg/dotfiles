@@ -1,0 +1,1744 @@
+#!/bin/sh
+#       _          _ _  __
+#   ___| |__   ___| | |/ _|_ __
+#  / __| '_ \ / _ \ | | |_| '_  \
+#  \__ \ | | |  __/ | |  _| | | |
+#  |___/_| |_|\___|_|_|_| |_| |_|
+#
+
+mkd() {
+    for d in "$@"; do
+        mkdir -pv "$d"
+    done
+}
+
+mkcd() {
+   d="$1"; mkdir -pv "$d" && cd "$d" || return 1;
+   return;
+}
+
+ve() {
+    for f in "$@" ; do
+        w=$(which "$f");
+        t=$(type "$f");
+        a=$(alias "$f");
+        ([ -f "$w" ]) && { file "$w" ; spwnedit "$w" ; } || echo "$t" ;
+        [ -n "$a" ] && {
+            grep -rn " ${f}=" "$XDG_CONFIG_HOME/shell" | fzf |  while read -r e l; do
+                file=$(echo "$e" | awk -F: '{print $1}')
+                ln=$(echo "$e" | awk -F: '{print $2}')
+                case "$EDITOR" in
+                    *vi*) "$EDITOR" "$file" -c ":$ln" ;;
+                    emac*) spwnedit "+${ln}" "$file" ;;
+                esac
+            done
+        }
+    done
+    return;
+}
+
+grepps() {
+  for p in $(pgrep "$1"); do
+    ps "$p"
+  done
+}
+
+awkargc() {
+  f="$1"
+  c="${2:-2}"
+  awk -F"$f" '{for(i='"$c"'; i<=NF; i++) printf "%s%s", $i, (i<NF ? '"$c"' : ""); print ""}'
+}
+
+# RTFM
+vman() { # nvim pager
+    export MANPAGER="nvim +Man!"
+    export MANWIDTH="$(($(tput cols) - 8))"
+    command man "$@"
+}
+
+# ask stupid questions
+gpt() { args=$(printf "%s " "$@"); tgpt "$args" ; }
+ttsgpt() { args=$(printf "%s " "$@"); tgpt "$args" | tts ; }
+
+# gpt() {
+#     local cmd=""
+#     local args=()
+#     local read_stdin=""
+#     local opts=()
+#     local to_tts=""
+#     # Process options with getopts
+#     while getopts ":cagpt" opt; do
+#         case $opt in
+#             c)
+#                 cmd="$OPTARG"  # Store command
+#                 ;;
+#             a)
+#                 args+=("$OPTARG")  # Store args in array
+#                 ;;
+#             g)
+#                 read_stdin=$(cat -)  # Read from stdin
+#                 ;;
+#             p)
+#                 opts+=("$(xclip -o)")  # Read from clipboard using xclip
+#                 ;;
+#             t)
+#                 to_tts=$(tts "${args[@]}")  # Call TTS (Text-to-Speech) on args
+#                 ;;
+#             \?)
+#                 echo "Invalid option: -$OPTARG" >&2
+#                 return 1
+#                 ;;
+#         esac
+#     done
+#     shift $((OPTIND - 1))  # Shift to remove processed options
+#     # Build the final command
+#     final_command="${cmd} ${read_stdin} ${opts[*]} ${args[*]} ${to_tts}"
+#     # Run the final command
+#     eval "$final_command"
+# }
+
+# text-to-speech model completion
+ttscomp() {
+    local models=()
+    for f in "$HOME/Templates/piper/voices/"*.onnx; do
+        base="${f%.onnx}"
+        if [[ -f "$base.onnx.json" ]]; then
+            models+=$(basename "$base")
+        fi
+    done
+    reply=($models)
+    return 0
+}
+compctl -K ttscomp tts 's[-m],[--model]'
+compctl -K ttscomp piper 's[-m],[--model]'
+
+addsv() {
+    local svdir="/etc/runit/sv"
+    local sv="$1"
+    if [ -z "$sv" ]; then
+        echo "Usage: addsv <service_name>"
+        return 1
+    fi
+    if [ -d "${svdir}/${sv}" ]; then
+        sudo ln -sf "${svdir}/${sv}" "/run/runit/service/${sv}"
+        sv status ${sv}
+    else
+        echo "Error: ${sv} doesn't exist in ${svdir}/"
+        return 1
+    fi
+}
+
+rmsv() {
+    local sv="$1"
+    local svlink="/run/runit/service/${sv}"
+    if [ -z "$sv" ]; then
+        echo "Usage: rmsv <service_name>"
+        return 1
+    fi
+    if [ -L "$svlink" ]; then
+        sudo rm "$svlink"
+        echo "Service ${sv} removed."
+        sv status ${sv} 2>/dev/null
+    else
+        echo "Error: ${svlink} does not exist or is not a symbolic link."
+        return 1
+    fi
+}
+
+# basic media editing helpers
+rmsound() {
+    input="$1"
+    output="no-sound-$1"
+    ffmpeg -i "$input" -an -c:v copy "$output"
+}
+
+mergeaudio() {
+    inputV="$1"
+    inputA="$2"
+    outputV="$3"
+    ffmpeg -i "$inputV" -i "$inputA" -c:v copy -c:a aac -strict experimental "$outputV"
+}
+
+trimvid() {
+    inputV="$1"
+    start="$2"
+    to="$3"
+    outputV="$4"
+    ffmpeg -i "$inputV" -ss "$start" -to "$to" "$outputV"
+}
+
+vid2gif() {
+    input="$1"
+    filename=$(basename -- "$input")
+    filename_noext="${filename%.*}"
+    output="$filename_noext.gif"
+    scale="${2:-200}"
+    ffmpeg -i "$input" -vf "scale=-1:$scale" "$output"
+}
+
+media_diff() {
+  ext="$1"
+  reference="${2:-1920x1080}"
+  property="${3:-Image}"
+  for file in *."${ext}"; do
+    value=$(mediainfo --Inform="${property};%" "$file")
+    if [ -z "$value" ]; then
+      echo "$file: Property '${property}' not found." >&2
+      continue
+    fi
+    if [ "$value" != "$reference" ]; then
+      echo "$file: $value"
+    fi
+  done
+}
+
+bak() {
+    target="$1"
+    backupdir="$HOME/Documents/Backups/5-adhoc"
+    backupname="${target}_$(date +%Y-%m-%d_%H%M).tar.gz"
+    [ -d "$backupdir" ] || mkdir -p "$backupdir"
+    [ -e "$target" ] && tar -zcvf "${backupdir}/${backupname}" "${target}" -P
+}
+
+ecf() {
+    case "$1" in
+        "dwmblocks")
+               file="$HOME/.local/src/dwmblocks/config.h"
+               cmd='cd ~/.local/src/dwmblocks && sudo make clean install && { killall -q dwmblocks ; setsid dwmblocks ; } &' ;;
+        "dwm")
+               file="$HOME/.local/src/dwm/config.h"
+               cmd='cd ~/.local/src/dwm && sudo make clean install && wmreup' ;;
+        "dmenu")
+               file="$HOME/.local/src/dmenu/config.h"
+               cmd='cd ~/.local/src/dmenu && sudo make clean install' ;;
+        "st")
+               file="$HOME/.local/src/st/config.h"
+               cmd='cd ~/.local/src/st && sudo make clean install' ;;
+        "zshrc")
+               file="$HOME/.config/zsh/.zshrc"
+               cmd='source ~/.config/zsh/.zshrc' ;;
+        "ytfzf")
+               file="$HOME/.config/ytfzf/subscriptions"
+               cmd='source ~/.config/ytfzf/subscriptions 2>/dev/null' ;;
+        "mpv")
+               file="$HOME/.config/mpv/input.conf"
+               cmd='source ~/.config/mpv/input.conf' ;;
+        "newsboat")
+               file="$HOME/.config/newsboat/urls"
+               cmd='source ~/.config/newsboat/urls' ;;
+        *)
+               echo "Invalid option."
+               return 1 ;;
+    esac
+    $EDITOR "$file" && eval "$cmd"
+    return;
+}
+
+# sync_subs() {
+#   local subs=(
+#       '~/.config/ytfzf/subscriptions'
+#       '~/.config/newsboat/urls'
+#       '~/.config/zsh/.zshrc'
+#       '~/.config/pipe-viewer/subscriptions'
+#       '~/.config/qutebrowser/'
+#   )
+#   hosts=("cf@10.0.0.27" "cf@10.0.0.203" "cf@10.0.0.234")
+#   for d in ${hosts[@]}; do
+#           for f in ${subs[@]}; do
+#                   rsync --recursive "$f" "${d:f}" --verbose
+#           done
+#   done
+# }
+
+# project setups
+# new_html() {
+#     pname="$1"
+#     cp -r ~/Templates/html/newProject/ "$pname"
+# }
+
+freelog() { # monitor directory remaining storage
+    dir="$1"
+    storage="cryptlvm"
+    if [[ -z $dir ]]; then
+        echo "Specify a directory. Usage: freelog <dir>"
+        exit 1
+    else
+        while true; do
+            # Capture the last line of `du -h` output for the specified directory
+            du_output=$(du -h "$dir" | tail -n 1 | awk '{print $1}')
+            # Capture disk usage statistics for "cryptlvm"
+            df_output=$(df -h | grep "$storage" | awk '{print "/ " $3," | "$4, $5}')
+            # Combine the outputs and print them on the same line
+            output="$du_output $df_output"
+            printf '\r%s' "$output"
+            sleep 3
+        done
+    fi
+}
+
+tcolors() { # print available 256 terminal colors
+    for num in {0..255}; do
+        printf "%s\033[38;5;${num}mcolour${num}\033[0m \t";
+        if [ $(expr $((num+1)) % 8) -eq 0 ]; then
+            printf "\n"
+        fi
+    done
+}
+
+apnd() {
+    file="$1"  # The first argument is the target file
+    shift      # Remove the first argument from the list
+    # Append all remaining arguments to the specified file
+    for content in "$@"; do
+        echo "$content" >> "$file"
+    done
+    tail $file
+}
+
+countdown() {
+    for i in $(seq $1 -1 1); do
+        echo -ne "\r$i";
+        sleep 1;
+    done
+}
+
+curLine() {
+    ROW=$(tput lines 2>/dev/null)
+    if [ -z "$ROW" ]; then
+        ROW=0
+    fi
+    export LINE="$ROW"
+    echo "$ROW"
+}
+
+# Install packages using yay (change to pacman/AUR helper of your choice)
+function in() {
+    yay -Slq | fzf -q "$1" -m --preview 'yay -Si {1}' --preview-window=right:70% | xargs -ro yay -S
+}
+# Remove installed packages (change to pacman/AUR helper of your choice)
+function re() {
+    yay -Qq | fzf -q "$1" -m --preview 'yay -Qi {1}' --preview-window=right:70% | xargs -ro yay -Rns
+}
+
+# Helper function to integrate yay and fzf
+yzf() {
+  pos=$1
+  shift
+  sed "s/ /\t/g" |
+    fzf --nth=$pos --multi --history="${FZF_HISTDIR:-$XDG_STATE_HOME/fzf}/history-yzf$pos" \
+    --preview-window=60%,border-left \
+    --bind="double-click:execute(xdg-open 'https://archlinux.org/packages/{$pos}'),alt-enter:execute(xdg-open 'https://aur.archlinux.org/packages?K={$pos}&SB=p&SO=d&PP=100')" \
+    "$@" | cut -f$pos | xargs
+}
+# Dev note: print -s adds a shell history entry
+
+# List installable packages into fzf and install selection
+yas() {
+  cache_dir="/tmp/yas-$USER"
+  test "$1" = "-y" && rm -rf "$cache_dir" && shift
+  mkdir -p "$cache_dir"
+  preview_cache="$cache_dir/preview_{2}"
+  list_cache="$cache_dir/list"
+  { test "$(cat "$list_cache$@" | wc -l)" -lt 50000 && rm "$list_cache$@"; } 2>/dev/null
+  pkg=$( (cat "$list_cache$@" 2>/dev/null || { pacman --color=always -Sl "$@"; yay --color=always -Sl aur "$@" } | sed 's/ [^ ]*unknown-version[^ ]*//' | tee "$list_cache$@") | yzf 2 --tiebreak=index --preview="cat $preview_cache 2>/dev/null | grep -v 'Querying' | grep . || yay --color always -Si {2} | tee $preview_cache")
+  if test -n "$pkg"
+    then echo "Installing $pkg..."
+      cmd="yay -S $pkg"
+      print -s "$cmd"
+      eval "$cmd"
+      rehash
+  fi
+}
+
+# List installed packages into fzf and remove selection Tip: use -e to list only explicitly installed packages
+yar() {
+      pkg=$(yay --color=always -Q "$@" | yzf 1 --tiebreak=length --preview="yay --color always -Qli {1}")
+      if test -n "$pkg"
+        then echo "Removing $pkg..."
+          cmd="yay -R --cascade --recursive $pkg"
+          print -s "$cmd"
+          eval "$cmd"
+      fi
+}
+
+# Emojis
+emoji() {
+    emojis=$(cat ~/Templates/css/emoji.txt)
+    selected_emoji=$(echo "$emojis" | fzf)
+    echo "$selected_emoji" | cut -d':' -f1 | xclip -selection clipboard
+    return
+}
+
+mkmpvplaylist() {
+    time="${time:-365}"
+    folder="${dir:-./}"
+    output="${output:-.playlist}"
+    play="${play:-0}"
+    while :; do
+        case "$1" in
+            -t|--time) time=$2; shift 2;;
+            -d|--dir) dir=$2; shift 2;;
+            -o|--output) output=$2; shift 2;;
+            -p|--play) play=1; shift;;
+            --) shift; break;;
+            *) break;;
+        esac
+    done
+    find "$folder" -not -path "$HOME/Videos/edit/*" -not -path "$HOME/Videos/yt/*"  -iname '*.mkv' -o -iname '*.mp4' -o -iname '*.webm' -o -iname '*.avi' -o -iname '*.mov' -o -iname '*.flv' -o -iname '*.wmv' -o -iname '*.mpeg' -o -iname '*.mpg' -o -iname '*.3gp' -type f -mtime -"$time" > "$folder/$output"
+    # If play flag is set, play the files
+    if [[ $play -eq 1 ]]; then
+        find "$folder"  -iname '*.mkv' -o -iname '*.mp4' -o -iname '*.webm' -o -iname '*.avi' -o -iname '*.mov' -o -iname '*.flv' -o -iname '*.wmv' -o -iname '*.mpeg' -o -iname '*.mpg' -o -iname '*.3gp' -type f -mtime -"$time" -print0 | sort -z | xargs -0 mpv --playlist=-
+    fi
+}
+
+dndmp() {
+  mpv --playlist=- < $( dragndrop -p --target --and-exit )
+}
+
+# exif_mpv() {
+#   fullpath="$(realpath "$1")"
+#   title=$(exiftool "$fullpath" -UserComment -j | jq -r '.[].UserComment | fromjson | .Summary.Title')
+#   channel="$(basename "$(dirname "$fullpath")")"
+#   uri=$(exiftool "$fullpath" -UserComment -j | jq -r '.[].UserComment | fromjson | .Summary.URI')
+#   str=$(exiftool -s3 "$fullpath" -UserComment -j | jq -r '.[].UserComment | fromjson | .Summary | "\(.URI) # \(.Title)"')
+#   echo "$str"
+#   notify-send -i "$fullpath" "$channel" "$title"
+#   grep -q "$str" "$MPVQ_PLAYLIST" || echo "$str" >> "$MPVQ_PLAYLIST"
+# }
+
+# exif2json() {
+#   for f in yt/meta/*/*.jpg; do
+#     f=$(realpath "$f")
+#     # Extract metadata from EXIF and ensure errors are ignored
+#     uri=$(exiftool "$f" -UserComment -j | jq -r '.[].UserComment | fromjson | .Summary.URI // .URI' || true)
+#     title=$(exiftool "$f" -UserComment -j | jq -r '.[].UserComment | fromjson | .Summary.Title // .Title' || true)
+#     description=$(exiftool "$f" -UserComment -j | jq -r '.[].UserComment | fromjson | .Summary.Description // .Description' || true)
+#     uploader=$(exiftool "$f" -UserComment -j | jq -r '.[].UserComment | fromjson | .Metadata.Uploader // .Uploader' || true)
+#     id=$(exiftool "$f" -UserComment -j | jq -r '.[].UserComment | fromjson | .Metadata.ID // .ID' || true)
+#     # Clean the strings to remove any unwanted characters (like newlines or extra quotes)
+#     uri=$(echo "$uri" | sed 's/^"\(.*\)"$/\1/' | tr -d '\n' | sed 's/\r//g')
+#     title=$(echo "$title" | sed 's/^"\(.*\)"$/\1/' | tr -d '\n' | sed 's/\r//g')
+#     description=$(echo "$description" | sed 's/^"\(.*\)"$/\1/' | sed 's/\r//g')
+#     uploader=$(echo "$uploader" | sed 's/^"\(.*\)"$/\1/' | tr -d '\n' | sed 's/\r//g')
+#     id=$(echo "$id" | sed 's/^"\(.*\)"$/\1/' | tr -d '\n' | sed 's/\r//g')
+#     json=$(jq -n \
+#       --arg uploader "$uploader" \
+#       --arg uri "$uri" \
+#       --arg title "$title" \
+#       --arg id "$id" \
+#       --arg path "$f" \
+#       --arg description "$description" \
+#       '{uploader: $uploader, path: $path, uri: $uri, title: $title, id: $id, description: $description}')
+#     # Output the cleaned JSON object
+#     printf "%s\n" "$json" | jq . -r
+#   done
+# }
+
+# metadb_rg() {
+#   search="$1"
+#   while read -r res; do
+#     match=$(printf "%s" "$res" | rg --color=always -i "${search}" 2>/dev/null)
+#     if [ -n "$match" ]; then
+#       uri=$(printf "%s" "$match" | jq -r '.uri')
+#       echo "URI: $uri"
+#     fi
+#   done < <(for f in yt/meta/*/*.jpg; do
+#     f=$(realpath "$f")
+#     metadata=$(exiftool "$f" -UserComment -j)
+#     if [ -z "$metadata" ]; then
+#       continue
+#     fi
+#     uri=$(echo "$metadata" | jq -r '.[].UserComment | fromjson | .Summary.URI // .URI')
+#     title=$(echo "$metadata" | jq -r '.[].UserComment | fromjson | .Summary.Title // .Title')
+#     description=$(echo "$metadata" | jq -r '.[].UserComment | fromjson | .Summary.Description // .Description')
+#     uploader=$(echo "$metadata" | jq -r '.[].UserComment | fromjson | .Summary.Uploader // .Uploader')
+#     uri=$(echo "$uri" | sed 's/^"\(.*\)"$/\1/' | tr -d '\n' | sed 's/\r//g')
+#     title=$(echo "$title" | sed 's/^"\(.*\)"$/\1/' | tr -d '\n' | sed 's/\r//g')
+#     description=$(echo "$description" | sed 's/^"\(.*\)"$/\1/' | tr -d '\n' | sed 's/\r//g')
+#     json=$(jq -n \
+#       --arg path "$f" \
+#       --arg uri "$uri" \
+#       --arg title "$title" \
+#       --arg description "$description" \
+#       '{path: $path, uri: $uri, title: $title, description: $description}')
+#     printf "%s\n" "$json"
+#   done)
+# }
+
+get_yt_desc() {
+    yt-dlp -q --no-warnings --skip-download --get-description "$1"
+}
+
+jsonfmt() {
+  dir=${1:-$(pwd)}
+  tmp=$(mktemp -d)
+  for f in *.json; do
+    jq . "$f" > "$tmp/$f" && mv "$tmp/$f" "$dir" -f
+  done && rm -rf "$tmp" && echo "$dir jsons formatted."
+}
+
+jsonlink() {
+  title=$(jq '.Summary.Title' "$1")
+  link="$(jq -r '.Summary."Original URI"' "$1")"
+  echo "$link # $title" >> "$MPVQ_PLAYLIST"
+}
+
+mpvqsv() {
+  mpvqsv="$HOME/.local/bin/statusbar/sb-mpvq"
+  down="${mpvqsv}.down"
+  if [ -f "$down" ]; then
+    echo "mpvqsv is down."
+    mv "${down}" "${mpvqsv}" -f > /dev/null
+    echo "mpvq up and running"
+    return
+  else
+    mv "${mpvqsv}" "${down}"
+    echo "mpvqsv down."
+    rm -f /tmp/mpvqicon
+    return
+  fi
+  ls "${mpvqsv}" || echo "mpvqsv down"
+  return 0
+}
+
+apndYtJsons() {
+  playslist="${1:-$MPVQ_PLAYLIST}"
+  for f in *.json; do
+    jsonlink "$f" >> "$playlist";
+    printf "\n" >> "$playlist";
+  done
+  return 0
+}
+
+metadb_search() {
+  metadb="$HOME/Videos/yt/metadb.json"
+  search="$*"
+  jq -r '.[] | select(.title, .description | contains("'$search'"))' "$metadb" | jq -r '.path'| sort -u | nsxiv -
+}
+
+sxyt() {
+  search="$*"
+  metadb="$HOME/Videos/yt/metadb.json"
+  tmp=$(mktemp)
+  jq -r '.[] | select(.title, .description | contains("'$search'"))' "$metadb" | jq -r '.path'|  sort -u | nsxiv -tio >> "$tmp"
+  while read -r f; do
+     exiftool -s3 -UserComment "$f" | jq -r '"\(.Summary.URI // .URI) # \(.Summary.Title // .Title)"' >> "$HOME/.playlist"
+  done < "$tmp"
+  rm "$tmp"
+  reload_playlist &
+  pid=$!
+  trap 'kill $pid' INT HUP EXIT
+  stnvim "$HOME/.playlist"
+  mpv --playlist="$HOME/.playlist" --input-ipc-server="/tmp/mpv-socket"
+}
+
+aicat() {
+  for f in "$@"; do
+    if [ -f "$f" ]; then
+      fname=$(basename "$f")
+      file=$(cat "$f")
+      printf '```%s\n%s\n```\n' "$fname" "$file"
+    else
+      echo "File not found: $f"
+    fi
+  done
+}
+
+aiecho() {
+  [ -n "$*" ] && printf '```%s\n%s\n```\n' "${0}" "$*"
+}
+
+epoch2date() {
+  if [ -z "$1" ]; then
+    echo "Syntax:   epoch2date <epoch_time> [format]"
+    echo "Default format:  %A, %B %d, %Y %H:%M:%S %Z"
+    echo "Example:"
+    echo "  \$ epoch2date 1483277086 \"%A, %Y-%m-%d %H:%M:%S\""
+    echo "  --> dimanche, 2017-01-01 08:24:46"
+    echo " (default output: dimanche, janvier 01, 2017 08:24:46 EST)"
+    return 1
+  fi
+  format=${2:-"%A, %B %d, %Y %H:%M:%S %Z"}
+  date -d @"$1" +"$format"
+}
+
+getfailedids() {
+  [ ! -f  "$1" ] && echo "File not found" && return 1
+  out=${2:-./failed}
+  while read -r line; do
+      echo "https://www.youtube.com/watch?v=$line" >> "$out"
+  done < <(grep 'ERROR:' "$1" | cut -d']' -f2  | cut -d':' -f1)
+  mv "$out" "$1.$(date +%Y%m%d%H%M%S)"
+}
+
+diffln() {
+  echo "Files in $1 but not in $2"
+  diff -rq <(find "$1" -type f) <(find "$2" -type l)
+}
+
+ffmpeg2messenger(){
+  in="$1"
+  out="${2:-fb_${in%.*}.mp4}"
+  basename=$(basename "$in")
+  realout=$(realpath "$out")
+  ffmpeg -i "$in" \
+  -c:v libx264 -preset slow -crf 20 -profile:v high -level 4.1 -pix_fmt yuv420p \
+  -vf "scale=w=1280:h=-2:force_original_aspect_ratio=decrease,fps=30" \
+  -b:v 3000k -maxrate 3000k -bufsize 6000k \
+  -c:a aac -b:a 192k -ar 44100 \
+  -strict experimental -movflags +faststart \
+  -fs 24M "$out" -y
+  echo "$basename --> $out"
+  echo "$realout" | xclip -selection clipboard && \
+    echo "$realout copied to clipboard"
+  return 0
+}
+
+relink() {
+  ls | grep '"' | while read -r file; do
+    mv -- "$file" "$(echo "$file" | sed 's/"/'\''/g')"
+  done
+}
+
+mtdcnt(){
+find "$HOME/Videos/yt/meta" -maxdepth 1 \
+  -not -path "$HOME/Videos/yt/meta/imported" \
+  -not -path "$HOME/Videos/yt/meta/playlists" \
+  -not -path "$HOME/Videos/yt/meta/bookmarks" \
+  -type d -exec echo "{}" \; > .metadirs
+  C=$(wc -l < .metadirs)
+  return "$C"
+}
+
+ythb() {
+  D=$(mtdcnt)
+  J=$((D*3))
+  parallel -j0+"$J" nsxiv "{}" -sF < .metadirs |\
+    parallel -0 -j0+"$J" -I {} exifjpg "{}" -M > "{}".playlist |\
+    mpv --playlist="{}".playlist &
+}
+
+lnescape() {
+  title="$1"
+  saneln="$(echo "$title" | sed 's/[\/:]//g; s/  / /g; s/^ //; s/\"/'\''/g')"
+  #  echo "$title"
+  #  echo "$saneln"
+  mv "$title" "$saneln"
+}
+
+parse_exifjpg_fields() {
+    local OPTIONS="c:t:u:" # Short options for channel, title, uri
+    local LONGOPTS="channel:,title:,uri:"
+    # Parse arguments with getopt
+    local PARSED
+    PARSED=$(getopt --options "$OPTIONS" --longoptions "$LONGOPTS" -- "$@") || {
+        echo "Invalid arguments" >&2
+        return 1
+    }
+    eval set -- "$PARSED"
+    local file=""
+    local fields=()
+    while true; do
+        case "$1" in
+            -c|--channel)
+                fields+=("--channel")
+                shift
+                ;;
+            -t|--title)
+                fields+=("-t")
+                shift
+                ;;
+            -u|--uri)
+                fields+=("-u")
+                shift
+                ;;
+            --)
+                shift
+                file="$1"  # Remaining argument is the file
+                shift
+                break
+                ;;
+            *)
+                echo "Unknown option: $1" >&2
+                return 1
+                ;;
+        esac
+    done
+    if [[ -z "$file" ]]; then
+        echo "Error: No file specified" >&2
+        return 1
+    fi
+    if [[ ${#fields[@]} -eq 0 ]]; then
+        echo "Error: No fields specified" >&2
+        return 1
+    fi
+    local exif_output
+    exif_output=$(exifjpg "$file" "${fields[@]}") || {
+        echo "Error: Failed to retrieve metadata with exifjpg" >&2
+        return 1
+    }
+    local i=0
+    while IFS= read -r line; do
+        case "${fields[i]}" in
+            "--channel") channel="$line" ;;
+            "-t")        title="$line" ;;
+            "-u")        uri="$line" ;;
+        esac
+        ((i++))
+    done <<< "$exif_output"
+    echo "Channel: ${channel:-N/A}"
+    echo "Title: ${title:-N/A}"
+    echo "URI: ${uri:-N/A}"
+}
+
+readexif(){
+    f="$1"
+    [ -L "$f" ] && f="$(readlink -f "$f")"
+    fi=$(realpath "$f")
+    {
+        read -r channel
+        read -r title
+        read -r uri
+      } < <(exifjpg "$fi" --channel --title --uri)
+    echo "$channel $title $uri"
+}
+
+timestamp() {
+  [ $# -gt 0 ] && CLIP=1
+  [ "$CLIP" -eq 1 ] && date "+%Y-%m-%d %H:%M:%S" | xclip -selection clipboard
+  date "+%Y-%m-%d %H:%M:%S" ;
+}
+
+exdt() { t="$1"; f="${2:-ar}" ; exifjpg "$t" -"$f" 2>/dev/null; }
+
+ytlnup() {
+  v="$1"
+  vu="$(exifjpg "$v" -u)"
+  vup="$(exifjpg "$v" --uploaderurl)"
+  errdir="$HOME/Videos/failed"
+  [ -d "$errdir" ] || mkdir -p "$errdir"
+  channel=${vup#https://www.youtube.com/@}
+  touch "$errdir/$channel.err"
+  ytup "$vu" && ytln "$vup" 2>"$errdir/$channel.err"
+}
+
+trimbl() { for f in "$@"; do [ -f "$f" ] && sed -i '/^$/d' "$f" ; done ; }
+
+mplist() {
+  mpc playlist |nl| while read -r l ; do
+     title="$(echo "$l"|awk '{print $2}')"
+     stream=$(grep -Fx "$title" "$HOME/.cache/mpd-streams")
+     i=$(echo "$l"|awk '{print $1}')
+  if [ -n "$stream" ]; then
+     sid=$(grep -nFx "$title" "$HOME/.cache/mpd-streams" | awk -F: '{print $1}')
+     t=$(sed -n "${sid}p" "$HOME/.cache/mpd-title")
+     printf "%s      %s\n" "$i" "$t"
+   else
+     printf "%s\n" "$l"
+   fi
+  done
+}
+
+mp() {
+  case "$1" in
+    -l|--list)
+      mplist ;
+      notify-send -a "mpctl" -r 9998 -t 2000 "$(mplist)" ;
+      return;;
+    -c|--clear)
+      :> ~/.cache/mpd-title
+      :> ~/.cache/mpd-streams
+      mpc clear && echo "clair."
+      return;;
+    -v|--voice)
+      playmuse
+      return;;
+    -n|--next)
+      mpc next >/dev/null 2>&1
+      return 0;;
+    -p|--prev)
+      mpc prev >/dev/null 2>&1
+      return;;
+    -d|--delete)
+      index="$2"
+      [ -n "$index" ] || { echo "Specify an index" >&2; return 1 ; }
+      title=$(mpc playlist | sed -n "${index}p")
+      stream=$(grep -Fx "$title" "$HOME/.cache/mpd-streams")
+      if [ -n "$stream" ]; then
+         sid=$(grep -nFx "$title" "$HOME/.cache/mpd-streams" | awk -F: '{print $1}')
+         t=$(sed -n "${sid}p" "$HOME/.cache/mpd-title")
+         sed -i "${sid}d" ~/.cache/mpd-streams
+         sed -i "${sid}d" ~/.cache/mpd-title
+         printf "%s *removed*\n" "$t"
+       else
+         printf "%s *removed*\n" "$title"
+       fi
+       mpc del "${index}" >/dev/null 2>&1
+       mplist
+       return;;
+    -dl|--download)
+      index="$2"
+      [ -n "$index" ] || { echo "Specify an index" >&2; return 1 ; }
+      title="$(mpc playlist | sed -n "${index}p")"
+      stream=$(grep -Fx "$title" "$HOME/.cache/mpd-streams")
+      if [ -n "$stream" ]; then
+         sid="$(grep -nFx "$title" "$HOME/.cache/mpd-streams" | awk -F: '{print $1}')"
+         t="$(sed -n "${sid}p" "$HOME/.cache/mpd-title")"
+         link=$(grep -F "$t" "$HOME/Downloads/albums/history.playmuse" | awk -F' # ' '{print $1}'| sort -u)
+         ydl -a "$link"
+       else
+         mplist
+         echo "$title is local."
+         return 1
+      fi
+      return;;
+    *) query="$*" ;;
+  esac
+  museplay "$query" >/dev/null && \
+  mplist
+  return 0
+}
+
+mediainf() {
+  f="$1"
+  mediainfo_output=$(mediainfo "$f")
+  album=$(echo "$mediainfo_output" | grep -E "Album" | cut -d: -f2 | xargs)
+  title=$(echo "$mediainfo_output" | grep -E "Track name" | cut -d: -f2 | xargs)
+  position=$(echo "$mediainfo_output" | grep -E "Track name/Position" | cut -d: -f2 | xargs)
+  artist=$(echo "$mediainfo_output" | grep -E "Performer" | cut -d: -f2 | xargs)
+  date=$(echo "$mediainfo_output" | grep -E "Recorded date" | cut -d: -f2 | xargs)
+  echo "Album: $album"
+  echo "Title: $title"
+  echo "Position: $position"
+  echo "Artist: $artist"
+  echo "Date: $date"
+}
+
+is_urljpg() {
+  f="$(realpath "$1")"
+        [ -f "$f" ] || { echo "that's not a file."; return 1 ; }
+        if file --dereference --mime-type --brief "$f" | grep -q "image/jpeg" && [ -n "$(exifjpg "$f" -u 2>/dev/null)" ]; then
+                url="$(exifjpg "$f" -u)"
+                echo "$url"
+        fi
+}
+
+grpecho() { grep -qE "$1" "$2" || echo "$1" >> "$2" ; }
+
+grepecho() {
+  op="tee -a"
+  SOURCE=0
+  while getopts "sS" opt; do
+    case $opt in
+      s) op=">>" ;;
+      S) SOURCE=1 ;;
+      *) op="tee -a" ;;
+      ?) echo "Invalid option: -$OPTARG" >&2; return 1 ;;
+    esac
+  done
+  shift "$((OPTIND - 1))"
+  grep -qE "$1" "$2" || echo "$1" | eval "$op" "$2"
+  [ "$SOURCE" -eq 1 ] && source "$2" >/dev/null 2>&1
+}
+
+addalias() {
+  alias_f="${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliases"
+  ln_cnt=$(wc -l < "$alias_f")
+  ln_ellipsis=$((ln_cnt - 8))
+  penultimate_line=$((ln_cnt - 1))
+  sed -i "${penultimate_line}i alias $1=\'$2\'" "$alias_f"
+  nl -ba "$alias_f" | head -n8 | sed 's/\([0-9]\)/ /' ;
+  printf "   (%s) [...]\n" "$ln_ellipsis" ;
+  nl -ba "$alias_f" | tail -n4 ;
+  source "$alias_f" >/dev/null 2>&1
+}
+
+addmodeline() {
+  f="$1"
+  if [ ! -f "$f" ]; then
+    echo "No valid file specified" >&2
+    return 1
+  fi
+  rpath=$(realpath "$f")
+  if head -n1 "$rpath" | grep -q "^#*" ; then
+    lang="sh"
+  else
+    file=$(basename "$rpath")
+    ext="${file##*.}"
+    lang="${ext:-sh}"
+  fi
+  modeline=${2:-"ts=2:sw=2:sts=2:et:"}
+  mln=" vim: ft=$lang:$modeline"
+  case "$lang" in
+    sh|py) ml="# $mln" ;;
+    c|h|js|cpp|ts) ml="/* $mln */" ;;
+    lua) ml="-- $mln" ;;
+    *) ml="# $mln" ;;
+  esac
+  if ! echo "$ml" >> "$f"; then
+    echo "Error adding modeline" >&2
+    return 1
+  fi
+  ln_cnt=$(wc -l < "$f")
+  if [ "$ln_cnt" -gt 13 ]; then
+    ln_ellipsis=$((ln_cnt - 13))
+    nl -ba "$f" | head -n9
+    printf "\n   (%s) [...]\n\n" "$ln_ellipsis"
+    nl -ba "$f" | tail -n4
+  else
+    nl -ba "$f"
+  fi
+  return 0
+}
+
+fn_echo() {
+  func="$*"
+  func_escaped=$(printf '%s' "$func" | sed 's/[&/\]/\\&/g')
+  # echo "$func"
+  echo "$func_escaped"
+}
+
+addfn() {
+  func_f="${XDG_CONFIG_HOME:-$HOME/.config}/shell/functions"
+  ln_cnt=$(wc -l < "$func_f")
+  ln_ellipsis=$((ln_cnt - 8))
+  penultimate_line=$((ln_cnt - 1))
+  if [ "$ln_cnt" -lt 2 ]; then
+    penultimate_line=1
+  fi
+  func="$*"
+  func_escaped=$(printf '%s' "$func" | sed 's/[&/\]/\\&/g')
+  # sed -i "${penultimate_line}i \n${func_escaped}" "$func_f"
+  printf "%s\n\n" "$func_escaped" >> "$func_f"
+  func_name=$(echo "$func" | head -n1 | awk -F'(' '{print $1}')
+  sed -i "${ln_cnt}d" "$func_f" >/dev/null
+  # echo "$func_escaped"
+  if ! source "$func_f" >/dev/null 2>&1; then
+    echo "Error: Sourcing the function file failed. Removing the added function."
+    sed -i "/^${func_escaped}$/d" "$func_f"
+    echo "$func_name removed from $func_f."
+    addmodeline "$func_f"
+    return 1
+  fi
+  addmodeline "$func_f" >/dev/null
+  head="$(nl -ba "$func_f" | head -n8)"
+  ellipsis="$(printf "\n  [%s] (...)\n\n" "$ln_ellipsis")"
+  tail="$(nl -ba "$func_f" | tail -n10)"
+  printf "       %s\n%s\n%s\n\n%s -> %s\n" "$head" "$ellipsis" "$tail" "$func_name" "$func_f"
+}
+
+extinfpipe() {
+    exifjpg "$1" --duration -tu | {
+    read -r d ; read -r t ; read -r u ;
+    s=$(echo "$d" | awk -F: 'NF==3 {print $1*3600+$2*60+$3}; NF==2 {print $1*60+$2}; NF==1 {print $1}')
+    printf "#EXTINF:%s,%s\n%s\n" "$s" "$t" "$u"
+  }
+}
+
+has_hls_header() { sed -n "1p" "$1" | grep -q "^#EXTM3U" || sed -i "1i #EXTM3U" "$1" ; }
+
+timestamp_format() {
+  in="$1"
+  out=${2:-timestamps}
+  [ -f "$in" ] || { echo "File not found" >&2; return 1 ; }
+  while read -r l; do
+    t=$(echo "$l" | cut -d' ' -f1 | awk -F: '{
+      if (NF == 3) printf "%02d:%02d:%02d", $1, $2, $3;
+      else if (NF == 2) printf "00:%02d:%02d", $1, $2;
+      else if (NF == 1) printf "00:00:%02d", $1;
+    }')
+    c=$(echo "$l" | cut -d' ' -f2-)
+    printf "%s\t%s\n" "$t" "$c"
+  done < "$in" > "$out"
+  tail "$out"
+}
+
+m3u_sdpipe() {
+   f="$1"
+   sd="${2:-/tmp/mpv.sock}"
+   playlist="${3:-$HOME/.cache/mpvq/sd_mpvq.m3u8}"
+   titles="${4:-$HOME/.cache/mpvq/sd_mpvq.titles}"
+   grep -v "#EXTM3U" "$f" | while read -r e; do
+      read -r u
+      [ -z "$e" ] || [ -z "$u" ] && continue
+      t=$(echo "$e" | sed -n 's/#EXTINF:\([0-9]*\),\(.*\)/\2/p')
+      grep -qE "$t" "$titles" || echo "$t" >> "$titles"
+      grep -qE "$u" "$playlist" || { echo "$e" ; echo "$u" ; } >> "$playlist"
+      echo '{"command": ["loadfile", "'"$u"'", "append"]}' | socat - "/tmp/mpv.sock"
+   done || return 1
+   return 0
+}
+
+m3umpsd() {
+   f="$1"
+   u="/tmp/filtered.m3u8"
+   sd="${MPV_SOCK:-/tmp/mpv.sock}"
+   grep -v "#EXT" "$f" > "$u"
+   echo '{"command": ["loadlist", "'"$u"'", "append"]}' | socat - "$sd"
+   rm -f "$u"
+}
+
+hlsfzfsd() {
+   f="$1"; sd="/tmp/mpv.sock";
+   grep -v "#EXT" "$f" | fzf --multi | while read -r e; do
+       read -r u
+       [ -z "$e" ] || [ -z "$u" ] && continue
+       echo '{"command": ["loadfile", "'"$u"'", "append"]}' | socat - "$sd"
+   done
+}
+
+sort_playlist_bydate() {
+  playlist="$1"
+  awk '
+  BEGIN { OFS = "\t" }
+  /^#EXTINF/ {
+    match($0, /[0-9]{4}-[0-9]{2}-[0-9]{2}$/, match_array)
+    date = (match_array[0] != "") ? match_array[0] : "0000-00-00"
+    extinf = $0  # Store the #EXTINF line
+    getline link  # Read the associated link
+    if (link ~ /^https?:\/\//) {
+      print date, extinf, link
+    } else {
+      print date, extinf
+    }
+  }
+  ' "$playlist" | sort -t$'\t' -k1,1 | awk -F'\t' '
+  {
+    # Reformat output with aligned #EXTINF and URL
+    print $2
+    if (NF == 3) print $3
+  }
+  '
+}
+
+dir_name() {
+  t="$1"
+  if [ -f "$t" ]||[ -L "$t" ]; then
+    d=$(dirname "$t")
+  elif [ -d "$t" ]; then
+    d="$(realpath $t)"
+  fi
+  name=$(basename "$(realpath "$d")")
+  echo "$name"
+}
+
+# make_playlist() {
+#   name=$(basename "$(dirname "$1")")
+#   for f in *; do
+#     exifjpg "$f" -M 2>/dev/null || continue
+#   done > "$HOME/Videos/playlists/$name.m3u8"
+#   has_hls_header "$HOME/Videos/playlists/$name.m3u8"
+#   grep "#EXTINF" | wc
+#   echo "$name playlist created."
+# }
+
+error() { cond="$1"; msg="$2" ; eval "$cond" && echo "$msg" && return 1 ; }
+
+make_playlist() {
+  playlist="$1"
+  for f in *; do
+    [ -n $(is_urljpg "$f") ] || continue
+    exifjpg "$f" -M >/dev/null 2>&1 | while read -r l; do
+       grep "$l" "$playlist" || echo "$l" >> "$playlist"
+      done
+  done
+  has_hls_header "$playlist"
+  grep "#EXTINF" "$playist" | wc -l
+  echo "$playlist created."
+}
+
+make_all_playlists() {
+  for d in "$HOME/Videos/yt/meta/"*; do
+    if [ -d "$d" ]; then
+      name=$(basename "$d" | sed "s/ $//;s/ /_/g;s/\.//g;s/'//g;s/\,//g;s/&/and/g")
+      for f in "$d"/*.jpg; do
+        exifjpg "$f" -M 2>/dev/null
+      done > "$HOME/Videos/playlists/$name.m3u8"
+      has_hls_header "$HOME/Videos/playlists/$name.m3u8"
+      grep "#EXTINF" | wc
+      echo "$name playlist created."
+    fi
+  done
+}
+
+dname() {
+  t="$1";
+  d=$(dirname "$t")
+  r=$(realpath "$t")
+  n=$(basename "$r")
+  dn=$(basename "$d")
+  printf 't="$1"              => target:      %s\n' "$t"
+  printf 'r=$(realpath "$t")  => realpath:    %s\n' "$r"
+  printf 'd=$(dirname "$t")   => dirname:     %s\n' "$d"
+  printf 'n=$(basename "$r")  => basename:    %s\n' "$n"
+  printf 'dn=$(basename "$d") => dirbasename: %s\n' "$dn"
+  return 0;
+}
+
+for_f() {
+  in="$*"
+  cmd="$1"
+  pat="$2"
+  args=("$@")
+  arg=$(echo "${args}"|sed "s/$1 $2 //")
+  for f in *"$pat"; do "$cmd" "$f" "$arg" 2>/dev/null ; done
+}
+
+f_ext() { f="$1"; ext=${f##*.} ; echo "$ext" ; }
+twitch() { while read -r sub; do ttv "$sub" ; done < ~/Videos/ttvsubs ; }
+
+em() {
+    if which "$1" >/dev/null 2>&1; then
+        [ -f "$(which "$1")" ] && target=$(which "$1")
+    else
+        target="$1"
+    fi
+    setsid -f emacsclient -c "$target" >/dev/null 2>&1 || \
+    setsid -f emacsclient -c -n "$target" >/dev/null 2>&1 || \
+    setsid -f emacs "$target" >/dev/null 2>&1 || \
+    emacs -nw "$target" || return 1 ;
+    return 0
+}
+
+sce() { # fuzzy script edit
+    scpath=${1:-"$HOME/.local/bin"}
+    s=("$scpath"/*)
+    c="$(print -lnr ${s:t:r} | fzf)"
+    [ "${c}" ] && em ${${(M)s:#*/${c}*}[1]}
+}
+
+lambda() {
+  f="$HOME/.config/shell/functions"
+  n="$1" ; b=$(echo "$*" | cut -d' ' -f2-) ;
+  l=$(wc -l < \"$f\"); i=$((l-1))
+  fn="${n}() { ${b} ; }"
+  sed -i "${i}i $fn" "$f"
+  head -n8 "$f" ; tail -n5 "$f" ;
+}
+
+mpsd_loadlist() {
+  f="$1"
+  u="/tmp/m3u8.tmp"
+  grep -v "#EXT" "$f" > "$u"
+  [ -f "$u" ] && echo '{"command": ["loadlist", "'"$u"'", "append"]}' | socat - "/tmp/mpv.sock" >/dev/null 2>&1
+  rm -f "$u" >/dev/null 2>&1 ;
+}
+
+sort_playlist_byduration() {
+    playlist="$1" ;
+    awk '
+    BEGIN { OFS = "\t" }
+    /^#EXTINF/ {
+        # Extract duration, title, and date
+        match($0, /^#EXTINF:([^,]+),([^,]+),([^,]+)/, match_array)
+        duration = match_array[1] + 0
+        title = match_array[2]
+        date = match_array[3]
+
+        extinf = $0  # Store the #EXTINF line
+        getline link  # Read the associated link
+        if (link ~ /^https?:\/\//) {
+            print duration, extinf, link
+        } else {
+            print duration, extinf
+        }
+    }
+    ' "$playlist" | sort -t$'\t' -k1,1n | awk -F'\t' '
+    {
+        # Reformat output with aligned #EXTINF and URL
+        print $2
+        if (NF == 3) print $3
+    }
+    ' ;
+}
+
+logdbg() {
+    input="$*"
+    DBG=1
+    LOGDIR="$HOME/Templates/logs"
+    LOGFILE="$LOGDIR/dbg.log"
+    [ -d "$LOGDIR" ] || mkdir -p "$LOGDIR"
+    [ -f "$LOGFILE" ] || touch "$LOGFILE"
+    sid=${sid:-"${0##*/}"}
+    [ "$DBG" -eq 0 ] && eval "$("$input")" 2>&1 && return 0
+    timestamp=$(date -u +"%Y-%m-%d %H:%M:%S")
+    printf "[%s] (%s) %s\n" "$timestamp" "${0}" "$(eval "$input" 2>>"$LOGFILE" 2>&1)" 2>&1 >> "$LOGFILE" ;
+    # l=$(wc -l < "$LOGFILE"); i=$((l-3)); sed -i "${i}d" "$LOGFILE" && tail -n1 "$LOGFILE"
+    awk '/^\[[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\]/' "$LOGFILE" > "$LOGFILE.tmp" && \
+      mv -f "$LOGFILE.tmp" "$LOGFILE" >/dev/null 2>&1 ;
+}
+
+ff_infojs_embed() {
+  for i in *.info.json; do
+    title=${i%%.info.json}
+    ls "${title}".{mp4,webm,mkv} 2>/dev/null | while read -r t ; do
+        ffjsonembed "$t" "$i"
+      done
+  done
+  return 0;
+}
+
+figlets() {
+    string="$*"
+    fonts=(banner block digital lean mnemonic shadow small smshadow standard big bubble ivrit mini script slant smscript smslant term)
+
+    for font in $fonts; do
+        echo "$font"
+        figlet -f "$font" "$string"
+        echo
+    done
+}
+
+fatdirs() {
+   d=${1:-$HOME}
+   i=${2:-10}
+   [ -d "$d" ] && du -Sh "$d" | sort -rh | head -n "$i"
+   return 0;
+}
+
+mklocalplaylist() {
+    d=${1:-.} ;
+    [ -d "$d" ] || d=$(dirname "$d") ;
+    playlist="$HOME/$(basename "$d" | sed -e "s/ /-/g;s/[\&/\`\\*.$ ']//g")_$(date +"%Y-%m-%d_%H%M-%S").m3u8" ;
+    find "$d" -type f -name "*[webm|mkv|mp4|avi|mpeg4|mpeg|mov]" |\
+        while read -r f; do
+           if [ $(file --brief --mime-type "$f") = "video/*" ]; then
+               extinf_video_cat "$f" 2>/dev/null
+           fi
+        done >"$playlist" ;
+    has_hls_header "$playlist" && linkhandler "$playlist" ;
+}
+
+mkjpgplaylist() {
+    d=${1:-.};
+    [ -d "$d" ] || d=$(dirname "$d");
+    playlist="$HOME/$(basename "$d" | sed -e "s/ /-/g;s/[\&/\`\\*.$ ']//g")_$(date +"%Y-%m-%d_%H%M-%S").m3u8" ;
+    find "$d" -type l | while read -r f; do
+           if [ $(file --dereference --brief --mime-type "$f") = "image/jpeg" ]; then
+               exifjpg "$f" -M 2>/dev/null
+           fi
+        done >"$playlist" ;
+    has_hls_header "$playlist" && linkhandler "$playlist" ;
+}
+
+askchar() {
+    stty -echo -icannon
+    char=$(dd bs=1 count=1 2>/dev/null)
+    stty sane
+    echo "$char"
+}
+
+whut() {
+    dis="$1"
+    type "$dis" | while read -r t; do
+        case "$t" in
+            "*not found")
+                printf "%s -- Create it now? " "$t" ; ans=$(askchar) ;
+                printf "%s" "$ans" | grep -i "[y,o]" && printf "Où? " ; read -r dir
+                [ -d "$dir" ] && setsid -f "$EDITOR" "$dir/$dis" >/dev/null 2>&1 || { echo "Invalid directory" ; return 1 ; }
+                return ;;
+            *alias*) shd="$HOME/.config/shell"
+                     grep -rn "$dis" "$shd" | head -n3 | while read -r f ln ; do
+                         [ -n "$f" ] || return 1
+
+                         file=$(echo "$f" | awk -F: '{print $1}');
+                         line=$(echo "$f" | awk -F: '{print $2}');
+                         case "$EDITOR" in
+                             *vi*) "$EDITOR" "$file" -c ":$line" ;;
+                             emac*) setsid -f emacsclient -cn -a '' +"$line" "$file" >/dev/null 2>&1 ;;
+                         esac
+                     done
+                     return 0
+                     ;;
+            "*is a shell function from*")
+                echo "$t" | awk -F"$dis is a shell function from " '{print $2}' | while read -r f; do
+                    line=$(grep -n "$dis" "$f"|cut -d: -f1)
+                    [ -n "$line" ] || return 1
+                    case "$EDITOR" in
+                        *vi*) "$EDITOR" "$f" -c ":$line" ;;
+                        emac*) setsid -f emacsclient -cn -a '' +"$line" "$f" >/dev/null 2>&1 ;;
+                    esac
+                done
+                return;;
+            "$dis is $HOME"*)
+                echo "$t" | awk -F' is ' '{print $2}' | while read -r f; do
+                    file="$f"
+                    case "$EDITOR" in
+                        *vi*) "$EDITOR" "$file" ;;
+                        emac*) setsid -f emacsclient -cn -a '' "$file" >/dev/null 2>&1 ;;
+                    esac
+                done
+                return;;
+            *) f=$(find "$HOME" -path "$HOME/.config*" -path "$HOME/.local/bin*" -path "$HOME/.local*" -type f -iname \*"$dis"\*)
+               [ -f "$f" ] && "$EDITOR" "$(realpath "$(echo "$f" | awk -F' ' '{print $1}'|head -n1)")" || return 1 ;
+               return;
+               ;;
+        esac
+    done
+    return;
+}
+
+subargs() {
+    shift
+    while [ $# -gt 0 ]; do
+        printf " %s" "$1"
+        shift
+    done
+}
+
+# dynamic variable expansion test function
+# usage: echovars <test_arg> -- '<vardec1=vardef1>' '<vardec2=vardef2>' '<...>'
+echovars() {
+    test="$1"
+    shift
+
+    # declaration of variables
+    for expr in "$@"; do
+        eval "$(echo "$expr" | sed "s|\$1|\"$test\"|g")"
+    done
+
+    # Print the variables and their values
+    for expr in "$@"; do
+        var_name="${expr%%=*}"  # Extract the variable name (before '=')
+        eval "value=\"\$$var_name\""
+        printf "%s => %s\n" "$var_name" "$value"
+    done
+}
+
+vm() {
+    vm_dir="$HOME/Templates/vm"
+    find "$vm_dir" -type f -name "*.conf" | fzf | xargs -I{} quickemu --vm "{}" --display "spice" --width "2256" --height "1504" --fullscreen || return 1 ;
+    return 0;
+}
+
+xswl() {
+    REVERSE=0
+    while getopts "rh" opt; do
+        case "$opt" in
+            r) REVERSE=1 ; break ;;
+            h|*) echo "xswl -[r] reverse SWALLOWER-SWALLOWEE -[h|*] prints this." && return 1 ;;
+        esac
+    done
+    i="$WINDOWID"
+    t="$(xwininfo | grep -E "Window id: " | awk '{print $4}')"
+    [ "$REVERSE" -eq 1 ] && { dwmswallow "$t" "$i" || return 1 ; } && return 0;
+    dwmswallow "$i" "$t" || return 1 ;
+    return 0;
+}
+
+fc-cache-rv() {
+    fc-cache -rv &
+    sudo fc-cache -rv &
+}
+
+
+kx2x() {
+    pgrep x2x | xargs kill || {
+        echo "$(pgrep x2x)"| xclip -in -selection clipboard
+        echo "failed to kill x2x: $(pgrep x2x)"
+        return 1
+    };
+    return 0;
+}
+# x2xr() { kx2x && sleep 1 && x2dg3 ; }
+
+fzfd() {
+    f="$HOME/.local/keys/ipa.gpg"
+    FS=', '
+    user=0
+    ip=0
+    port=0
+    OPTIND=1
+    while getopts ":huipf:F:" opt; do
+        case "$opt" in
+            h) printf "Usage: fzfd [/path/to/file]\n\tIf no file is specified, default is used\n\tcurrent default file: %s\n" "$HOME/.local/keys/ipa.gpg"
+               return;;
+            F) FS="$OPTARG" ;;
+            f) if [ -f "$OPTARG" ]; then f="$OPTARG"; else echo "$OPTARG is not a valid file path." && return 1; fi ;;
+            u) user=1 ;;
+            i) ip=1 ;;
+            p) port=1 ;;
+            \?) echo "Invalid option: -$OPTARG" >&2 ; return 1 ;;
+            :) echo "Option -$OPTARG requires an argument." >&2 ; return 1 ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+    if [ "${f##*.}" = "gpg" ]; then
+        host=$(gpg2 --quiet --no-tty --for-your-eyes-only --decrypt "$f") || { echo "Error: Failed to decrypt host file"; return 1; }
+    else
+        host=$(cat "$f")
+    fi
+    t=$(echo "$host" | awk -F "$FS" '{print $1}' | fzf --prompt="Où? ")
+    if [ $((user+ip+port)) -ne 0 ]; then
+        [ "$user" -eq 1 ] && u=$(echo "$host" | grep -E "^$t$FS" | awk -F "$FS" '{print $2}'| cut -d'@' -f1 )
+        [ "$ip" -eq 1 ] && i=$(echo "$host" | grep -E "^$t$FS" | awk -F "$FS" '{print $2}' | cut -d'@' -f2 )
+        [ "$port" -eq 1 ] && p=$(echo "$host" | grep -E "^$t$FS" | awk -F "$FS" '{print $3}')
+        [ "$user" -eq 0 ] && [ "$ip" -eq 1 ] && [ "$port" -eq 0 ] && t="$i"
+        [ "$user" -eq 0 ] && [ "$ip" -eq 1 ] && [ "$port" -eq 1 ] && t="$i:$p"
+        [ "$user" -eq 0 ] && [ "$ip" -eq 0 ] && [ "$port" -eq 1 ] && t="$p"
+        [ "$user" -eq 1 ] && [ "$ip" -eq 0 ] && [ "$port" -eq 0 ] && t="$u"
+        [ "$user" -eq 1 ] && [ "$ip" -eq 1 ] && [ "$port" -eq 0 ] && t="$u@$i"
+        [ "$user" -eq 1 ] && [ "$ip" -eq 1 ] && [ "$port" -eq 1 ] && t="$u@$i:$p"
+    fi
+    [ -n "$t" ] && echo "$t" || return 1
+    return 0
+}
+
+addpass() {
+    gpg2 --quiet --decrypt "$1" | \
+        {
+            while read -r line; do
+                count=1 ;
+                name="$(echo "$line"| awk -F', ' '{print $1}')"
+                pass="$(echo "$line"| awk -F', ' '{print $2}')"
+                if ! pass "$name" >/dev/null 2>&1 ; then
+                    echo "$pass" | pass insert -e "$name"
+                    count=$((count+1))
+                fi
+            done
+            echo "password store updated with $count passwords"
+        } || return 1 ;
+    return;
+}
+
+strprint() {
+    FS=" "
+    while getopts "F:" opt; do
+        case "$opt" in
+            F) FS="$OPTARG" ; break ;;
+            *) ;;
+        esac
+    done
+    FS=${FS[1]}
+    echo "$@" | awk -F"$FS" '{for (i=0;i<=NF;i++) {print "\""$i"\""}}'
+}
+
+svadd() {
+    [ $# -gt 0 ] || { printf "svadd <service>\n\t\t => sudo ln -s /run/runit/sv/<service> /run/runit/service\n" ; return 1 ; };
+    for sv in "$@" ; do
+        [ -n "$sv" ] || { echo "Error while reading service. Got: '${sv}'" ; continue }
+        [ -d "/etc/runit/sv/$sv" ] || { echo "Could not find $sv in service directory. Is it installed?" ; continue ; }
+        [ -L "/etc/runit/sv/$sv" ] && { echo "$sv is already linked as running service." ; sudo sv status "$sv" 2>&1 } ; continue  || continue
+        if sudo ln -s /etc/runit/sv/"$sv" /run/runit/service ; then
+            sudo sv status "$sv"
+        else
+            echo "Error while linking $sv. Verify installation and runscript." >&2
+        fi
+        continue
+    done
+    return;
+}
+
+
+YTZD="$HOME/Videos/playlists/ytzf"
+YTZF="$YTZD/.saved"
+[ -d "$YTZD" ] || mkdir -p "$YTZD"
+[ -f "$YTZF" ] || touch "$YTZF"
+export YTZD
+export YTZF
+
+fzfbm() {
+    pf="${1:-$YTZF}"
+    cat "$pf" | fzf --delimiter="\t" --with-nth=1 | while read -r n f; do
+        [ -n "$n" ] && [ -f "$f" ] || return 1 ;
+        if tmux has-session -t mpv || tmux new-session -d -s "mpv" ; then
+            tmux new-window -t mpv: -n "$n" -- "/usr/bin/mpv -quiet --playlist=${f} 2>&1"
+        else
+            echo "failed to create in tmux session... starting $selected_playlist detached.."
+            setsid -f /usr/bin/mpv -quiet --playlist="$f" 2>&1 || return 1 ;
+        fi
+    done
+    return;
+}
+
+mkpl() {
+    i=0; n=0; p=0;
+    while getopts "ip:n" opt; do
+        case "$opt" in
+            i) i=1 ;;
+            p) p=1 ;;
+            n) n=1; name="$OPTARG" ;;
+            *) ;;
+        esac
+        shift $((OPTIND - 1))
+    done
+    DEFAULT_NAME="$(basename "$(pwd)"| sed 's/ /-/g')_$(date +"%Y-%m-%d_%H%M-%S").m3u8"
+    created_playlist="${1:-$DEFAULT_NAME}"
+    echo "$created_playlist" | grep -qE ".m3u8$" || created_playlist="${created_playlist}.m3u8"
+    [ -f "$created_playlist" ] || echo "#EXTM3U" >"$created_playlist"
+    find . -maxdepth 1 -mindepth 1 | while read -r f ; do
+        case $(file --dereference --brief --mime-type "$f") in
+            video*) extinf_video_cat "$f" 2>/dev/null | tee -a "$created_playlist" || continue ;;
+            image/jpeg) exifjpg "$f" -M 2>/dev/null | tee -a "$created_playlist" || continue ;;
+            *) continue ;;
+        esac
+    done
+    head -n1 "$created_playlist" | grep -q "#EXTM3U" || sed -i "1i #EXTM3U" "$created_playlist"
+    [ -z "$name" ] && name="$(basename "$(pwd)"| sed "s/ /-/g;s/\'//g")"
+    lnc=$(grep -c "#EXTINF" "$created_playlist")
+    realpath "$created_playlist" | xclip -in -selection clipboard
+    echo "$lnc videos added to $created_playlist. Path to playlist added to clipboard."
+    if [ "$i" -eq 1 ] ; then
+        echo "Add to ${PLAYLIST_LIST##*/} playlists? [Y/n]"
+        stty -echo -icannon
+        ans=$(dd bs=1 count=1 2>/dev/null)
+        stty sane
+        [ "$ans" = "y" ] && echo "Change Name? (AliasName: $name)"
+        stty -echo -icannon
+        n=$(dd bs=1 count=1 2>/dev/null)
+        stty sane
+        [ "$n" = "y" ] && echo "NewAliasName: " && read -r name
+    fi
+    [ -n "$name" ] && echo "Name: $name" && mv "$created_playlist" "$PLAYLIST_DIR"
+    printf "%s\t%s\n" "$name" "$PLAYLIST_DIR/$created_playlist" >>"$PLAYLIST_LIST"
+    echo "You can recall and launch previously saved playlists by calling fzfmpl."
+    unset name
+    [ "$i" -eq 0 ] && return;
+    [ -f "$YTZF/$created_playlist" ] && playlist="$PLAYLIST_DIR/$created_playlist" || playlist="$created_playlist"
+    [ "$i" -eq 1 ] || [ "$p" -eq 0 ] && {
+        echo "Play Now? [Y/n]"
+        stty -echo -icannon
+        ans=$(dd bs=1 count=1 2>/dev/null)
+        stty sane
+        [ "$ans" = "n" ] && echo "$playlist. done." && return;
+    }
+    if grep "$PLAYLIST_DIR/$created_playlist" "$PLAYLIST_LIST"; then
+        tail -n1 "$PLAYLIST_LIST" | while read -r n f ; do
+            if tmux has-session -t mpv >/dev/null 2>&1 || tmux new-session -d -s "mpv" ; then
+                tmux new-window -t mpv: -n "$n" -- "/usr/bin/mpv -quiet --playlist=${f} 2>&1"
+            else
+                echo "failed to create in tmux session... starting $selected_playlist detached.."
+                setsid -f /usr/bin/mpv -quiet --playlist="$f" 2>&1 || return 1 ;
+            fi
+        done
+    fi
+    return;
+}
+
+tmxzf() {
+    ls ~/Videos/playlists | while read -r t; do b=${t##*/} ; n=${b%.*} ; printf "%s\t%s\n" "$n" "$HOME/Videos/playlists/$t" ; done | fzf --delimiter="\t" --with-nth=1 | while read -r n f ; do
+        [ -n "$n" ] && [ -f "$f" ] || return 1 ;
+        if tmux has-session -t mpv >/dev/null 2>&1 || tmux new-session -d -s "mpv" ; then
+            tmux new-window -t mpv: -n "$n" -- "/usr/bin/mpv -quiet --playlist=${f} 2>&1"
+        else
+            echo "failed to create in tmux session... starting $selected_playlist detached.."
+            setsid -f /usr/bin/mpv -quiet --playlist="$f" 2>&1 || return 1 ;
+        fi
+    done
+}
+
+mkdpl() {
+    PLDIR=${YTZD:-"$HOME/Videos/playlists/ytzf"}
+    SAVED=${YTZF:-"$HOME/Videos/playlists/ytzf/.saved"}
+    [ -d "$PLDIR" ] || mkdir -p "$PLDIR"
+    [ -f "$SAVED" ] || touch "$SAVED"
+    [ $# -lt 1 ] || [ ! -d "$1" ] && d=$(find "$HOME/Videos/yt/" -maxdepth 1 -mindepth 1 -type d -not -path "/home/cf/Videos/yt/meta" | fzf --delimiter='/' --with-nth=6) || d="$1"
+    p=$(echo "${d##*/}" | sed "s/ /-/g;s/'//g")
+    pl="$HOME/Videos/playlists/ytzf/${p}.m3u8"
+    find "$d" -mindepth 1 -maxdepth 1 -type l | while read -r l; do
+        exifjpg "$l" -M 2>/dev/null | tee -a "$pl" || continue
+    done
+    [ -f "$pl" ] && head -n1 "$pl" | grep -q "#EXTM3U" || sed -i "1i #EXTM3U" "$pl"
+    vcount=$(grep -c "#EXTINF" "$pl")
+    if [ -f "$pl"] && [ "$vcount" -gt 1 ]; then
+        printf "%s\t%s\n" "$p" "$pl" | tee -a "$SAVED" && echo "Piped $vcount videos in $p playlist. done."
+        unset p pl vcount
+    else
+        unset p pl vcount
+        return 1
+    fi
+    return 0
+}
+
+rsyncpush() {
+    unset i t h d fx
+    [ $# -lt 1 ] && { echo "Usage: ryncpush [target_host] <files_argv>"; return 1; }
+
+    i="$1"
+    h="$HOME/.local/keys/ipa.gpg"
+
+    if [ -f "$h" ] && [ "$(awk -F', ' '{print $1}' "$h" | grep -xc "$i")" -lt 1 ]; then
+        i=$(fzfd) || { echo "Host selection failed"; return 1; }
+    fi
+
+    t=$(pass "$i")
+    [ -z "$t" ] && { echo "Error: Empty target retrieved for $i"; return 1; }
+
+    d="$HOME/Downloads"
+    fx=""
+
+    shift
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            "$i "|"$t") shift ;;  # Skip these values
+            -t|--target) shift ; [ $# -gt 0 ] && d="$1" && shift ;;
+            --target=) shift ; [ $# -gt 0 ] && i="${1#--target=}" ; shift ;;
+            -d|--dest) shift ; [ $# -gt 0 ] && d="$1" && shift ;;
+            --dest=*) d="${1#--dest=}" ; shift ;;
+            --) shift; break ;;
+            *)
+                if find "$1" -maxdepth 0 2>/dev/null | grep -q .; then
+                    fx="${fx:+$fx }$1"
+                else
+                    echo "Invalid target path: $1" >&2
+                fi
+                shift
+                ;;
+        esac
+    done
+
+    if [ -z "$fx" ]; then
+        echo "Error: No valid files specified for transfer."
+        return 1
+    fi
+
+    IFS='
+' # Preserve spaces in filenames
+    for j in $fx; do
+        rsync --recursive "$j" "$t":"$d"
+    done
+}
+
+rsyncpull() {
+    unset i t h d fx
+    [ $# -lt 1 ] && { echo "Usage: rsyncpull [target_host] <remote_files_argv>"; return 1; }
+
+    i="$1"
+    h="$HOME/.local/keys/ipa.gpg"
+
+    if [ -f "$h" ] && [ "$(awk -F', ' '{print $1}' "$h" | grep -xc "$i")" -lt 1 ]; then
+        i=$(fzfd) || { echo "Host selection failed"; return 1; }
+    fi
+
+    t=$(pass "$i")
+    [ -z "$t" ] && { echo "Error: Empty target retrieved for $i"; return 1; }
+
+    d="$HOME/Downloads"
+    fx=""
+
+    shift
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            "$i"|"$t") shift ;;
+            -t|--target) shift ; [ $# -gt 0 ] && i="$1" && shift ;;
+            --target=*) i="${1#--dest=}" ; shift ;;
+            -d|--dest) shift; [ $# -gt 0 ] && d="$1" && shift ;;
+            --dest=*) d="${1#--dest=}" ; shift ;;
+            --) shift; break ;;
+            *)
+                fx="${fx:+$fx }$1"
+                shift
+                ;;
+        esac
+    done
+    IFS='
+'
+    for f in $fx; do
+        rsync --recursive "$t":"$f" "$d"
+    done
+    unset IFS
+}
+
+push_to() {
+    OPTIND=1
+    while getopts "ht:d:" opt; do
+        case "$opt" in
+            h) printf "Usage: push_to [-t <target_host>] [-d <target_destination_dir>] <file_argv>\n" ; return;;
+            t) host="$OPTARG" ;;
+            d) dest="$OPTARG" ;;
+            :) echo "Option -$OPTARG requires an argument." >&2 ; return 1 ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+    if [ "$("$HOME/.local/keys/ipa.gpg" | awk -F', ' '{print $2}' | grep -xc "$host")" -le 1 ]; then
+        host=$(fzfd -ui)
+    fi
+    [ -n "$host" ] || return 1;
+    for f in "$@" ; do
+        if [ "$(echo "$f" | grep -c ":")" -eq 1 ]; then
+            dest=$(echo "$*" | cut -d: -f2- | awk -F' ' '{print $1}')
+        else
+            dest=$(dirname "$f"|sed "s/\/home\/$USER/~/")
+        fi
+        rsync "$f" --recursive "$host:$dest"
+    done
+}
+
+pull_from() {
+    unset host dest fx
+    fx=""
+    SYNC=0
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            --host|--ip) host="$2"; shift 2 ;;
+            --target-dir|--destination) dest="$2"; shift 2 ;;
+            -s|--sync) SYNC=1; shift ;;
+            --) shift; break ;;
+            *) fx="${fx:+$fx }$1"; shift ;;
+        esac
+    done
+    while [ $# -gt 0 ]; do
+        fx="${fx:+$fx }$1"
+        shift
+    done
+    [ -n "$host" ] || host=$(fzfd -ui)
+    [ -n "$dest" ] || dest="$HOME/Downloads"
+
+    if [ -z "$host" ]; then
+        echo "Error: No host specified." >&2
+        return 1
+    fi
+
+    IFS='
+'  # Set IFS to newline to handle filenames safely
+    for f in $fx; do
+        [ "$SYNC" -eq 1 ] && dest=$(dirname "$f")
+        rsync --recursive "$host:$f" "$dest"
+    done
+    unset IFS
+}
+
+sshto() {
+    t=""
+    argv=""
+    OPTIONS="XAYp:t:"
+    LONGOPTIONS="host:,ip:,target:"
+    PARSED=$(getopt -o "$OPTIONS" -l "$LONGOPTIONS" -- "$@") || {
+        echo "Error: Invalid option(s)" >&2
+        return 1
+    }
+    eval set -- "$PARSED"
+    while true; do
+        case "$1" in
+            -X|-A|-Y) argv="${argv:+$argv }$1" ; shift ;;
+            -p) argv="${argv:+$argv }-p $2" ; shift 2 ;;
+            -t|--host|--ip|--target) t="$2" ; shift 2 ;;
+            --) shift ; break ;;
+            *) echo "Error: Unexpected option '$1'" >&2 ; return 1 ;;
+        esac
+    done
+
+    if [ -z "$t" ] || [ "$(gpg2 --quiet --decrypt "$HOME/.local/keys/ipa.gpg" | awk -F', ' '{print $1}' | grep -xc "^$t")" -gt 0 ]; then
+        t=$(fzfd -ui)
+    fi
+    [ -z "$t" ] && { echo "Error while retrieving host address."; return 1; }
+    eval "$(printf "ssh %s%s\n" "${argv:-}" "\$t")"
+}
+
+fzsync() {
+    host=$(fzfd -ui)
+    [ -n "$host" ] || return 1 ;
+    find . -mindepth 1 -maxdepth 2 | fzf --multi | while read -r t ; do
+        [ -n "$t" ] || continue
+        f=$(realpath "$t")
+        [ -f "$f" ] && rsync "$f" "$host:${f}" || continue
+        [ -d "$f" ] && rsync --recursive "$f" "$host:${f}" || continue
+    done
+    unset f t host
+    return 0
+}
+
+fzfin() { [ -t 1 ] && cat | fzf-tmux --multi | xargs -I{} $EDITOR "{}" || return 1 ; return 0;  }
+dic_pick() { sdcv -l | awk -F"    " '{print $1}' | fzf --multi ; }
+
+#  vim: ft=sh:ts=2:sw=2:sts=2:et:

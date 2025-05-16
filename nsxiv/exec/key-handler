@@ -1,0 +1,60 @@
+#!/bin/sh
+
+while read -r file; do
+        case "$1" in
+        "w")  setbg "$file" & ;;
+        "c")  [ -z "$destdir" ] && destdir="$(sed "s/#.*$//;/^\s*$/d" "${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs" | awk '{print $2}' | dmenu -l 20 -i -p "Copy file(s) to where?" | sed "s|~|$HOME|g")"
+	      [ ! -d "$destdir" ] && notify-send "$destdir is not a directory, cancelled." && exit
+	      cp "$file" "$destdir" && notify-send -i "$(readlink -f "$file")" "$file copied to $destdir." & ;;
+        "m")  [ -z "$destdir" ] && destdir="$(sed "s/#.*$//;/^\s*$/d" "${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs" | awk '{print $2}' | dmenu -l 20 -i -p "Move file(s) to where?" | sed "s|~|$HOME|g")"
+	      [ ! -d "$destdir" ] && notify-send "$destdir is not a directory, cancelled." && exit
+	      mv "$file" "$destdir" && notify-send -i "$(readlink -f "$file")" "$file moved to $destdir." & ;;
+        "r")  convert -rotate 90 "$file" "$file" ;;
+        "R")  convert -rotate -90 "$file" "$file" ;;
+        "f")  convert -flop "$file" "$file" ;;
+        "y")  printf "%s" "$file" | tr -d '\n' | xclip -selection clipboard && notify-send "$file copied to clipboard" & ;;
+        "Y")  readlink -f "$file" | tr -d '\n' | xclip -selection clipboard && notify-send "$(readlink -f "$file") copied to clipboard" & ;;
+        "d")  [ "$(printf "No\\nYes" | dmenu -i -p "Really delete $file?")" = "Yes" ] && rm "$file" && notify-send "$file deleted." ;;
+        "g")  ifinstalled gimp && setsid -f gimp "$file" ;;
+        "i")  notify-send "File information" "$(mediainfof "$file" | sed "s/[ ]\+:/:/g;s/: /: <b>/;s/$/<\/b>/" | grep "<b>")" ;;
+        "I")  channel="$(basename "$(dirname "$file")")"
+              file=$(realpath "$file")
+              exifjpg "$file" --description | xargs -I {} notify-send -t 5000 -r 8888 -i "$file" "$channel" "{}" ;;
+        "v")  channel="$(basename "$(dirname "$file")")"
+              file=$(realpath "$file")
+              title=$(exifjpg "$file" -t 2>/dev/null)
+              uri=$(exifjpg "$file" -u 2>/dev/null)
+              str=$(printf "#EXTINF:,%s\n%s" "$title" "$uri")
+              grep -qF "$str" "$MPVQ_PLAYLIST" || echo "$str" >> "$MPVQ_PLAYLIST"
+              notify-send -t 2000 -r 8888 -i "$file" "$channel" "$title\nadded to mpvq playlist." ;;
+        "x")  [ -L "$file" ] && file=$(realpath "$file");
+              title=$(exifjpg "$file" -t)
+              stexec exifcomments "$file" &
+              setsid -f mpv "$(exifjpg "$file" -u)" --title="$title" >/dev/null 2>&1
+              xdotool search --sync --onlyvisible --class "mpv" --name "$title" windowactivate click 2
+              winUnder || winRight ;;
+        "X")  exifjpg "$file" -u | parrallel ydl "{}" & ;;
+        "p") [ -L "$file" ] && file=$(realpath "$file")
+              channel="$(exifjpg "$file" --channel)"
+              rotdir "$file" | parallel exifjpg "{}" -M > "$MPVQ_PLAYLIST" && update_playlist
+              rotdir "$file" | head -n 10 | xargs -I {} exifjpg "{}" -t | nl - |\
+              xargs -I {} notify-send -t 1000 -r 8888 -i "$file" "$channel added to mpvq playlist." "{}\n[...]" ;;
+        "P")  channel="$(basename "$(dirname "$file")")"
+              [ -L "$file" ] && file=$(realpath "$file")
+              playlist="$HOME/.cache/mpvq/playlists/$channel.playlist"
+              rotdir "$file" | parallel exifjpg "{}" -M > "$playlist" 2>/dev/null
+              rotdir "$file" | head -n 10 | xargs -I {} exifjpg "{}" -t 2>/dev/null | nl - |\
+              xargs -I {} notify-send -t 1000 -r 8888 -i "$file" "$channel playlist:" "{}\n[...]"
+              xdoswl mpv --profile=fast --playlist="$playlist" &
+              xdotool search --sync --onlyvisible --class "mpv" --name "$title" windowactivate click 2;;
+        "j")  file=$(realpath "$file"); title=$(exifjpg "$file" -t);
+              stexec "exifcomments" "$file" &
+              xdoswl ytjpg "$file" &
+              xdotool search --sync --onlyvisible --class "mpv" --name "$title" windowactivate click 2;;
+        "J") [ -L "$file" ] && file=$(realpath "$file"); stexec "exifcomments" "$file" & ;;
+        "l") [ -L "$file" ] && file=$(realpath "$file"); if [ -n "$(is_urljpg "$file")" ]; then xdrag "$(is_urljpg "$file")"; else xdrag "$file"; fi;;
+        "L") [ -L "$file" ] && file=$(realpath "$file"); xdrag "$file" ; if [ -n "$(is_urljpg "$file")" ]; then is_urljpg "$file" | xclip -selection clipboard -in ; fi ;;
+	esac
+done
+
+# vim: ft=sh:ts=4:sw=4:sts=4:et:

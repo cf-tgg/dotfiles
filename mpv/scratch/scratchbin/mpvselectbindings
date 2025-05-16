@@ -1,0 +1,11 @@
+g-p script-binding select/select-playlist
+g-s script-binding select/select-sid
+g-S script-binding select/select-secondary-sid
+g-a script-binding select/select-aid
+g-v script-binding select/select-vid
+g-t script-binding select/select-track
+g-c script-binding select/select-chapter
+g-l script-binding select/select-subtitle-line
+g-d script-binding select/select-audio-device
+g-b script-binding select/select-binding
+g-r script-binding select/show-properties

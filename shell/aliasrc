@@ -1,0 +1,74 @@
+#!/bin/sh
+
+# Neovim over Vim when installed
+[ -x "$(command -v nvim)" ] && alias vim="nvim" vimdiff="nvim -d"
+
+# emacsclient over nvim when available.
+VISUAL=(emacsclient -c --socket-name="/run/user/1000/emacs/server")
+[ -x "$(command -v $VISUAL)" ] && EDITOR=(emacsclient -c --socket-name="/run/user/1000/emacs/server" --alternate-editor="") || EDITOR="nvim"
+export EDITOR
+alias ed='emacsclient -c --socket-name="/run/user/1000/emacs/server" --alternate-editor=""'
+
+# if file exists, point programs to custom config locations.
+[ -f "$XINITRC" ] && alias startx='startx "$XINITRC"'
+[ -f "$MBSYNCRC" ] && alias mbsync='mbsync -c "$MBSYNCRC"'
+[ -f "$INFO_INIT_FILE" ] && alias info='info --init-file="$INFO_INIT_FILE"' || alias info="info --vi-keys" ;
+
+# sudo bypass
+for command in mount umount sv pacman updatedb su shutdown poweroff reboot ; do
+    alias $command="sudo $command"
+done; unset command
+
+se() { # fuzzy script edits
+    choice="$(find ~/.local/bin -mindepth 1 -printf '%P\n' | fzf)"
+    [ -f "$HOME/.local/bin/$choice" ] && $EDITOR "$HOME/.local/bin/$choice" ;
+}
+
+fe() {
+    hash | awk -F'=' '{print $1"\t"$2}' \
+        | fzf --delimiter "\t" \
+              --with-nth '{1}' \
+        | awk -F"\t" '{print $2}' \
+        | xargs -I{} $EDITOR "{}"
+}
+
+# Sensible default opts
+alias \
+    cp="cp -iv" \
+    mv="mv -iv" \
+    rm="rm -vI" \
+    bc="bc -ql" \
+    rsync="rsync -vrPlu" \
+    ytd="yt-dlp --embed-metadata -i" \
+    yta="ytd -x -f bestaudio/best" \
+    ytt="ytd --skip-download --write-thumbnail" \
+    ffmpeg="ffmpeg -hide_banner"
+    # mkd="mkdir -pv" \
+
+
+# ColorCmds
+alias \
+    ls="ls -hN --color=auto --group-directories-first" \
+    ccat="highlight --out-format=ansi" \
+    grep="grep --color=auto" \
+    diff="diff --color=auto" \
+    octal='stat -c "%a %n"' \
+    ip="ip -color=auto"
+
+# Abbrevs
+alias \
+    ka="killall" \
+    g="git" \
+    trem="transmission-remote" \
+    sdn="shutdown -h now" \
+    yt="pipe-viewer" \
+    e="$EDITOR" \
+    v="nvim" \
+    p="pacman" \
+    z="zathura"
+
+alias \
+    lf="lfub" \
+    meteo="less -S ${XDG_CACHE_HOME:-$HOME/.cache}/weatherreport" \
+    magit="nvim -c MagitOnly" \
+    ref="shortcuts >/dev/null; source ${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc ; source ${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutenvrc ; source ${XDG_CONFIG_HOME:-$HOME/.config}/shell/zshnameddirrc"
